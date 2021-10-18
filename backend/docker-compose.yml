@@ -20,8 +20,6 @@ services:
         container_name: app
         build:
             context: .
-        volumes:
-            - .:/opt/application/flask
         restart: always
         ports:
             - 5000:5000

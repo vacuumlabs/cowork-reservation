@@ -1,5 +1,9 @@
 from flask import Flask
-from .api import api
+import sys
+
+# both local and docker approach had issues with finding modules in working directory so this line was added to append cwd
+sys.path.append("./")
+from api import api
 
 
 def create_app():

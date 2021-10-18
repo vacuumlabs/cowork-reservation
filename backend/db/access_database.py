@@ -1,10 +1,53 @@
 from typing import Dict, List, Union
-
+from datetime import datetime
 import psycopg2
+from sqlalchemy.sql.expression import true
 
 from db.config_database import ConfigDatabase
+from sqlalchemy import create_engine, engine
+from sqlalchemy.engine.url import URL
+from sqlalchemy import text
 
 
+class AccessDataBase(ConfigDatabase):
+    def __init__(self) -> None:
+        self.engine = create_engine(
+            URL("postgresql", **self.postgres_access), future=True
+        )
+        with self.engine.connect() as conn:
+            conn.execute(
+                text(
+                    f"""CREATE TABLE IF NOT EXISTS {self.table_name}(
+                    id SERIAL PRIMARY KEY,
+                    text varchar(500) NOT NULL,
+                    created_at date NOT NULL)"""
+                )
+            )
+            conn.commit()
+
+    def get_messages(self, indice: int = 0):
+        with self.engine.connect() as conn:
+            result = conn.execute(text("select text from messages"))
+            list_of_dicts = [dict(result) for result in result.all()]
+        return list_of_dicts
+
+    def insert_message(self, message_rows: Dict[str, str]):
+        with self.engine.connect() as conn:
+            conn.execute(
+                text(
+                    "INSERT INTO messages (text, created_at) VALUES (:text, :created_at)"
+                ),
+                [
+                    {
+                        "text": message_rows["text"],
+                        "created_at": str(datetime.now().date()),
+                    }
+                ],
+            )
+            conn.commit()
+
+
+'''
 class AccessDataBase(ConfigDatabase):
     def __init__(self) -> None:
         self.logger.debug("Init Class AccessDataBase")
@@ -33,15 +76,14 @@ class AccessDataBase(ConfigDatabase):
         self.logger.debug("RETURNING DATA")
         return data
 
-    def insert_message(self, message_rows: Dict[int, str]):
+    def insert_message(self, message_rows: Dict[str, str]):
         self.logger.debug(f"INSERT INTO {self.table_name} VALUES({message_rows}) ")
         conn = psycopg2.connect(**self.postgres_access)
         cursor = conn.cursor()
-        insert_query = (
-            f"INSERT INTO {self.table_name} (text, created_at) VALUES(%s, %s);"
-        )
+        insert_query = f"INSERT INTO {self.table_name} (text, created_at) VALUES(%s, %s);"
         insert_tuple = (message_rows["text"], message_rows["created_at"])
         cursor.execute(insert_query, insert_tuple)
         cursor.close()
         conn.commit()
         self.logger.debug("INSERT SUCCESS")
+'''

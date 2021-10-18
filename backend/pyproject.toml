@@ -1,0 +1,23 @@
+[tool.black]
+line-length = 88
+target-version = ['py37', 'py38', 'py39']
+include = '\.pyi?$'
+exclude = '''
+^/(
+  (
+      postgres/        # exclude a few common directories in the
+    | \.git          # root of the project
+    | venvForLocal
+    | _build
+    | build
+    | dist
+  )/
+  |\.dockerignore
+  |\.gitignore
+  |docker-compose.yml
+  |Dockerfile
+  |Jenkinfile
+  |Readme.md
+  |requirements.txt    
+)
+'''
