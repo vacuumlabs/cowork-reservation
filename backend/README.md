@@ -41,11 +41,11 @@ This backend is syncing events of multiple instances of G-suite calendars and al
 
 5. Activate virtual enviroment
 
-   Windows Command Prompt:    `.\venvForLocal\Scripts\activate.bat`
+   Windows Command Prompt:    `.\venvForLocal\Scripts\activate.bat`\
    Windows PowerShell:        `.\venvForLocal\Scripts\activate.ps1`
 
-   Unix or MacOs Bash shell:  `./venvForLocal/bin/activate`
-   Unix or MacOs Csh shell:   `./venvForLocal/bin/activate.csh`
+   Unix or MacOs Bash shell:  `./venvForLocal/bin/activate`\
+   Unix or MacOs Csh shell:   `./venvForLocal/bin/activate.csh`\
    Unix or MacOs Fish shell:  `./venvForLocal/bin/activate.fish`
 
 6. Install all required modules
@@ -58,7 +58,7 @@ This backend is syncing events of multiple instances of G-suite calendars and al
 
 ### Run backend in local
 
-1. Make sure that you finished all steps in ### Local installation
+1. Make sure that you finished all steps in `Local installation`
 
 2. Make sure your backend.pgdb container is running via docker
 
