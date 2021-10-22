@@ -9,9 +9,11 @@ import {
   Tab,
   ListProps,
   ShowProps,
+  ResourceContextProvider,
 } from 'react-admin'
 
 import { Company } from '../models'
+import { UserList } from './Users'
 
 export const CompanyList: (props: ListProps) => JSX.Element = (props) => (
   <List {...props}>
@@ -28,6 +30,7 @@ const CompanyTitle = ({ record }: { record?: Company }) => (
 )
 
 export const CompanyShow: (props: ShowProps) => JSX.Element = (props) => {
+  console.log(props)
   return (
     <Show title={<CompanyTitle />} {...props}>
       <TabbedShowLayout>
@@ -36,7 +39,9 @@ export const CompanyShow: (props: ShowProps) => JSX.Element = (props) => {
           <TextField source="email" label="Tenant admin email:" />
         </Tab>
         <Tab label="people">
-          <></>
+          <ResourceContextProvider value="users">
+            <UserList {...props} />
+          </ResourceContextProvider>
         </Tab>
       </TabbedShowLayout>
     </Show>
