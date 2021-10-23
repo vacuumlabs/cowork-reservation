@@ -38,7 +38,7 @@ const UserList = ({ record }: { record?: Company }) => {
       pagination: { page: 1, perPage: 10 },
       sort: 'id',
       order: 'ASC',
-      filter: { companyId: 1 },
+      filter: { companyId: record?.id },
     },
   })
   if (loading) return <Loading />
