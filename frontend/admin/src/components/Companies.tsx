@@ -31,7 +31,6 @@ const CompanyTitle = ({ record }: { record?: Company }) => (
 )
 
 const UserList = ({ record }: { record?: Company }) => {
-  console.log(record ? record : 'none')
   const { data, loading, error } = useQuery({
     type: 'getList',
     resource: 'users',
@@ -52,7 +51,7 @@ const UserList = ({ record }: { record?: Company }) => {
   //   </ul>
   // )
   return (
-    <Table size="small">
+    <Table size="small" aria-label="a dense table">
       <TableHead>
         <TableRow>
           <TableCell>Name</TableCell>

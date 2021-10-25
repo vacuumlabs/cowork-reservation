@@ -9,7 +9,6 @@ import {
 } from 'react-admin'
 
 export const UserList: (props: ListProps) => JSX.Element = (props) => {
-  console.log(props)
   return (
     <List {...props}>
       <Datagrid>
