@@ -13,7 +13,7 @@ services:
             - ./postgres:/appdb
         environment:
             POSTGRES_USER: coworkdbadmin
-            POSTGRES_PASSWORD: "password123*"
+            POSTGRES_PASSWORD: "password123"
             POSTGRES_DB: cowork
             PGDATA: /appdb
     application:
