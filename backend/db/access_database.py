@@ -8,7 +8,8 @@ from sqlalchemy import create_engine, engine
 from sqlalchemy.engine.url import URL
 from sqlalchemy import text
 
-
+# TODO: THIS file is slowly being deleted, its only purpose now is to not break somethine, next commit should remove it
+# Database communication is done by file db/queries.py and api/api.py
 class AccessDataBase(ConfigDatabase):
     def __init__(self) -> None:
         self.engine = create_engine(
