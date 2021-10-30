@@ -33,20 +33,25 @@ This backend is syncing events of multiple instances of G-suite calendars and al
 
 3. Make sure you have `virtualenv` installed using pip (You can check that using `pip list`)
 
-   `pip install virtualenv`
+   Windows: `pip install virtualenv`\
+   Linux: `sudo pip install virtualenv`
 
 4. Create python virtual enviroment
 
-   `virtualenv venvForLocal` 
+   `virtualenv venvForLocal`\
+   or\
+   `python -m virtualenv venvForLocal`
 
 5. Activate virtual enviroment
 
    Windows Command Prompt:    `.\venvForLocal\Scripts\activate.bat`\
    Windows PowerShell:        `.\venvForLocal\Scripts\activate.ps1`
 
-   Unix or MacOs Bash shell:  `./venvForLocal/bin/activate`\
-   Unix or MacOs Csh shell:   `./venvForLocal/bin/activate.csh`\
-   Unix or MacOs Fish shell:  `./venvForLocal/bin/activate.fish`
+  > **_Linux:_**  If command `source ./venvForLocal/bin/activate` gives you an error, use `chmod +x ./venvForLocal/bin/activate`
+  
+   Unix or MacOs Bash shell:  `source ./venvForLocal/bin/activate`\
+   Unix or MacOs Csh shell:   `source ./venvForLocal/bin/activate.csh`\
+   Unix or MacOs Fish shell:  `source ./venvForLocal/bin/activate.fish`
 
 6. Install all required modules
 
