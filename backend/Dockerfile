@@ -6,7 +6,7 @@ WORKDIR /opt/application/flask
 
 RUN apt-get update
 RUN pip install -r requirements.txt
-ENV DATABASE_HOST postgres-db
+ENV DATABASE_HOST=postgres-db IS_IN_DOCKER=Yes
 EXPOSE 5000
 
 ENTRYPOINT ["gunicorn", "-b", ":5000"]
