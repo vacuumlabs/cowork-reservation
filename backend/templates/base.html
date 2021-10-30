@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+</head>
+<body>
+    <form action="/" method="post">
+        <label for="name">Add Company</label>
+        <br>
+        <input autofocus name="name" type="text" maxlength="255", autocomplete="off", spellcheck="false" placeholder="Company name">
+        <br>
+        <input autofocus name="location" type="text" maxlength="255", autocomplete="off", spellcheck="false" placeholder="Location">
+        <br>
+        <input autofocus name="email" type="text" maxlength="255", autocomplete="off", spellcheck="false" placeholder="Email">
+        <button type="submit">Submit</button>
+    </form>
+
+    <ul id="testUl"></ul>
+    <script>
+        let listOfMessages = document.querySelector("#testUl");
+        fetch("/getCmpns")
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(element => {
+                listOfMessages.innerHTML += `<li>${element.id} ${element.name} ${element.location} ${element.email}</li>`;
+            });
+        })
+    </script>
+</body>
+</html>

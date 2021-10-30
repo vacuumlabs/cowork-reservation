@@ -1,0 +1,8 @@
+/venvForLocal
+/postgres
+.dockerignore
+Dockerfile
+docker-compose.yml
+pyproject.toml
+.pre-commit-config.yaml
+/.git

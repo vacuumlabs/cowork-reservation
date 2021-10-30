@@ -13,15 +13,13 @@ services:
             - ./postgres:/appdb
         environment:
             POSTGRES_USER: coworkdbadmin
-            POSTGRES_PASSWORD: "password123*"
+            POSTGRES_PASSWORD: "password123"
             POSTGRES_DB: cowork
             PGDATA: /appdb
     application:
         container_name: app
         build:
             context: .
-        volumes:
-            - .:/opt/application/flask
         restart: always
         ports:
             - 5000:5000
