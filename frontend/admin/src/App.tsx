@@ -2,8 +2,8 @@ import React from 'react'
 import { Admin, Resource } from 'react-admin'
 import jsonServerProvider from 'ra-data-json-server'
 
-import { CompanyShow, CompanyList } from './components/Companies'
-import { UserList } from './components/Users'
+import { CompanyShow, CompanyList, CompanyCreate } from './components/Companies'
+import { UserCreate, UserList } from './components/Users'
 import authProvider from './components/authProvider'
 
 const dataProvider = jsonServerProvider(
@@ -12,8 +12,13 @@ const dataProvider = jsonServerProvider(
 
 const App: React.FC = () => (
   <Admin dataProvider={dataProvider} authProvider={authProvider}>
-    <Resource name="companies" list={CompanyList} show={CompanyShow} />
-    <Resource name="users" list={UserList} />
+    <Resource
+      name="companies"
+      list={CompanyList}
+      show={CompanyShow}
+      create={CompanyCreate}
+    />
+    <Resource name="users" list={UserList} create={UserCreate} />
   </Admin>
 )
 
