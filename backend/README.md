@@ -37,7 +37,8 @@ This backend is syncing events of multiple instances of G-suite calendars and al
 
 4. Create python virtual enviroment
 
-   `virtualenv venvForLocal` 
+   `virtualenv venvForLocal` or\
+   `python -m virtualenv venvForLocal`
 
 5. Activate virtual enviroment
 
