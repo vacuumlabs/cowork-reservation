@@ -1,9 +1,7 @@
 # In this directory, run the following command to build this builder.
 # $ gcloud builds submit . --config=cloudbuild.yaml
-substitutions:
-  _DOCKER_COMPOSE_VERSION: 1.28.2
 steps:
-- name: 'gcr.io/cloud-builders/docker'
+- name: gcr.io/cloud-builders/docker
   args:
   - 'build'
   - '--build-arg'
@@ -13,16 +11,23 @@ steps:
   - '-t'
   - 'gcr.io/$PROJECT_ID/docker-compose:${_DOCKER_COMPOSE_VERSION}'
   - '.'
-- name: 'gcr.io/$PROJECT_ID/docker-compose'
+- name: 'gcr.io/$PROJECT_ID/backend/docker-compose'
   args: ['version']
 
 - name: 'gcr.io/$PROJECT_ID/backend/docker-compose'
   args: ['up']
 
+
+substitutions:
+  _DOCKER_COMPOSE_VERSION: v2.0.1
+
 images:
 - 'gcr.io/$PROJECT_ID/docker-compose:latest'
 - 'gcr.io/$PROJECT_ID/docker-compose:${_DOCKER_COMPOSE_VERSION}'
-tags: ['cloud-builders-community']
+
+tags: 
+  - cloud-builders-community
+  - cowork-reservation
 
 
 
