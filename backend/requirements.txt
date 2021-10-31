@@ -26,3 +26,4 @@ virtualenv==20.8.1
 virtualenv-clone==0.5.7
 virtualenvwrapper==4.8.4
 Werkzeug==2.0.2
+flask-swagger-ui==3.36.0

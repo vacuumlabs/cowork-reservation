@@ -1,6 +1,8 @@
 from datetime import datetime
 import json
 from flask import Flask, request, render_template
+from flask.helpers import send_from_directory
+from flask_swagger_ui import get_swaggerui_blueprint
 from db.access_database import AccessDataBase
 import db.queries as db
 
@@ -8,11 +10,22 @@ import db.queries as db
 def init_app(app: Flask):
 
     """--- GET methods ---"""
+    ### swagger specific ###
+    SWAGGER_URL = "/swagger"
+    API_URL = "/static/swagger.json"
+    SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
+        SWAGGER_URL, API_URL, config={"app_name": "Cowork-Reservation"}
+    )
+
+    app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
+
+    @app.route("/static/<path:path>")
+    def send_static(path):
+        return send_from_directory("static", path)
 
     @app.route("/getCmpns", methods=["GET"])
     def get_companies():
         companies = db.getCompanies()
-        print(companies)
         return json.dumps(companies)
 
     @app.route("/", methods=["GET"])

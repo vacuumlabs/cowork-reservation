@@ -1,0 +1,285 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "description": "cowork-reservation system",
+        "version": "1.0.0",
+        "title": "Cowork-Reservation",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "servers": [
+        {
+            "url": "/"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Attendee",
+            "description": "All endpoints related to the Attendee table"
+        },
+        {
+            "name": "Calendar",
+            "description": "All endpoints related to the Calendar table"
+        },
+        {
+            "name": "Company",
+            "description": "All endpoints related to the Company table"
+        },
+        {
+            "name": "Event",
+            "description": "All endpoints related to the Event table"
+        },
+        {
+            "name": "Room",
+            "description": "All endpoints related to the Room table"
+        }
+    ],
+    "paths": {
+        "/getCmpns": {
+            "get": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Returns everything located in Company table",
+                "responses": {
+                    "200": {
+                        "description": "There should be array of companies located in response",
+                        "schema": {
+                            "type": "array",
+                            "properties": {
+                                "object": {
+                                    "id": {
+                                        "type": "int",
+                                        "format": "int32"
+                                    },
+                                    "location": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/": {
+            "post": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Adds new company to the database (Soon this path will be switched to /addCompany)",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "minLength": 1,
+                                        "maxLength": 255
+                                    },
+                                    "location": {
+                                        "type": "string",
+                                        "minLength": 1,
+                                        "maxLength": 255,
+                                        "default": "notFakeLocation1",
+                                        "enum": ["notFakeLocation1", "notFakeLocation2", "notFakeLocation3"]
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "minLength": 1,
+                                        "maxLength": 255,
+                                        "default": "email@NotFake.com",
+                                        "enum": ["email@NotFake.com", "notFake@email.com", "not.fake@email.com"]
+                                    }
+                                },
+                            "required": [
+                                    "name", "location", "email"
+                                ]   
+                            }
+                        }
+                    }    
+                },
+                "responses": {
+                    "200": {
+                        "description": "Response should contain web page where change will be visible",
+                        "schema": {
+                            "$ref": "#/components/schemas/Company"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Attendee": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32",
+                        "primary_key": "True"
+                    },
+                    "name": {
+                        "type": "string",
+                        "max_length": 255,
+                        "nullable": "False",
+                        "description": ""
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "max_length": 255,
+                        "nullable": "False",
+                        "description": ""
+                    },
+                    "event_id": {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "In many to many relationship with Event table"
+                    }
+                }
+            },
+            "Calendar": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32",
+                        "primary_key": "True"
+                    },
+                    "company_id": {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "Foreing key from Company table"
+                    },
+                    "name": {
+                        "type": "string",
+                        "max_length": 255,
+                        "nullable": "False",
+                        "description": ""
+                    },
+                    "google_id": {
+                        "type": "string",
+                        "max_length": 255,
+                        "nullable": "False",
+                        "description": ""
+                    }
+                }
+            },
+            "Company": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32",
+                        "primary_key": "True"
+                    },
+                    "name": {
+                        "type": "string",
+                        "max_length": 255,
+                        "nullable": "False",
+                        "description": ""
+                    },
+                    "location": {
+                        "type": "string",
+                        "max_length": 255,
+                        "nullable": "False",
+                        "description": ""
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "max_length": 255,
+                        "nullable": "False",
+                        "description": ""
+                    }
+                }
+            },
+            "Event": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32",
+                        "primary_key": "True"
+                    },
+                    "calendar_id": {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "Foreing key from Calendar table"
+                    },
+                    "room_id": {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "Foreing key from Room table"
+                    },
+                    "name": {
+                        "type": "string",
+                        "max_length": 255,
+                        "nullable": "False",
+                        "description": ""
+                    },
+                    "start": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": "False",
+                        "description": ""
+                    },
+                    "end": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": "False",
+                        "description": ""
+                    },
+                    "google_id": {
+                        "type": "string",
+                        "max_length": 255,
+                        "nullable": "False",
+                        "description": ""
+                    },
+                    "company_id": {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "Foreing key from Company table"
+                    },
+                    "status": {
+                        "type": "boolean",
+                        "description": ""
+                    }
+                }
+            },
+            "Room": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32",
+                        "primary_key": "True"
+                    },
+                    "location": {
+                        "type": "string",
+                        "max_length": 255,
+                        "nullable": "False",
+                        "description": ""
+                    },
+                    "capacity": {
+                        "type": "int",
+                        "format": "int32",
+                        "nullable": "False",
+                        "description": ""
+                    },
+                    "equipment": {
+                        "type": "string",
+                        "max_length": 255,
+                        "description": ""
+                    }
+                }
+            }
+        }
+    }
+}
