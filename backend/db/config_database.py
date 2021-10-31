@@ -27,5 +27,4 @@ class ConfigDatabase:
         postgres_access["database"] = new_value
     if new_value := os.environ.get("DATABASE_USER"):
         postgres_access["username"] = new_value
-    table_name = db_info.get("MESSAGES_TABLE", "table_name")
     logger.debug("DATABASE INFO CONFIGURED")
