@@ -25,7 +25,8 @@ services:
             - 5000:5000
         networks:
             - backend
-
+        volumes:
+            - .:/opt/application/flask
         depends_on:
             - postgres-db
 
