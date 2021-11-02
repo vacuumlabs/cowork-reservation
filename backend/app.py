@@ -17,7 +17,10 @@ def create_app():
     )
     print(app.config["SQLALCHEMY_DATABASE_URI"])
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    db.init_app(app)
-    db.create_all(app=app)
+    try:
+        db.init_app(app)
+        db.create_all(app=app)
+    except:
+        print("--------------------!!!Database is not running!!!")
     api.init_app(app)
     return app
