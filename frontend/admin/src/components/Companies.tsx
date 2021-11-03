@@ -16,7 +16,7 @@ import {
   SimpleForm,
 } from 'react-admin'
 
-import { Company, User } from '../models'
+import { Company } from '../models'
 import AddUserButton from './addUserButton'
 
 export const CompanyList: (props: ListProps) => JSX.Element = (props) => (
@@ -59,7 +59,7 @@ export const CompanyShow: (props: ShowProps) => JSX.Element = (props) => {
 }
 
 export const CompanyCreate: (props: CreateProps) => JSX.Element = (props) => (
-  <Create {...props}>
+  <Create title="Add Company" {...props}>
     <SimpleForm>
       <TextInput source="name" />
       <TextInput source="email" />

@@ -18,7 +18,12 @@ const App: React.FC = () => (
       show={CompanyShow}
       create={CompanyCreate}
     />
-    <Resource name="users" list={UserList} create={UserCreate} />
+    <Resource
+      name="users"
+      list={UserList}
+      create={UserCreate}
+      options={{ label: 'Tenant Admins' }}
+    />
   </Admin>
 )
 
