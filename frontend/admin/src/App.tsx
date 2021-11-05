@@ -2,9 +2,10 @@ import React from 'react'
 import { Admin, Resource } from 'react-admin'
 import jsonServerProvider from 'ra-data-json-server'
 
-import { CompanyShow, CompanyList, CompanyCreate } from './components/Companies'
-import { UserCreate, UserList } from './components/Users'
 import authProvider from './authProvider'
+import Company from './components/Company'
+import User from './components/User'
+import { MyCompanyList } from './components/MyCompany'
 
 const dataProvider = jsonServerProvider(
   'https://my-json-server.typicode.com/Bandius/myJsonServer'
@@ -12,18 +13,20 @@ const dataProvider = jsonServerProvider(
 
 const App: React.FC = () => (
   <Admin dataProvider={dataProvider} authProvider={authProvider}>
-    <Resource
-      name="companies"
-      list={CompanyList}
-      show={CompanyShow}
-      create={CompanyCreate}
-    />
-    <Resource
-      name="users"
-      list={UserList}
-      create={UserCreate}
-      options={{ label: 'Tenant Admins' }}
-    />
+    {localStorage.getItem('permissions') == 'superadmin' ? (
+      <Resource
+        name="companies"
+        {...Company}
+        options={{ label: 'Organisations' }}
+      />
+    ) : (
+      <Resource
+        name="companies"
+        list={MyCompanyList}
+        options={{ label: 'My company' }}
+      />
+    )}
+    <Resource name="users" {...User} options={{ label: 'Tenant Admins' }} />
   </Admin>
 )
 
