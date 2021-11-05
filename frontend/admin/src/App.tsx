@@ -4,7 +4,7 @@ import jsonServerProvider from 'ra-data-json-server'
 
 import { CompanyShow, CompanyList, CompanyCreate } from './components/Companies'
 import { UserCreate, UserList } from './components/Users'
-import authProvider from './components/authProvider'
+import authProvider from './authProvider'
 
 const dataProvider = jsonServerProvider(
   'https://my-json-server.typicode.com/Bandius/myJsonServer'

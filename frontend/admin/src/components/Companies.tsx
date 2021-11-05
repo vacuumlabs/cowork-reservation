@@ -15,9 +15,11 @@ import {
   TextInput,
   SimpleForm,
 } from 'react-admin'
+import { Button } from 'react-admin'
+import { Link } from 'react-router-dom'
+import { Add as AddIcon } from '@material-ui/icons'
 
 import { Company } from '../models'
-import AddUserButton from './addUserButton'
 
 export const CompanyList: (props: ListProps) => JSX.Element = (props) => (
   <List {...props}>
@@ -33,13 +35,22 @@ const CompanyTitle = ({ record }: { record?: Company }) => (
   <span>{record ? record.name : 'Company'}</span>
 )
 
+const AddAdminButton = (): JSX.Element => (
+  <Button
+    startIcon={<AddIcon />}
+    component={Link}
+    label="Add org admin"
+    to={'../../users/create'}
+  />
+)
+
 export const CompanyShow: (props: ShowProps) => JSX.Element = (props) => {
   return (
     <Show title={<CompanyTitle />} {...props}>
       <SimpleShowLayout>
         <TextField source="name" label="" />
-        {/* <TextField source="email" label="Email" /> */}
-        <AddUserButton />
+        <TextField source="email" label="Email" />
+        <AddAdminButton />
         <ReferenceManyField
           fullWidth
           label="Admins"

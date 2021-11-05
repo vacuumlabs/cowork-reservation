@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+  AutocompleteInput,
   Create,
   CreateProps,
   Datagrid,
@@ -8,6 +9,7 @@ import {
   ListProps,
   ReferenceField,
   ReferenceInput,
+  required,
   SimpleForm,
   TextField,
   TextInput,
@@ -31,10 +33,15 @@ export const UserCreate: (props: CreateProps) => JSX.Element = (props) => {
   return (
     <Create title="Add Admin" {...props}>
       <SimpleForm>
-        <TextInput source="name" />
-        <TextInput source="email" />
-        <ReferenceInput source="companyId" reference="companies" link={false}>
-          <TextInput source="name" />
+        <TextInput source="name" validate={required()} />
+        <TextInput source="email" validate={required()} />
+        <ReferenceInput
+          source="companyId"
+          reference="companies"
+          link={false}
+          validate={required()}
+        >
+          <AutocompleteInput />
         </ReferenceInput>
       </SimpleForm>
     </Create>
