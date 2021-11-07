@@ -16,3 +16,13 @@ export type User = {
   tenantId: string
   role: UserRole
 }
+
+export type Room = {
+  id: string
+  roomNumber: string
+  city: string
+  building: string
+  floor: string
+  capacity: string
+  equipment: string
+}
