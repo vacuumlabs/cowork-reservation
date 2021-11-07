@@ -1,7 +1,7 @@
 import React from 'react'
 import { ListProps, List, Datagrid, TextField, EmailField } from 'react-admin'
 
-const CompanyList: (props: ListProps) => JSX.Element = (props) => (
+const TenantList: (props: ListProps) => JSX.Element = (props) => (
   <List {...props}>
     <Datagrid rowClick="show">
       <TextField source="name" />
@@ -10,4 +10,4 @@ const CompanyList: (props: ListProps) => JSX.Element = (props) => (
     </Datagrid>
   </List>
 )
-export default CompanyList
+export default TenantList

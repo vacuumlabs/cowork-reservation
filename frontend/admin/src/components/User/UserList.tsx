@@ -15,10 +15,10 @@ const UserList: (props: ListProps) => JSX.Element = (props) => {
         <TextField source="name" />
         <EmailField source="email" />
         <ReferenceField
-          source="companyId"
-          reference="companies"
+          source="tenantId"
+          reference="tenants"
           link={false}
-          label="Organisation"
+          label="Tenant"
         >
           <TextField source="name" />
         </ReferenceField>

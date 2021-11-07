@@ -16,8 +16,8 @@ const UserCreate: (props: CreateProps) => JSX.Element = (props) => {
         <TextInput source="name" validate={required()} />
         <TextInput source="email" validate={required()} />
         <ReferenceInput
-          source="companyId"
-          reference="companies"
+          source="tenantId"
+          reference="tenants"
           link={false}
           validate={required()}
         >

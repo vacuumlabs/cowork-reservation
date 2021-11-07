@@ -1,8 +1,8 @@
 import React from 'react'
 import { CreateProps, Create, SimpleForm, TextInput } from 'react-admin'
 
-const CompanyCreate: (props: CreateProps) => JSX.Element = (props) => (
-  <Create title="Add Company" {...props}>
+const TenantCreate: (props: CreateProps) => JSX.Element = (props) => (
+  <Create title="Add Tenant" {...props}>
     <SimpleForm>
       <TextInput source="name" />
       <TextInput source="email" />
@@ -10,4 +10,4 @@ const CompanyCreate: (props: CreateProps) => JSX.Element = (props) => (
     </SimpleForm>
   </Create>
 )
-export default CompanyCreate
+export default TenantCreate

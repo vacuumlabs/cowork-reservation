@@ -12,24 +12,24 @@ import {
 import { Link } from 'react-router-dom'
 import { Add as AddIcon } from '@material-ui/icons'
 
-import { Company } from '../../models'
+import { Tenant } from '../../models'
 
-const CompanyTitle = ({ record }: { record?: Company }) => (
-  <span>{record ? record.name : 'Company'}</span>
+const TenantTitle = ({ record }: { record?: Tenant }) => (
+  <span>{record ? record.name : 'Tenant'}</span>
 )
 
 const AddAdminButton = (): JSX.Element => (
   <Button
     startIcon={<AddIcon />}
     component={Link}
-    label="Add org admin"
+    label="Add Tenant Admin"
     to={'../../users/create'}
   />
 )
 
-const CompanyShow: (props: ShowProps) => JSX.Element = (props) => {
+const TenantShow: (props: ShowProps) => JSX.Element = (props) => {
   return (
-    <Show title={<CompanyTitle />} {...props}>
+    <Show title={<TenantTitle />} {...props}>
       <SimpleShowLayout>
         <TextField source="name" label="" />
         <TextField source="email" label="Email" />
@@ -38,7 +38,7 @@ const CompanyShow: (props: ShowProps) => JSX.Element = (props) => {
           fullWidth
           label="Admins"
           reference="users"
-          target="companyId"
+          target="TenantId"
         >
           <Datagrid>
             <TextField source="id" />
@@ -52,4 +52,4 @@ const CompanyShow: (props: ShowProps) => JSX.Element = (props) => {
   )
 }
 
-export default CompanyShow
+export default TenantShow
