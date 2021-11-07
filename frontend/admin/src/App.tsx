@@ -3,30 +3,52 @@ import { Admin, Resource } from 'react-admin'
 import jsonServerProvider from 'ra-data-json-server'
 
 import authProvider from './authProvider'
-import Company from './components/Company'
+import Tenant from './components/Tenant'
 import User from './components/User'
-import { MyCompanyList } from './components/MyCompany'
+import Layout from './components/Layout'
+import { UserRole } from './models'
 
 const dataProvider = jsonServerProvider(
   'https://my-json-server.typicode.com/Bandius/myJsonServer'
 )
 
 const App: React.FC = () => (
-  <Admin dataProvider={dataProvider} authProvider={authProvider}>
-    {localStorage.getItem('permissions') == 'superadmin' ? (
-      <Resource
-        name="companies"
-        {...Company}
-        options={{ label: 'Organisations' }}
-      />
-    ) : (
-      <Resource
-        name="companies"
-        list={MyCompanyList}
-        options={{ label: 'My company' }}
-      />
-    )}
-    <Resource name="users" {...User} options={{ label: 'Tenant Admins' }} />
+  <Admin
+    dataProvider={dataProvider}
+    authProvider={authProvider}
+    layout={Layout}
+  >
+    {(permissions) =>
+      permissions === UserRole.SUPER_ADMIN
+        ? [
+            <Resource
+              key="tenants"
+              name="tenants"
+              {...Tenant}
+              options={{ label: 'Tenants' }}
+            />,
+            <Resource
+              key="users"
+              name="users"
+              {...User}
+              options={{ label: 'Tenant Admins' }}
+            />,
+          ]
+        : [
+            <Resource
+              key="tenants"
+              name="tenants"
+              show={Tenant.show}
+              options={{ label: 'Profile' }}
+            />,
+            <Resource
+              key="users"
+              name="users"
+              {...User}
+              options={{ label: 'Tenant Admins' }}
+            />,
+          ]
+    }
   </Admin>
 )
 

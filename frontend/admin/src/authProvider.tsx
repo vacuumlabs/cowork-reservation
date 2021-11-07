@@ -1,24 +1,28 @@
+import { User, UserRole } from './models'
+
 const login: (params: { username: string }) => Promise<void> = ({
   username,
 }) => {
-  localStorage.setItem('username', username)
-  const regexEmail = /(?<=@)[^.]+(?=\.)/
-  if (regexEmail.test(username)) {
-    // const domain = regexEmail.exec(username)
-    // localStorage.setItem('company', domain ? domain[0] : '')
-    localStorage.setItem('company', '1')
-    localStorage.setItem('permissions', 'tenantadmin')
-  } else {
-    localStorage.setItem('permissions', 'superadmin')
-  }
-
+  const isSuperadmin = username === 'superadmin'
+  const user = isSuperadmin
+    ? {
+        email: username,
+        name: 'Super Admin',
+        tenantId: '',
+        role: UserRole.SUPER_ADMIN,
+      }
+    : {
+        email: username,
+        name: 'Tenant Admin',
+        tenantId: '1',
+        role: UserRole.TENANT_ADMIN,
+      }
+  localStorage.setItem('user', JSON.stringify(user))
   return Promise.resolve()
 }
 
 const logout: () => Promise<void> = () => {
-  localStorage.removeItem('username')
-  localStorage.removeItem('company')
-  localStorage.removeItem('permissions')
+  localStorage.removeItem('user')
   return Promise.resolve()
 }
 
@@ -26,21 +30,40 @@ const checkError: (params: { status: number }) => Promise<void | never> = ({
   status,
 }) => {
   if (status === 401 || status === 403) {
-    localStorage.removeItem('username')
-    localStorage.removeItem('company')
-    localStorage.removeItem('permissions')
+    localStorage.removeItem('user')
     return Promise.reject()
   }
   return Promise.resolve()
 }
 
 const checkAuth: () => Promise<void | never> = () => {
-  return localStorage.getItem('username') ? Promise.resolve() : Promise.reject()
+  return localStorage.getItem('user') ? Promise.resolve() : Promise.reject()
 }
 
-const getPermissions: () => Promise<string> = () => {
-  const role = localStorage.getItem('permissions')
-  return role ? Promise.resolve(role) : Promise.reject()
+const getPermissions: () => Promise<UserRole> = () => {
+  try {
+    const userString = localStorage.getItem('user')
+    if (userString === null) {
+      throw new Error('No user available')
+    }
+    const user = JSON.parse(userString) as User
+    return Promise.resolve(user.role)
+  } catch (error) {
+    return Promise.reject(error)
+  }
+}
+
+const getIdentity: () => Promise<User> = () => {
+  try {
+    const userString = localStorage.getItem('user')
+    if (userString === null) {
+      throw new Error('No user available')
+    }
+    const user = JSON.parse(userString) as User
+    return Promise.resolve(user)
+  } catch (error) {
+    return Promise.reject(error)
+  }
 }
 
 export default {
@@ -49,4 +72,5 @@ export default {
   checkError,
   checkAuth,
   getPermissions,
+  getIdentity,
 }
