@@ -38,7 +38,7 @@ const TenantShow: (props: ShowProps) => JSX.Element = (props) => {
           fullWidth
           label="Admins"
           reference="users"
-          target="TenantId"
+          target="tenantId"
         >
           <Datagrid>
             <TextField source="id" />

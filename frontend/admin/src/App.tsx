@@ -5,6 +5,7 @@ import jsonServerProvider from 'ra-data-json-server'
 import authProvider from './authProvider'
 import Tenant from './components/Tenant'
 import User from './components/User'
+import Room from './components/Room'
 import Layout from './components/Layout'
 import { UserRole } from './models'
 
@@ -33,6 +34,12 @@ const App: React.FC = () => (
               {...User}
               options={{ label: 'Tenant Admins' }}
             />,
+            <Resource
+              key="rooms"
+              name="rooms"
+              {...Room}
+              options={{ label: 'Rooms' }}
+            />,
           ]
         : [
             <Resource
@@ -46,6 +53,12 @@ const App: React.FC = () => (
               name="users"
               {...User}
               options={{ label: 'Tenant Admins' }}
+            />,
+            <Resource
+              key="rooms"
+              name="rooms"
+              {...Room}
+              options={{ label: 'Rooms' }}
             />,
           ]
     }
