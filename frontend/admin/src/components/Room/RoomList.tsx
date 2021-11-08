@@ -5,37 +5,69 @@ import {
   CardContent,
   Typography,
   makeStyles,
+  CardActions,
 } from '@material-ui/core'
-import { List, ListProps, useListContext } from 'react-admin'
+import {
+  EditButton,
+  List,
+  ListProps,
+  TextInput,
+  useListContext,
+} from 'react-admin'
 
 import { Room } from '../../models'
 
 const useStyles = makeStyles({
   root: {
-    marginTop: '1em',
+    marginTop: '3em',
     display: 'flex',
-    justifyContent: 'space-around',
+    alignContent: 'center',
+    justifyContent: 'center',
   },
   title: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
   },
+  card: {
+    height: 'auto',
+    width: 200,
+    margin: '2em',
+  },
+  actionSpacer: {
+    display: 'flex',
+    justifyContent: 'space-around',
+  },
 })
+
+const RoomFilters = [
+  <TextInput key={0} label="Search city" source="q" alwaysOn />,
+]
 
 const RoomGrid = () => {
   const classes = useStyles()
   const { data, ids } = useListContext<Room>()
   return ids ? (
-    <Grid container spacing={2} className={classes.root}>
+    <Grid container className={classes.root}>
       {ids.map((id) => (
-        <Grid key={id}>
-          <Card>
+        <Grid container item key={id} xs={6} md={2} spacing={3}>
+          <Card className={classes.card}>
             <CardContent className={classes.title}>
               <Typography variant="h5" component="h2" align="center">
                 {data[id].roomNumber}
               </Typography>
             </CardContent>
+            <CardContent>
+              <Typography variant="subtitle1" component="h2" align="center">
+                {data[id].city}
+              </Typography>
+              <Typography variant="subtitle1" component="h2" align="center">
+                {data[id].building}
+              </Typography>
+            </CardContent>
+            <CardActions className={classes.actionSpacer}>
+              <EditButton record={data[id]} />
+            </CardActions>
           </Card>
         </Grid>
       ))}
@@ -44,7 +76,7 @@ const RoomGrid = () => {
 }
 
 const RoomList: (props: ListProps) => JSX.Element = (props) => (
-  <List {...props}>
+  <List {...props} filters={RoomFilters}>
     <RoomGrid />
   </List>
 )

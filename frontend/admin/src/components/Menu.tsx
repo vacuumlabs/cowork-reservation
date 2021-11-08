@@ -57,12 +57,6 @@ const _Menu: (props: MenuProps) => JSX.Element = (props) => {
               primaryText="My Admins"
               leftIcon={<UserIcon />}
             />,
-            <MenuItemLink
-              key="rooms"
-              to="/rooms"
-              primaryText="Rooms"
-              leftIcon={<RoomIcon />}
-            />,
           ]}
     </Menu>
   )

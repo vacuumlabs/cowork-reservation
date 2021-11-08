@@ -54,12 +54,6 @@ const App: React.FC = () => (
               {...User}
               options={{ label: 'Tenant Admins' }}
             />,
-            <Resource
-              key="rooms"
-              name="rooms"
-              {...Room}
-              options={{ label: 'Rooms' }}
-            />,
           ]
     }
   </Admin>
