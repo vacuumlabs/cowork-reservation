@@ -14,9 +14,6 @@
 		6172F2D35A4C3AA820D92908 /* libPods-tablet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6423831EA8574132BED9D8CC /* libPods-tablet.a */; };
 		7EF68E3733C33B6898317E18 /* libPods-tablet-tabletTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABFE59519B596E51CEFDCCC0 /* libPods-tablet-tabletTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		73F1F809A2BA40679B1ED8B7 /* Crete Round.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2F80B21310B14A568934E9A3 /* Crete Round.ttf */; };
-		0ED5E2BC33DF461C919B7DF4 /* Hind Madurai.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C1B3C4E423C1497F93A15F37 /* Hind Madurai.ttf */; };
-		67328603B5EE4331903EDE3E /* PT Sans Caption Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 344A6620760A4AB8B72C4227 /* PT Sans Caption Bold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,9 +44,6 @@
 		C0A881CF5CF3F2B244570E2A /* Pods-tablet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tablet.debug.xcconfig"; path = "Target Support Files/Pods-tablet/Pods-tablet.debug.xcconfig"; sourceTree = "<group>"; };
 		D00AAFFCFCFDA5787532823F /* Pods-tablet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tablet.release.xcconfig"; path = "Target Support Files/Pods-tablet/Pods-tablet.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		2F80B21310B14A568934E9A3 /* Crete Round.ttf */ = {isa = PBXFileReference; name = "Crete Round.ttf"; path = "../assets/fonts/Crete Round.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		C1B3C4E423C1497F93A15F37 /* Hind Madurai.ttf */ = {isa = PBXFileReference; name = "Hind Madurai.ttf"; path = "../assets/fonts/Hind Madurai.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		344A6620760A4AB8B72C4227 /* PT Sans Caption Bold.ttf */ = {isa = PBXFileReference; name = "PT Sans Caption Bold.ttf"; path = "../assets/fonts/PT Sans Caption Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,7 +122,6 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				E233CBF5F47BEE60B243DCF8 /* Pods */,
-				A9C9599725114E37A3A31D01 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -155,17 +148,6 @@
 			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
-		};
-		A9C9599725114E37A3A31D01 /* Resources */ = {
-			isa = "PBXGroup";
-			children = (
-				2F80B21310B14A568934E9A3 /* Crete Round.ttf */,
-				C1B3C4E423C1497F93A15F37 /* Hind Madurai.ttf */,
-				344A6620760A4AB8B72C4227 /* PT Sans Caption Bold.ttf */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-			path = "";
 		};
 /* End PBXGroup section */
 
@@ -263,9 +245,6 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				73F1F809A2BA40679B1ED8B7 /* Crete Round.ttf in Resources */,
-				0ED5E2BC33DF461C919B7DF4 /* Hind Madurai.ttf in Resources */,
-				67328603B5EE4331903EDE3E /* PT Sans Caption Bold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
