@@ -1,13 +1,11 @@
 import sys
-
 from sqlalchemy.engine.url import URL
 
 sys.path.append("./")
-
 from flask import Flask
-from api import api
 from db.models import db
 from db.config_database import ConfigDatabase
+from flask_migrate import Migrate
 
 
 def create_app():
@@ -15,12 +13,11 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = URL(
         "postgresql", **ConfigDatabase.postgres_access
     )
-    print(app.config["SQLALCHEMY_DATABASE_URI"])
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    try:
-        db.init_app(app)
-        db.create_all(app=app)
-    except:
-        print("--------------------!!!Database is not running!!!")
+    db.init_app(app)
+    migrate = Migrate()
+    migrate.init_app(app, db)
+    from api import api
+
     api.init_app(app)
     return app

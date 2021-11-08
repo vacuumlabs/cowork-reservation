@@ -24,9 +24,9 @@ def init_app(app: Flask):
         return send_from_directory("static", path)
 
     @app.route("/organizations", methods=["GET"])
-    def get_companies():
-        companies = db.getCompanies()
-        return json.dumps(companies)
+    def get_organizations():
+        organizations = db.getOrganizations()
+        return json.dumps(organizations)
 
     @app.route("/", methods=["GET"])
     def get_webPage():
@@ -41,7 +41,7 @@ def init_app(app: Flask):
     """ --- POST methods --- """
 
     @app.route("/organizations", methods=["POST"])
-    def insert_company():
+    def insert_organization():
         try:
             if request.method == "POST":
                 print(request)
@@ -50,7 +50,7 @@ def init_app(app: Flask):
                 message_json["location"] = request.form.get("location")
                 message_json["email"] = request.form.get("email")
                 print(
-                    db.addCompany(
+                    db.addOrganization(
                         message_json["name"],
                         message_json["location"],
                         message_json["email"],

@@ -1,10 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_sqlalchemy.model import DefaultMeta
 
-
 db = SQLAlchemy()
-
 BaseModel: DefaultMeta = db.Model
+
 # This is table for MANY to MANY relationShip for event and attendee
 event_attendee = db.Table(
     "event_attendee",
@@ -23,21 +22,23 @@ class Attendee(BaseModel):
 
 class Calendar(BaseModel):
     id = db.Column(db.Integer, primary_key=True)
-    company_id = db.Column(db.Integer, db.ForeignKey("company.id"), nullable=False)
+    organization_id = db.Column(
+        db.Integer, db.ForeignKey("organization.id"), nullable=False
+    )
     name = db.Column(db.String(255), nullable=False)
     google_id = db.Column(db.String(255), nullable=False)
 
     events = db.relationship("Event", backref="calendar")
 
 
-class Company(BaseModel):
+class Organization(BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     location = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False)
 
-    calendars = db.relationship("Calendar", backref="company")
-    events = db.relationship("Event", backref="company")
+    calendars = db.relationship("Calendar", backref="organization")
+    events = db.relationship("Event", backref="organization")
 
 
 class Event(BaseModel):
@@ -48,7 +49,7 @@ class Event(BaseModel):
     start = db.Column(db.DateTime, nullable=False)
     end = db.Column(db.DateTime, nullable=False)
     google_id = db.Column(db.String(255), nullable=False)
-    company_id = db.Column(db.Integer, db.ForeignKey("company.id"))
+    organization_id = db.Column(db.Integer, db.ForeignKey("organization.id"))
     status = db.Column(db.Boolean)
 
     attendees = db.relationship("Attendee", secondary=event_attendee)
