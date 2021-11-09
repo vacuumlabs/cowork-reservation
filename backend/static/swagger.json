@@ -16,16 +16,12 @@
     ],
     "tags": [
         {
-            "name": "Attendee",
-            "description": "All endpoints related to the Attendee table"
-        },
-        {
             "name": "Calendar",
             "description": "All endpoints related to the Calendar table"
         },
         {
-            "name": "Organization",
-            "description": "All endpoints related to the Organization table"
+            "name": "Tenant",
+            "description": "All endpoints related to the Company table"
         },
         {
             "name": "Event",
@@ -37,15 +33,15 @@
         }
     ],
     "paths": {
-        "/organization": {
+        "/tenant": {
             "get": {
                 "tags": [
-                    "Organization"
+                    "Tenant"
                 ],
                 "summary": "",
                 "responses": {
                     "200": {
-                        "description": "There should be array of organizations located in response",
+                        "description": "There should be array of tenant located in response",
                         "schema": {
                             "type": "array",
                             "properties": {
@@ -54,7 +50,10 @@
                                         "type": "int",
                                         "format": "int32"
                                     },
-                                    "location": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "city": {
                                         "type": "string"
                                     },
                                     "email": {
@@ -69,7 +68,7 @@
             },
             "post": {
                 "tags": [
-                    "Organization"
+                    "Tenant"
                 ],
                 "summary": "",
                 "requestBody": {
@@ -83,12 +82,16 @@
                                         "minLength": 1,
                                         "maxLength": 255
                                     },
-                                    "location": {
+                                    "city": {
                                         "type": "string",
                                         "minLength": 1,
                                         "maxLength": 255,
                                         "default": "notFakeLocation1",
-                                        "enum": ["notFakeLocation1", "notFakeLocation2", "notFakeLocation3"]
+                                        "enum": [
+                                            "notFakeLocation1",
+                                            "notFakeLocation2",
+                                            "notFakeLocation3"
+                                        ]
                                     },
                                     "email": {
                                         "type": "string",
@@ -96,15 +99,21 @@
                                         "minLength": 1,
                                         "maxLength": 255,
                                         "default": "email@NotFake.com",
-                                        "enum": ["email@NotFake.com", "notFake@email.com", "not.fake@email.com"]
+                                        "enum": [
+                                            "email@NotFake.com",
+                                            "notFake@email.com",
+                                            "not.fake@email.com"
+                                        ]
                                     }
                                 },
-                            "required": [
-                                    "name", "location", "email"
-                                ]   
+                                "required": [
+                                    "name",
+                                    "city",
+                                    "email"
+                                ]
                             }
                         }
-                    }    
+                    }
                 },
                 "responses": {
                     "200": {
@@ -119,33 +128,6 @@
     },
     "components": {
         "schemas": {
-            "Attendee": {
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "format": "int32",
-                        "primary_key": "True"
-                    },
-                    "name": {
-                        "type": "string",
-                        "max_length": 255,
-                        "nullable": "False",
-                        "description": ""
-                    },
-                    "email": {
-                        "type": "string",
-                        "format": "email",
-                        "max_length": 255,
-                        "nullable": "False",
-                        "description": ""
-                    },
-                    "event_id": {
-                        "type": "integer",
-                        "format": "int32",
-                        "description": "In many to many relationship with Event table"
-                    }
-                }
-            },
             "Calendar": {
                 "properties": {
                     "id": {
@@ -153,10 +135,10 @@
                         "format": "int32",
                         "primary_key": "True"
                     },
-                    "company_id": {
+                    "tenant_id": {
                         "type": "integer",
                         "format": "int32",
-                        "description": "Foreing key from Company table"
+                        "description": "Foreing key from Tenant table"
                     },
                     "name": {
                         "type": "string",
@@ -172,7 +154,7 @@
                     }
                 }
             },
-            "Company": {
+            "Tenant": {
                 "properties": {
                     "id": {
                         "type": "integer",
@@ -185,7 +167,7 @@
                         "nullable": "False",
                         "description": ""
                     },
-                    "location": {
+                    "city": {
                         "type": "string",
                         "max_length": 255,
                         "nullable": "False",
@@ -241,10 +223,10 @@
                         "nullable": "False",
                         "description": ""
                     },
-                    "company_id": {
+                    "tenant_id": {
                         "type": "integer",
                         "format": "int32",
-                        "description": "Foreing key from Company table"
+                        "description": "Foreing key from Tenant table"
                     },
                     "status": {
                         "type": "boolean",
@@ -259,7 +241,7 @@
                         "format": "int32",
                         "primary_key": "True"
                     },
-                    "location": {
+                    "city": {
                         "type": "string",
                         "max_length": 255,
                         "nullable": "False",
@@ -274,6 +256,17 @@
                     "equipment": {
                         "type": "string",
                         "max_length": 255,
+                        "description": ""
+                    },
+                    "building": {
+                        "type": "string",
+                        "max_length": 255,
+                        "description": ""
+                    },
+                    "room_number": {
+                        "type": "int",
+                        "format": "int32",
+                        "nullable": "False",
                         "description": ""
                     }
                 }

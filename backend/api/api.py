@@ -23,10 +23,10 @@ def init_app(app: Flask):
     def send_static(path):
         return send_from_directory("static", path)
 
-    @app.route("/organizations", methods=["GET"])
-    def get_organizations():
-        organizations = db.getOrganizations()
-        return json.dumps(organizations)
+    @app.route("/tenant", methods=["GET"])
+    def get_tenant():
+        companies = db.getTenant()
+        return json.dumps(companies)
 
     @app.route("/", methods=["GET"])
     def get_webPage():
@@ -40,19 +40,19 @@ def init_app(app: Flask):
 
     """ --- POST methods --- """
 
-    @app.route("/organizations", methods=["POST"])
-    def insert_organization():
+    @app.route("/tenant", methods=["POST"])
+    def insert_tenant():
         try:
             if request.method == "POST":
                 print(request)
                 message_json = {}
                 message_json["name"] = request.form.get("name")
-                message_json["location"] = request.form.get("location")
+                message_json["city"] = request.form.get("city")
                 message_json["email"] = request.form.get("email")
                 print(
-                    db.addOrganization(
+                    db.addTenant(
                         message_json["name"],
-                        message_json["location"],
+                        message_json["city"],
                         message_json["email"],
                     )
                 )

@@ -1,20 +1,18 @@
-from db.models import Organization
+from db.models import Tenant
 from db.models import db
 from flask_sqlalchemy import SQLAlchemy
 
 
-def getOrganizations() -> list:
-    organizations = Organization.query.all()
+def getTenant() -> list:
+    tenant = Tenant.query.all()
     return [
-        {"id": row.id, "name": row.name, "location": row.location, "email": row.email}
-        for row in organizations
+        {"id": row.id, "name": row.name, "city": row.city, "email": row.email}
+        for row in tenant
     ]
 
 
-def addOrganization(organization_name: str, location: str, email: str) -> Organization:
-    add_organization = Organization(
-        name=organization_name, location=location, email=email
-    )
-    db.session.add(add_organization)
+def addTenant(tenant_name: str, city: str, email: str) -> Tenant:
+    add_tenant = Tenant(name=tenant_name, city=city, email=email)
+    db.session.add(add_tenant)
     db.session.commit()
-    return add_organization
+    return add_tenant

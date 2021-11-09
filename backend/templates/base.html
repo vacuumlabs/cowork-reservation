@@ -7,12 +7,12 @@
     <title>Test</title>
 </head>
 <body>
-    <form action="/organizations" method="post">
+    <form action="/tenant" method="post">
         <label for="name">Add Company</label>
         <br>
         <input autofocus name="name" type="text" maxlength="255", autocomplete="off", spellcheck="false" placeholder="Company name">
         <br>
-        <input autofocus name="location" type="text" maxlength="255", autocomplete="off", spellcheck="false" placeholder="Location">
+        <input autofocus name="city" type="text" maxlength="255", autocomplete="off", spellcheck="false" placeholder="City">
         <br>
         <input autofocus name="email" type="text" maxlength="255", autocomplete="off", spellcheck="false" placeholder="Email">
         <button type="submit">Submit</button>
@@ -21,11 +21,11 @@
     <ul id="testUl"></ul>
     <script>
         let listOfMessages = document.querySelector("#testUl");
-        fetch("/organizations")
+        fetch("/tenant")
         .then(response => response.json())
         .then(data => {
             data.forEach(element => {
-                listOfMessages.innerHTML += `<li>${element.id} ${element.name} ${element.location} ${element.email}</li>`;
+                listOfMessages.innerHTML += `<li>${element.id} ${element.name} ${element.city} ${element.email}</li>`;
             });
         })
     </script>
