@@ -1,32 +1,61 @@
 from datetime import datetime
 import json
-
-from flask import Flask, request
-
+from flask import Flask, request, render_template
+from flask.helpers import send_from_directory
+from flask_swagger_ui import get_swaggerui_blueprint
 from db.access_database import AccessDataBase
+import db.queries as db
 
 
 def init_app(app: Flask):
+
+    """--- GET methods ---"""
+    ### swagger specific ###
+    SWAGGER_URL = "/swagger"
+    API_URL = "/static/swagger.json"
+    SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
+        SWAGGER_URL, API_URL, config={"app_name": "Cowork-Reservation"}
+    )
+
+    app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
+
+    @app.route("/static/<path:path>")
+    def send_static(path):
+        return send_from_directory("static", path)
+
+    @app.route("/tenant", methods=["GET"])
+    def get_tenant():
+        companies = db.getTenant()
+        return json.dumps(companies)
+
     @app.route("/", methods=["GET"])
-    def get_messages():
-        dbobj = AccessDataBase()
-        messages = dbobj.get_messages()
+    def get_webPage():
+        # TODO: Replace with correct html file
+        return render_template("base.html")
 
-        print(messages)
+    @app.route("/admin", methods=["GET"])
+    def get_adminPage():
+        # TODO: Replace with correct html file
+        return render_template("base.html")
 
-        return "OK"
+    """ --- POST methods --- """
 
-    @app.route("/", methods=["POST"])
-    def insert_message():
+    @app.route("/tenant", methods=["POST"])
+    def insert_tenant():
         try:
-            dbobj = AccessDataBase()
             if request.method == "POST":
                 print(request)
                 message_json = {}
-                message_json["text"] = request.json["text"]
-                message_json["created_at"] = str(datetime.now().date())
-
-                dbobj.insert_message(message_json)
-                return json.dumps(message_json)
+                message_json["name"] = request.form.get("name")
+                message_json["city"] = request.form.get("city")
+                message_json["email"] = request.form.get("email")
+                print(
+                    db.addTenant(
+                        message_json["name"],
+                        message_json["city"],
+                        message_json["email"],
+                    )
+                )
+                return render_template("base.html")
         except Exception as err:
             return str(err)
