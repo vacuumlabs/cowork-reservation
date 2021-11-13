@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
-const App : React.FC = () => {
+const RoomDetailScreen : React.FC = () => {
     return (
         <View style={styles.container}>
             <Text>Room Screen</Text>
@@ -9,7 +9,7 @@ const App : React.FC = () => {
     )
 }
 
-export default App;
+export default RoomDetailScreen;
 
 const styles = StyleSheet.create({
     container: {
