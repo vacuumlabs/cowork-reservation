@@ -9,7 +9,7 @@ const App: React.FC = () => {
   return (
     <NavigationContainer>
         <Navigator screenOptions={{headerShown: false}}>
-            <Screen name="room_detail_screen" component={RoomDetailScreen}></Screen>
+            <Screen name="RoomDetailScreen" component={RoomDetailScreen}></Screen>
         </Navigator>
     </NavigationContainer>
   )
