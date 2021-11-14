@@ -24,21 +24,14 @@ const login: (params: { username: string; password: string }) => Promise<void> =
         username,
         password
       )
-      const isSuperadmin =
-        userCredential.user.email?.split('@')[0] === 'superadmin'
-      const user = isSuperadmin
-        ? {
-            email: userCredential.user.email,
-            name: 'Super Admin',
-            tenantId: '',
-            role: UserRole.SUPER_ADMIN,
-          }
-        : {
-            email: userCredential.user.email,
-            name: 'Tenant Admin',
-            tenantId: '1',
-            role: UserRole.TENANT_ADMIN,
-          }
+      const userToken = await userCredential.user.getIdTokenResult()
+      const userClaims = userToken.claims
+      const user = {
+        email: userCredential.user.email,
+        name: userCredential.user.displayName,
+        tenantId: userClaims.tenantId,
+        role: userClaims.role,
+      }
       localStorage.setItem('user', JSON.stringify(user))
       return Promise.resolve()
     } catch (error) {
