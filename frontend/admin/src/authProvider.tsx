@@ -1,28 +1,53 @@
+import { initializeApp } from 'firebase/app'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+
 import { User, UserRole } from './models'
 
-const login: (params: { username: string }) => Promise<void> = ({
-  username,
-}) => {
-  const isSuperadmin = username === 'superadmin'
-  const user = isSuperadmin
-    ? {
-        email: username,
-        name: 'Super Admin',
-        tenantId: '',
-        role: UserRole.SUPER_ADMIN,
-      }
-    : {
-        email: username,
-        name: 'Tenant Admin',
-        tenantId: '1',
-        role: UserRole.TENANT_ADMIN,
-      }
-  localStorage.setItem('user', JSON.stringify(user))
-  return Promise.resolve()
+const firebaseConfig = {
+  apiKey: 'AIzaSyAJ_GxyUXUkja9DCHXVTbH9Jhje5bsfv9s',
+  authDomain: 'coworkreservation.firebaseapp.com',
+  projectId: 'coworkreservation',
+  storageBucket: 'coworkreservation.appspot.com',
+  messagingSenderId: '182196777623',
+  appId: '1:182196777623:web:c9d18ac242055ba54f2fd2',
+  measurementId: 'G-LRR9NTQ779',
 }
 
-const logout: () => Promise<void> = () => {
+initializeApp(firebaseConfig)
+const auth = getAuth()
+
+const login: (params: { username: string; password: string }) => Promise<void> =
+  async ({ username, password }) => {
+    try {
+      await signInWithEmailAndPassword(auth, username, password).then(
+        (userCredential) => {
+          const isSuperadmin =
+            userCredential.user.email?.split('@')[0] === 'superadmin'
+          const user = isSuperadmin
+            ? {
+                email: userCredential.user.email,
+                name: 'Super Admin',
+                tenantId: '',
+                role: UserRole.SUPER_ADMIN,
+              }
+            : {
+                email: userCredential.user.email,
+                name: 'Tenant Admin',
+                tenantId: '1',
+                role: UserRole.TENANT_ADMIN,
+              }
+          localStorage.setItem('user', JSON.stringify(user))
+        }
+      )
+      return Promise.resolve()
+    } catch (error) {
+      return Promise.reject(error)
+    }
+  }
+
+const logout: () => Promise<void> = async () => {
   localStorage.removeItem('user')
+  await auth.signOut()
   return Promise.resolve()
 }
 
