@@ -1,20 +1,18 @@
 import React from 'react'
-import {
-  StyleSheet, Text,
-} from 'react-native'
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
+import { RoomDetailScreen } from './src/screens'
+
+const {Navigator, Screen} = createStackNavigator();
 
 const App: React.FC = () => {
   return (
-    <Text style={styles.text}>Hello World!</Text>
+    <NavigationContainer>
+        <Navigator screenOptions={{headerShown: false}}>
+            <Screen name="RoomDetailScreen" component={RoomDetailScreen}></Screen>
+        </Navigator>
+    </NavigationContainer>
   )
 }
-
-const styles = StyleSheet.create({
-  text: {
-    marginTop: 32,
-    fontSize: 48,
-    alignSelf: 'center',
-  },
-})
 
 export default App
