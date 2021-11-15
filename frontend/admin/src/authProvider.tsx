@@ -19,26 +19,27 @@ const auth = getAuth()
 const login: (params: { username: string; password: string }) => Promise<void> =
   async ({ username, password }) => {
     try {
-      await signInWithEmailAndPassword(auth, username, password).then(
-        (userCredential) => {
-          const isSuperadmin =
-            userCredential.user.email?.split('@')[0] === 'superadmin'
-          const user = isSuperadmin
-            ? {
-                email: userCredential.user.email,
-                name: 'Super Admin',
-                tenantId: '',
-                role: UserRole.SUPER_ADMIN,
-              }
-            : {
-                email: userCredential.user.email,
-                name: 'Tenant Admin',
-                tenantId: '1',
-                role: UserRole.TENANT_ADMIN,
-              }
-          localStorage.setItem('user', JSON.stringify(user))
-        }
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        username,
+        password
       )
+      const isSuperadmin =
+        userCredential.user.email?.split('@')[0] === 'superadmin'
+      const user = isSuperadmin
+        ? {
+            email: userCredential.user.email,
+            name: 'Super Admin',
+            tenantId: '',
+            role: UserRole.SUPER_ADMIN,
+          }
+        : {
+            email: userCredential.user.email,
+            name: 'Tenant Admin',
+            tenantId: '1',
+            role: UserRole.TENANT_ADMIN,
+          }
+      localStorage.setItem('user', JSON.stringify(user))
       return Promise.resolve()
     } catch (error) {
       return Promise.reject(error)

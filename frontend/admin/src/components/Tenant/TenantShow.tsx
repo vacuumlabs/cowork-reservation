@@ -54,8 +54,11 @@ const TenantShow: (props: ShowProps) => JSX.Element = (props) => {
         <TextField source="name" label="" />
         <TextField source="email" label="Email" />
         {permissions === UserRole.SUPER_ADMIN
-          ? [<AddAdminButton key={permissions} />]
-          : [<AddUserButton key="user" />, <AddDomainButton key="domain" />]}
+          ? [<AddAdminButton key="adminButton" />]
+          : [
+              <AddUserButton key="userButton" />,
+              <AddDomainButton key="domainButton" />,
+            ]}
         <ReferenceManyField
           fullWidth
           label="Admins"
