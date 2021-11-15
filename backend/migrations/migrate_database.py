@@ -27,9 +27,9 @@ else:
                 moved_lines.append(line)
                 lines[idx] = ""
             elif "# ### end Alembic commands ###" in line:
-                for elem in moved_lines:
-                    lines.insert(idx, elem)
-                    moved_lines.pop(0)
+                for i, drops in enumerate(moved_lines):
+                    lines.insert(idx, moved_lines[i])
+                moved_lines.clear()
             pass
         migration_file.seek(0)
         migration_file.truncate()
