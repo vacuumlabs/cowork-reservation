@@ -1,8 +1,8 @@
 # Starting the Cowork Reservation App (Admin panel)
 
-Make sure you are in directory `/cowork-reservation/frontend/admin`.\
+Make sure you are in directory `/cowork-reservation/frontend/admin`
 
-Make sure you have `yarn` installed. If not click here -> [https://yarnpkg.com/getting-started/install](Setup yarn) <- and proceed to next step.\
+Make sure you have `yarn` installed. If not click here -> [Setup yarn](https://yarnpkg.com/getting-started/install) <- and proceed to next step
 
 Run command to build your modules:
 
