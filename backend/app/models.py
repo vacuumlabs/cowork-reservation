@@ -1,7 +1,6 @@
-from flask_sqlalchemy import SQLAlchemy
 from flask_sqlalchemy.model import DefaultMeta
+from app import db
 
-db = SQLAlchemy()
 BaseModel: DefaultMeta = db.Model
 
 
