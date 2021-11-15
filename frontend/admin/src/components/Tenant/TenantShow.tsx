@@ -64,6 +64,7 @@ const TenantShow: (props: ShowProps) => JSX.Element = (props) => {
           label="Admins"
           reference="users"
           target="tenantId"
+          sort={{ field: 'id', order: 'ASC' }}
         >
           <Datagrid>
             <TextField source="id" />

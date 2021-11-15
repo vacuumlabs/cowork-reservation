@@ -1,7 +1,13 @@
 import { initializeApp } from 'firebase/app'
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import {
+  getAuth,
+  ParsedToken,
+  signInWithEmailAndPassword,
+  UserCredential,
+  User as FirebaseUser,
+} from 'firebase/auth'
 
-import { User, UserRole } from './models'
+import { CustomUserClaims, User, UserRole } from './models'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAJ_GxyUXUkja9DCHXVTbH9Jhje5bsfv9s',
@@ -16,80 +22,57 @@ const firebaseConfig = {
 initializeApp(firebaseConfig)
 const auth = getAuth()
 
-const login: (params: { username: string; password: string }) => Promise<void> =
-  async ({ username, password }) => {
-    try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        username,
-        password
-      )
-      const isSuperadmin =
-        userCredential.user.email?.split('@')[0] === 'superadmin'
-      const user = isSuperadmin
-        ? {
-            email: userCredential.user.email,
-            name: 'Super Admin',
-            tenantId: '',
-            role: UserRole.SUPER_ADMIN,
-          }
-        : {
-            email: userCredential.user.email,
-            name: 'Tenant Admin',
-            tenantId: '1',
-            role: UserRole.TENANT_ADMIN,
-          }
-      localStorage.setItem('user', JSON.stringify(user))
-      return Promise.resolve()
-    } catch (error) {
-      return Promise.reject(error)
-    }
-  }
+type UserClaims = ParsedToken & CustomUserClaims
+
+const login: (params: {
+  username: string
+  password: string
+}) => Promise<void | UserCredential> = async ({ username, password }) => {
+  return await signInWithEmailAndPassword(auth, username, password)
+}
 
 const logout: () => Promise<void> = async () => {
-  localStorage.removeItem('user')
-  await auth.signOut()
-  return Promise.resolve()
+  return await auth.signOut()
 }
 
 const checkError: (params: { status: number }) => Promise<void | never> = ({
   status,
 }) => {
   if (status === 401 || status === 403) {
-    localStorage.removeItem('user')
-    return Promise.reject()
+    auth.signOut()
+    return Promise.reject('Unauthorized or forbidden.')
   }
   return Promise.resolve()
 }
 
 const checkAuth: () => Promise<void | never> = () => {
-  return localStorage.getItem('user') ? Promise.resolve() : Promise.reject()
+  return auth.currentUser
+    ? Promise.resolve()
+    : Promise.reject('No user available.')
 }
 
-const getPermissions: () => Promise<UserRole> = () => {
-  try {
-    const userString = localStorage.getItem('user')
-    if (userString === null) {
-      throw new Error('No user available')
-    }
-    const user = JSON.parse(userString) as User
-    return Promise.resolve(user.role)
-  } catch (error) {
-    return Promise.reject(error)
-  }
+const getUserClaims: (user: FirebaseUser) => Promise<UserClaims> = async (
+  user
+) => {
+  return Promise.resolve((await user.getIdTokenResult()).claims as UserClaims)
 }
 
-const getIdentity: () => Promise<User> = () => {
-  try {
-    const userString = localStorage.getItem('user')
-    if (userString === null) {
-      throw new Error('No user available')
-    }
-    const user = JSON.parse(userString) as User
-    return Promise.resolve(user)
-  } catch (error) {
-    return Promise.reject(error)
-  }
+const getPermissions: () => Promise<UserRole> = async () => {
+  if (!auth.currentUser) return Promise.reject()
+  return Promise.resolve((await getUserClaims(auth.currentUser)).role)
+}
+
+const getIdentity: () => Promise<User> = async () => {
+  if (!auth.currentUser) return Promise.reject()
+  const claims = await getUserClaims(auth.currentUser)
+
+  return Promise.resolve({
+    id: auth.currentUser.uid,
+    name: auth.currentUser.displayName,
+    email: auth.currentUser.email,
+    tenantId: claims.tenantId,
+    role: claims.role,
+  } as User)
 }
 
 export default {
