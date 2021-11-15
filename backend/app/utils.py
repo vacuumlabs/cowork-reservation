@@ -11,3 +11,9 @@ def config_logging():
     )
     logger = logging.getLogger("root")
     logger.debug("logging.conf got")
+
+
+def migrate_database(app: Flask):
+    import flask_migrate
+
+    flask_migrate.init()
