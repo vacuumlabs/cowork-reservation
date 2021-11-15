@@ -1,18 +1,13 @@
 import configparser
 import logging
 import logging.config
-import os
 
-IN_DOCKER = os.environ.get("IS_IN_DOCKER", False)
+from flask import Flask
 
 
-def ConfigLogging():
+def config_logging():
     logging.config.fileConfig(
         "config/logging.conf",
     )
     logger = logging.getLogger("root")
     logger.debug("logging.conf got")
-    # if IN_DOCKER:
-    #     db_info.read("db/resources/database.ini")
-    # else:
-    #     db_info.read("db/resources/database_local.ini")

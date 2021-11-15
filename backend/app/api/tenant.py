@@ -1,12 +1,13 @@
-from flask import Blueprint, jsonfiy, request, render_template
+from flask import jsonify, request, render_template
+from flask.blueprints import Blueprint
 from app.daos import tenant_dao
 
 tenant_bp = Blueprint("tenant_bp", __name__)
 
 
 @tenant_bp.route("/tenant", methods=["GET"])
-def get_users():
-    return jsonfiy(tenant_dao.get_all())
+def get_tenants():
+    return jsonify(tenant_dao.get_all())
 
 
 @tenant_bp.route("/tenant", methods=["POST"])
@@ -19,7 +20,7 @@ def insert_tenant():
             message_json["city"] = request.form.get("city")
             message_json["email"] = request.form.get("email")
             print(
-                tenant_dao.addTenant(
+                tenant_dao.add_tenant(
                     message_json["name"],
                     message_json["city"],
                     message_json["email"],
