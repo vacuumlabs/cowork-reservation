@@ -1,3 +1,3 @@
-import RoomDetailScreen from './MainScreen'
+import RoomDetailScreen from './RoomDetailScreen'
 
 export { RoomDetailScreen }
