@@ -1,16 +1,22 @@
 import React from 'react'
-import { StyleSheet, Text } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
-interface Props {
+import theme from './theme'
+
+import { Typography } from '.'
+
+type ButtonProps = {
   title: string
   onPress: () => void
 }
 
-const Button: React.FC<Props> = (props) => {
+const Button: React.FC<ButtonProps> = ({ title, onPress }) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={props.onPress}>
-      <Text style={styles.text}>{props.title}</Text>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
+      <Typography variant="button" color="black">
+        {title}
+      </Typography>
     </TouchableOpacity>
   )
 }
@@ -19,16 +25,9 @@ export default Button
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#36DABC',
-    borderRadius: 12,
-    paddingHorizontal: 18,
-    paddingVertical: 12,
-  },
-  text: {
-    color: '#000000',
-    fontFamily: 'PT Sans Caption Bold',
-    fontSize: 18,
-    textTransform: 'uppercase',
-    textAlign: 'center',
+    backgroundColor: theme.colors.turquoise,
+    borderRadius: theme.borderRadius.middle,
+    paddingHorizontal: theme.paddingHorizontal.middle,
+    paddingVertical: theme.paddingVertical.middle,
   },
 })
