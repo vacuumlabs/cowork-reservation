@@ -1,10 +1,12 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
+
+import { Button } from '../components'
 
 const RoomDetailScreen: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text>Room Screen</Text>
+      <Button title="Room Detail" onPress={() => 'Pressed'} />
     </View>
   )
 }
