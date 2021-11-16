@@ -24,6 +24,10 @@ const auth = getAuth()
 
 type UserClaims = ParsedToken & CustomUserClaims
 
+export const getIdToken: () => Promise<string | null> = async () => {
+  return auth.currentUser ? await auth.currentUser?.getIdToken() : null
+}
+
 const login: (params: {
   username: string
   password: string
