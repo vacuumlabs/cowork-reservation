@@ -7,6 +7,12 @@ const RoomDetailScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <Button title="Room Detail" onPress={() => 'Pressed'} />
+      <Button
+        variant="secondary"
+        title="Room Detail"
+        onPress={() => 'Pressed'}
+      />
+      <Button variant="error" title="Room Detail" onPress={() => 'Pressed'} />
     </View>
   )
 }

@@ -1,29 +1,23 @@
 import React, { PropsWithChildren } from 'react'
 import { StyleSheet, Text, TextProps } from 'react-native'
 
-import theme, {
-  TypographyVariant,
-  TypographyColorVariant,
-  TypographyFontFamilyVariant,
-} from './theme'
+import theme, { TypographyVariant, TypographyColorVariant } from './theme'
 
 type TygographyProps = PropsWithChildren<
   {
     variant?: TypographyVariant
     color?: TypographyColorVariant
-    fontFamily?: TypographyFontFamilyVariant
   } & TextProps
 >
 
 const Typography: React.FC<TygographyProps> = ({
-  variant = 'button',
+  variant = 'body',
   color = 'white',
-  fontFamily = 'caption',
   style,
   children,
   ...props
 }: TygographyProps) => {
-  const styles = createStyles(variant, color, fontFamily)
+  const styles = createStyles(variant, color)
   return (
     <Text style={[styles.typography, style]} {...props}>
       {children}
@@ -35,13 +29,12 @@ export default Typography
 
 const createStyles = (
   variant: TypographyVariant,
-  color: TypographyColorVariant,
-  fontFamily: TypographyFontFamilyVariant
+  color: TypographyColorVariant
 ) =>
   StyleSheet.create({
     typography: {
-      color: theme.colors[color],
+      color: theme.typographyColors[color],
       fontSize: theme.fontSize[variant],
-      fontFamily: theme.fontFamily[fontFamily],
+      fontFamily: theme.fontFamily[variant],
     },
   })

@@ -2,19 +2,46 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
-import theme from './theme'
+import theme, { TypographyColorVariant } from './theme'
+import Typography from './Typography'
 
-import { Typography } from '.'
+type ButtonVariant = 'primary' | 'secondary' | 'error'
+
+const buttonVariantTextColorMap: {
+  [key in ButtonVariant]: TypographyColorVariant
+} = {
+  primary: 'black',
+  secondary: 'white',
+  error: 'white',
+}
+
+const buttonVariantBackgroundColorMap: {
+  [key in ButtonVariant]: string
+} = {
+  primary: theme.colors.turquoise,
+  secondary: theme.colors.backgroundDark,
+  error: theme.colors.red,
+}
 
 type ButtonProps = {
   title: string
   onPress: () => void
+  variant?: ButtonVariant
 }
 
-const Button: React.FC<ButtonProps> = ({ title, onPress }) => {
+const Button: React.FC<ButtonProps> = ({
+  title,
+  onPress,
+  variant = 'primary',
+}) => {
+  const styles = createStyles(variant)
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
-      <Typography variant="button" color="black">
+    <TouchableOpacity style={styles.button} onPress={onPress}>
+      <Typography
+        variant="button"
+        color={buttonVariantTextColorMap[variant]}
+        style={styles.text}
+      >
         {title}
       </Typography>
     </TouchableOpacity>
@@ -23,11 +50,15 @@ const Button: React.FC<ButtonProps> = ({ title, onPress }) => {
 
 export default Button
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: theme.colors.turquoise,
-    borderRadius: theme.borderRadius.middle,
-    paddingHorizontal: theme.paddingHorizontal.middle,
-    paddingVertical: theme.paddingVertical.middle,
-  },
-})
+const createStyles = (variant: ButtonVariant) =>
+  StyleSheet.create({
+    button: {
+      backgroundColor: buttonVariantBackgroundColorMap[variant],
+      borderRadius: theme.spacing.sm,
+      paddingHorizontal: theme.spacing.md,
+      paddingVertical: theme.spacing.lg,
+    },
+    text: {
+      textTransform: 'uppercase',
+    },
+  })
