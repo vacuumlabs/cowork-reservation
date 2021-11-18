@@ -3,7 +3,7 @@ export type ColorVariant =
   | 'red'
   | 'backgroundDark'
   | 'backgroundDarker'
-export type TypographyColorVariant = 'turquoise' | 'white' | 'black'
+export type TypographyColorVariant = 'turquoise' | 'white' | 'black' | 'gray'
 export type TypographyVariant = 'h1' | 'h2' | 'h3' | 'h4' | 'body' | 'button'
 type SizeVariant = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
@@ -25,6 +25,7 @@ const theme = {
     turquoise: '#36DABC',
     white: '#FFFFFF',
     black: '#000000',
+    gray: '#C1C1C1',
   } as { [key in TypographyColorVariant]: string },
   fontFamily: {
     h1: 'Crete Round',

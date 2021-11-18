@@ -1,4 +1,5 @@
 import Button from './Button'
 import Typography from './Typography'
+import Screen from './Screen'
 
-export { Button, Typography }
+export { Button, Typography, Screen }
