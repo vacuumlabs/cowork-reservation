@@ -10,6 +10,7 @@ import {
   Business as TenantIcon,
   SupervisorAccount as UserIcon,
   Person as ProfileIcon,
+  MeetingRoom as RoomIcon,
 } from '@material-ui/icons'
 
 import { User, UserRole } from '../models'
@@ -33,6 +34,12 @@ const _Menu: (props: MenuProps) => JSX.Element = (props) => {
               to="/users"
               primaryText="Tenant Admins"
               leftIcon={<UserIcon />}
+            />,
+            <MenuItemLink
+              key="rooms"
+              to="/rooms"
+              primaryText="Rooms"
+              leftIcon={<RoomIcon />}
             />,
           ]
         : [

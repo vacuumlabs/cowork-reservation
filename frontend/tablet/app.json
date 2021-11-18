@@ -1,4 +1,8 @@
 {
   "name": "tablet",
-  "displayName": "tablet"
+  "displayName": "Cowork Reservation",
+  "ios": {
+    "bundleIdentifier": "your bundle identifier",
+    "supportsTablet": true
+  }
 }

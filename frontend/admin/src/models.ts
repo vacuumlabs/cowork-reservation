@@ -9,10 +9,23 @@ export enum UserRole {
   USER = 'USER',
 }
 
+export type CustomUserClaims = {
+  tenantId: string
+  role: UserRole
+}
+
 export type User = {
   id: string
   name: string
   email: string
-  tenantId: string
-  role: UserRole
+} & CustomUserClaims
+
+export type Room = {
+  id: string
+  roomNumber: string
+  city: string
+  building: string
+  floor: string
+  capacity: string
+  equipment: string
 }

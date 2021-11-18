@@ -8,11 +8,12 @@ import {
   Datagrid,
   EditButton,
   Button,
+  usePermissions,
 } from 'react-admin'
 import { Link } from 'react-router-dom'
 import { Add as AddIcon } from '@material-ui/icons'
 
-import { Tenant } from '../../models'
+import { Tenant, UserRole } from '../../models'
 
 const TenantTitle = ({ record }: { record?: Tenant }) => (
   <span>{record ? record.name : 'Tenant'}</span>
@@ -27,18 +28,43 @@ const AddAdminButton = (): JSX.Element => (
   />
 )
 
+const AddUserButton = (): JSX.Element => (
+  <Button
+    startIcon={<AddIcon />}
+    component={Link}
+    label="Add user via e-mail"
+    to={'../../users/create'}
+  />
+)
+
+const AddDomainButton = (): JSX.Element => (
+  <Button
+    startIcon={<AddIcon />}
+    component={Link}
+    label="Add domain"
+    to={'../../users/create'}
+  />
+)
+
 const TenantShow: (props: ShowProps) => JSX.Element = (props) => {
+  const { permissions } = usePermissions()
   return (
     <Show title={<TenantTitle />} {...props}>
       <SimpleShowLayout>
         <TextField source="name" label="" />
         <TextField source="email" label="Email" />
-        <AddAdminButton />
+        {permissions === UserRole.SUPER_ADMIN
+          ? [<AddAdminButton key="adminButton" />]
+          : [
+              <AddUserButton key="userButton" />,
+              <AddDomainButton key="domainButton" />,
+            ]}
         <ReferenceManyField
           fullWidth
           label="Admins"
           reference="users"
-          target="TenantId"
+          target="tenantId"
+          sort={{ field: 'id', order: 'ASC' }}
         >
           <Datagrid>
             <TextField source="id" />
