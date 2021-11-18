@@ -6,13 +6,20 @@ import { Button } from '../components'
 const RoomDetailScreen: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Button title="Room Detail" onPress={() => 'Pressed'} />
+      {/* eslint-disable-next-line no-console */}
+      <Button title="Room Detail" onPress={() => console.log('Pressed')} />
       <Button
         variant="secondary"
         title="Room Detail"
-        onPress={() => 'Pressed'}
+        // eslint-disable-next-line no-console
+        onPress={() => console.log('Pressed')}
       />
-      <Button variant="error" title="Room Detail" onPress={() => 'Pressed'} />
+      <Button
+        variant="error"
+        title="Room Detail"
+        // eslint-disable-next-line no-console
+        onPress={() => console.log('Pressed')}
+      />
     </View>
   )
 }
