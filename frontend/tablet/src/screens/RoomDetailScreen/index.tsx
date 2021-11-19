@@ -1,24 +1,16 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 
-import { Typography, Screen, Button } from '../components'
-import theme from '../components/theme'
+import { Typography, Screen, Button } from '../../components'
+import theme from '../../components/theme'
+import Header from './Header'
 
 const RoomDetailScreen: React.FC = () => {
   return (
     <Screen>
       <View style={styles.layout}>
         <View style={styles.header}>
-          <View>
-            <Typography variant="h3">13:37</Typography>
-            <Typography variant="h4">Thursday, Oct 28</Typography>
-          </View>
-
-          <Button
-            title="Find Room"
-            // eslint-disable-next-line no-console
-            onPress={() => console.log('TODO Open find room drawer')}
-          />
+          <Header />
         </View>
 
         <View style={styles.main}>
