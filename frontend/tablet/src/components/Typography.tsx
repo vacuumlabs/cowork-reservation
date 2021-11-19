@@ -3,20 +3,20 @@ import { StyleSheet, Text, TextProps } from 'react-native'
 
 import theme, { TypographyVariant, TypographyColorVariant } from './theme'
 
-type TygographyProps = PropsWithChildren<
+type TypographyProps = PropsWithChildren<
   {
     variant?: TypographyVariant
     color?: TypographyColorVariant
   } & TextProps
 >
 
-const Typography: React.FC<TygographyProps> = ({
+const Typography: React.FC<TypographyProps> = ({
   variant = 'body',
   color = 'white',
   style,
   children,
   ...props
-}: TygographyProps) => {
+}: TypographyProps) => {
   const styles = createStyles(variant, color)
   return (
     <Text style={[styles.typography, style]} {...props}>
