@@ -12,6 +12,8 @@ target 'tablet' do
     :hermes_enabled => false
   )
 
+  pod 'SRSRadialGradient', :path => '../node_modules/react-native-radial-gradient/ios'
+
   target 'tabletTests' do
     inherit! :complete
     # Pods for testing
