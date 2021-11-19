@@ -50,14 +50,14 @@ const Button: React.FC<ButtonProps> = ({
 export default Button
 
 const createStyles = (variant: ButtonVariant) => {
-  const horizontalPadding = theme.spacing.md
+  const verticalPadding = theme.spacing.lg
   return StyleSheet.create({
     button: {
-      height: horizontalPadding * 2 + theme.fontSize.button,
+      height: verticalPadding * 2 + theme.fontSize.button,
       backgroundColor: buttonVariantBackgroundColorMap[variant],
       borderRadius: theme.spacing.sm,
-      paddingHorizontal: horizontalPadding,
-      paddingVertical: theme.spacing.lg,
+      paddingHorizontal: theme.spacing.md,
+      paddingVertical: verticalPadding,
     },
     text: {
       textTransform: 'uppercase',
