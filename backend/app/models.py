@@ -1,11 +1,7 @@
-from flask_sqlalchemy import SQLAlchemy
 from flask_sqlalchemy.model import DefaultMeta
-
-
-db = SQLAlchemy()
+from app import db
 
 BaseModel: DefaultMeta = db.Model
-
 
 
 class Calendar(BaseModel):
@@ -37,7 +33,6 @@ class Event(BaseModel):
     google_id = db.Column(db.String(255), nullable=False)
     tenant_id = db.Column(db.Integer, db.ForeignKey("tenant.id"))
     status = db.Column(db.Boolean)
-
 
 
 class Room(BaseModel):

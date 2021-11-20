@@ -21,7 +21,7 @@
         },
         {
             "name": "Tenant",
-            "description": "All endpoints related to the Company table"
+            "description": "All endpoints related to the Tenant table"
         },
         {
             "name": "Event",
@@ -119,7 +119,7 @@
                     "200": {
                         "description": "Response should contain web page where change will be visible",
                         "schema": {
-                            "$ref": "#/components/schemas/Company"
+                            "$ref": "#/components/schemas/Tenant"
                         }
                     }
                 }
