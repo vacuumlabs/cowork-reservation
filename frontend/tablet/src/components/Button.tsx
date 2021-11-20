@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet, TouchableOpacity, ViewStyle } from 'react-native'
 
 import theme, { TypographyColorVariant } from './theme'
 import Typography from './Typography'
@@ -26,16 +26,18 @@ type ButtonProps = {
   title: string
   onPress: () => void
   variant?: ButtonVariant
+  style?: ViewStyle
 }
 
 const Button: React.FC<ButtonProps> = ({
   title,
   onPress,
   variant = 'primary',
+  style,
 }) => {
   const styles = createStyles(variant)
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
+    <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
       <Typography
         variant="button"
         color={buttonVariantTextColorMap[variant]}
