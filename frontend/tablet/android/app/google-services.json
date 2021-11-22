@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "182196777623",
+    "project_id": "coworkreservation",
+    "storage_bucket": "coworkreservation.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:182196777623:android:425140d8653f0e1c4f2fd2",
+        "android_client_info": {
+          "package_name": "com.tablet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "182196777623-5ids1dgk2ng0vemgspem665t6a2rehv8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "%FIREBASE_ANDROID_API_KEY%"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "182196777623-5ids1dgk2ng0vemgspem665t6a2rehv8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
