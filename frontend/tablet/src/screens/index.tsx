@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { createStackNavigator, StackScreenProps } from '@react-navigation/stack'
 
 import { Room } from '../models'
 import LoginScreen from './LoginScreen'
 import RoomListScreen from './RoomListScreen'
 import RoomDetailScreen from './RoomDetailScreen'
+import { UserContext } from '../contexts/UserContext'
 
 const { Navigator, Screen } = createStackNavigator()
 
@@ -22,11 +23,17 @@ export type NavigationProps = StackScreenProps<
 >
 
 const ScreenNavigator: () => JSX.Element = () => {
+  const { user, isLoading } = useContext(UserContext)
   return (
     <Navigator screenOptions={{ headerShown: false }}>
-      <Screen name="LoginScreen" component={LoginScreen} />
-      <Screen name="RoomListScreen" component={RoomListScreen} />
-      <Screen name="RoomDetailScreen" component={RoomDetailScreen} />
+      {!isLoading && user ? (
+        <>
+          <Screen name="RoomListScreen" component={RoomListScreen} />
+          <Screen name="RoomDetailScreen" component={RoomDetailScreen} />
+        </>
+      ) : (
+        <Screen name="LoginScreen" component={LoginScreen} />
+      )}
     </Navigator>
   )
 }
