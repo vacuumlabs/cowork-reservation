@@ -1,23 +1,47 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { StyleSheet } from 'react-native'
+import { TextInput } from 'react-native-gesture-handler'
 
-import { NavigationProps } from '..'
-import { Button, Screen, Typography } from '../../components'
+import { Button, Screen } from '../../components'
+import authProvider from '../../authProvider'
 import theme from '../../components/theme'
 
-const LoginScreen: React.FC<NavigationProps> = ({
-  navigation,
-}: NavigationProps) => {
+const LoginScreen: React.FC = () => {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
   return (
     <Screen>
-      <Typography variant="h3" style={{ marginBottom: theme.spacing.xl }}>
-        TODO login form
-      </Typography>
+      <TextInput
+        placeholder="Email"
+        onChangeText={setEmail}
+        value={email}
+        keyboardType="email-address"
+        style={styles.input}
+      />
+      <TextInput
+        placeholder="Password"
+        onChangeText={setPassword}
+        value={password}
+        secureTextEntry={true}
+        style={styles.input}
+      />
       <Button
         title="Log In"
-        onPress={() => navigation.navigate('RoomListScreen')}
+        onPress={() => authProvider.signIn(email, password)}
       />
     </Screen>
   )
 }
 
 export default LoginScreen
+
+const styles = StyleSheet.create({
+  input: {
+    height: theme.spacing.xl * 2,
+    width: theme.spacing.xl * 10,
+    marginBottom: theme.spacing.md,
+    backgroundColor: theme.colors.turquoise,
+    fontSize: theme.fontSize.body,
+  },
+})
