@@ -22,9 +22,9 @@ export type User = {
 
 export type Room = {
   id: string
-  roomNumber: string
-  city: string
-  building: string
+  name: string
+  cityId: string
+  buildingId: string
   floor: string
   capacity: string
   equipment: string
