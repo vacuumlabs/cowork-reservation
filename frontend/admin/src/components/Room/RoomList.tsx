@@ -54,15 +54,18 @@ const RoomGrid = () => {
           <Card className={classes.card}>
             <CardContent className={classes.title}>
               <Typography variant="h5" component="h2" align="center">
-                {data[id].roomNumber}
+                {data[id].name}
               </Typography>
             </CardContent>
             <CardContent>
               <Typography variant="subtitle1" component="h2" align="center">
-                {data[id].city}
+                <p>Floor {data[id].floor} </p>
               </Typography>
               <Typography variant="subtitle1" component="h2" align="center">
-                {data[id].building}
+                <p> Capacity: {data[id].capacity} </p>
+              </Typography>
+              <Typography variant="subtitle1" component="h2" align="center">
+                {data[id].equipment}
               </Typography>
             </CardContent>
             <CardActions className={classes.actionSpacer}>
