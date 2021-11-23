@@ -8,6 +8,7 @@ import User from './components/User'
 import Room from './components/Room'
 import Layout from './components/Layout'
 import { UserRole } from './models'
+import LoginPage from './components/LoginPage'
 
 const dataProvider = jsonServerProvider(
   'https://my-json-server.typicode.com/Bandius/myJsonServer'
@@ -30,6 +31,7 @@ const App: React.FC = () => {
     <Admin
       dataProvider={dataProvider}
       authProvider={authProvider}
+      loginPage={LoginPage}
       layout={Layout}
     >
       {(permissions) =>
@@ -53,6 +55,8 @@ const App: React.FC = () => {
                 {...Room}
                 options={{ label: 'Rooms' }}
               />,
+              <Resource key="cities" name="cities" />,
+              <Resource key="buildings" name="buildings" />,
             ]
           : [
               <Resource
