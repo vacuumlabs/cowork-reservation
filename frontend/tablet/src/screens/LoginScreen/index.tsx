@@ -17,6 +17,7 @@ const LoginScreen: React.FC = () => {
         onChangeText={setEmail}
         value={email}
         keyboardType="email-address"
+        autoCapitalize="none"
         style={styles.input}
       />
       <TextInput
