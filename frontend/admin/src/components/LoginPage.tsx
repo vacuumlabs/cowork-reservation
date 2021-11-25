@@ -4,7 +4,7 @@ import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
 import { Login } from 'ra-ui-materialui'
 
-// Configure Firebase.
+// TODO extract to env
 const firebaseConfig = {
   apiKey: 'AIzaSyAJ_GxyUXUkja9DCHXVTbH9Jhje5bsfv9s',
   authDomain: 'coworkreservation.firebaseapp.com',
@@ -14,14 +14,12 @@ const firebaseConfig = {
   appId: '1:182196777623:web:c9d18ac242055ba54f2fd2',
   measurementId: 'G-LRR9NTQ779',
 }
+
 firebase.initializeApp(firebaseConfig)
 
-// Configure FirebaseUI.
 const uiConfig = {
-  // Popup signin flow rather than redirect flow.
   signInFlow: 'popup',
   signInSuccessUrl: '#/',
-  // We will display Google and Facebook as auth providers.
   signInOptions: [
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,

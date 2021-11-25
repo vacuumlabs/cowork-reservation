@@ -6,7 +6,7 @@ const RoomEdit: (props: EditProps) => JSX.Element = (props) => (
     <SimpleForm>
       <TextInput source="city" disabled />
       <TextInput source="building" disabled />
-      <TextInput source="roomNumber" validate={required()} />
+      <TextInput source="name" validate={required()} />
       <TextInput source="floor" validate={required()} />
       <TextInput source="capacity" validate={required()} />
       <TextInput source="equipment" validate={required()} />

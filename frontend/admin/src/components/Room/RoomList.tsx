@@ -28,6 +28,7 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: 'column',
   },
   card: {
     height: 'auto',
@@ -58,13 +59,21 @@ const RoomGrid = () => {
               </Typography>
             </CardContent>
             <CardContent>
-              <Typography variant="subtitle1" component="h2" align="center">
-                <p>Floor {data[id].floor} </p>
+              <Typography variant="h6" component="h2" align="center">
+                {data[id].building}
               </Typography>
-              <Typography variant="subtitle1" component="h2" align="center">
-                <p> Capacity: {data[id].capacity} </p>
+              <Typography variant="h6" component="h2" align="center">
+                {data[id].city}
               </Typography>
-              <Typography variant="subtitle1" component="h2" align="center">
+            </CardContent>
+            <CardContent>
+              <Typography variant="subtitle2" component="h2" align="center">
+                <span>Floor {data[id].floor} </span>
+              </Typography>
+              <Typography variant="subtitle2" component="h2" align="center">
+                <span> Capacity: {data[id].capacity} </span>
+              </Typography>
+              <Typography variant="subtitle2" component="h2" align="center">
                 {data[id].equipment}
               </Typography>
             </CardContent>

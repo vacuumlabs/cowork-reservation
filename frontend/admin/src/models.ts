@@ -24,7 +24,9 @@ export type Room = {
   id: string
   name: string
   cityId: string
+  city: string
   buildingId: string
+  building: string
   floor: string
   capacity: string
   equipment: string
