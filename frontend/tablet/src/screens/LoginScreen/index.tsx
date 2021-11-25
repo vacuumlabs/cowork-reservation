@@ -4,7 +4,7 @@ import { TextInput } from 'react-native-gesture-handler'
 import { GoogleSigninButton } from '@react-native-google-signin/google-signin'
 
 import { Button, Screen } from '../../components'
-import authProvider from '../../AuthProvider'
+import AuthProvider from '../../AuthProvider'
 import theme from '../../components/theme'
 
 const LoginScreen: React.FC = () => {
@@ -30,13 +30,13 @@ const LoginScreen: React.FC = () => {
       />
       <Button
         title="Log In"
-        onPress={() => authProvider.signIn(email, password)}
+        onPress={() => AuthProvider.signIn(email, password)}
       />
       <GoogleSigninButton
         style={styles.googleButton}
         size={GoogleSigninButton.Size.Wide}
         color={GoogleSigninButton.Color.Light}
-        onPress={() => authProvider.googleSignIn()}
+        onPress={() => AuthProvider.googleSignIn()}
       />
     </Screen>
   )
