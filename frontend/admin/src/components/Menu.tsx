@@ -11,6 +11,8 @@ import {
   SupervisorAccount as UserIcon,
   Person as ProfileIcon,
   MeetingRoom as RoomIcon,
+  HomeWork as BuildingIcon,
+  LocationCity as CityIcon,
 } from '@material-ui/icons'
 
 import { User, UserRole } from '../models'
@@ -35,6 +37,18 @@ const useMenuItems = (user: User) => ({
       primaryText="Rooms"
       leftIcon={<RoomIcon />}
     />,
+    <MenuItemLink
+      key="buildings"
+      to="/buildings"
+      primaryText="Buildings"
+      leftIcon={<BuildingIcon />}
+    />,
+    <MenuItemLink
+      key="city"
+      to="/cities"
+      primaryText="Cities"
+      leftIcon={<CityIcon />}
+    />,
   ],
   [UserRole.TENANT_ADMIN]: [
     <MenuItemLink
@@ -52,8 +66,12 @@ const useMenuItems = (user: User) => ({
   ],
   [UserRole.USER]: [
     <MenuItemLink
-      key="tenants"
-      to={user ? `/tenants/${user.tenantId}/show` : ''}
+      key="users"
+      to={
+        user?.tenantId
+          ? `/users/${(user as User).tenantId}/show`
+          : `/users/1/show`
+      }
       primaryText="My Profile"
       leftIcon={<ProfileIcon />}
     />,

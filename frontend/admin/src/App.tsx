@@ -27,9 +27,9 @@ const SUPER_ADMIN_RESOURCES = [
     {...User}
     options={{ label: 'Tenant Admins' }}
   />,
-  <Resource key="rooms" name="rooms" {...Room} options={{ label: 'Rooms' }} />,
-  <Resource key="cities" name="cities" />,
+  <Resource key="rooms" name="rooms" {...Room} />,
   <Resource key="buildings" name="buildings" />,
+  <Resource key="cities" name="cities" />,
 ]
 
 const TENANT_ADMIN_RESOURCES = [
@@ -39,12 +39,7 @@ const TENANT_ADMIN_RESOURCES = [
     show={Tenant.show}
     options={{ label: 'Profile' }}
   />,
-  <Resource
-    key="users"
-    name="users"
-    {...User}
-    options={{ label: 'Tenant Admins' }}
-  />,
+  <Resource key="users" name="users" {...User} options={{ label: 'Admins' }} />,
 ]
 
 const USER_RESOURCES = [
