@@ -1,5 +1,6 @@
 import React, { PropsWithChildren, useEffect, useState } from 'react'
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
 
 type User = FirebaseAuthTypes.User | null | undefined
 
@@ -20,6 +21,11 @@ export const UserContextProvider: React.FC<Props> = ({ children }: Props) => {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        '182196777623-5ids1dgk2ng0vemgspem665t6a2rehv8.apps.googleusercontent.com',
+    })
+
     const unsubscribe = auth().onAuthStateChanged((authUser) => {
       setUser(authUser)
       setIsLoading(false)
