@@ -15,6 +15,11 @@ def get_room_by_city(city):
     #TODO: check if tenant has permissions to view all rooms
     return jsonify(room_dao.get_by_city(city))
 
+@room_bp.route("/room/<id>/", methods=["DELETE"])
+def del_room(id):
+    room_dao.delete_room(id)
+    return jsonify(room_dao.get_all())
+
 @room_bp.route("/room/", methods=["POST"])
 def insert_room():
     try:

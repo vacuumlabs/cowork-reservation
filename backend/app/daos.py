@@ -55,6 +55,14 @@ class RoomDAO:
         session.add(new_room)
         session.commit()
         return new_room
+    def delete_room(self, id: int):
+        try:
+            room = session.query(self.model).filter_by(id=id).first()
+            session.delete(room)
+            session.commit()
+        except:
+            return False
+        return True
     
     def to_array(self, results) -> list:
         return [
