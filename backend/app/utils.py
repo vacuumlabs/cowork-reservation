@@ -23,11 +23,9 @@ def migrate_database(app: Flask):
         import io
 
         flask_migrate.upgrade()
-        migrate_message = "Migration created at "
-        migrate_message += str(datetime.now())
         f = io.StringIO()
         with redirect_stdout(f):
-            flask_migrate.migrate(message=migrate_message)
+            flask_migrate.migrate()
         out = f.getvalue()
         if " ...  done" in out:
             filename = out
