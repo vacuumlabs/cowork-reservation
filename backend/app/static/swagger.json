@@ -125,7 +125,7 @@
                 }
             }
         },
-        "/room": {
+        "/room/": {
             "get": {
                 "tags": [
                     "Room"
@@ -165,7 +165,7 @@
                 "summary": "",
                 "requestBody": {
                     "content": {
-                        "application/x-www-form-urlencoded": {
+                        "application/json": {
                             "schema": {
                                 "type": "object",
                                 "properties": {
@@ -208,6 +208,31 @@
                         "description": "Response should contain web page where change will be visible",
                         "schema": {
                             "$ref": "#/components/schemas/Tenant"
+                        }
+                    }
+                }
+            }
+        },
+        "/room/{city}": {
+            "get": {
+                "tags": [
+                    "Room"
+                ],
+                "summary": "",
+                "parameters":[
+                    {
+                    "name": "city",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "There should be array of rooms located in response",
+                        "schema": 
+                        {
+                            "$ref": "#/components/schemas/Room"
                         }
                     }
                 }
