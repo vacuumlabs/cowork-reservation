@@ -2,7 +2,7 @@
   "name": "tablet",
   "displayName": "Cowork Reservation",
   "ios": {
-    "bundleIdentifier": "your bundle identifier",
+    "bundleIdentifier": "com.vacuumlabs.cowork.tablet",
     "supportsTablet": true
   }
 }

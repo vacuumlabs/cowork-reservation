@@ -1,13 +1,16 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 
-import MainNavigator from './src/screens'
+import ScreenNavigator from './src/screens'
+import { UserContextProvider } from './src/contexts/UserContext'
 
 const App: React.FC = () => {
   return (
-    <NavigationContainer>
-      <MainNavigator />
-    </NavigationContainer>
+    <UserContextProvider>
+      <NavigationContainer>
+        <ScreenNavigator />
+      </NavigationContainer>
+    </UserContextProvider>
   )
 }
 
