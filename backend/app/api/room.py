@@ -18,12 +18,13 @@ def get_room_by_city(city):
 @room_bp.route("/room/", methods=["POST"])
 def insert_room():
     try:
+        data = request.json
         room_dao.add_room(
-            request.form.get("city"),
-            int(request.form.get("capacity")),
-            request.form.get("equipment"),
-            request.form.get("building"),
-            int(request.form.get("room_number"))
+            data["city"],
+            int(data["capacity"]),
+            data["equipment"],
+            data["building"],
+            int(data["room_number"])
         )
         return get_room()
     except Exception as err:
