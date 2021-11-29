@@ -124,6 +124,89 @@
                     }
                 }
             }
+        },
+        "/calendar/": {
+            "get": {
+                "tags": [
+                    "Calendar"
+                ],
+                "summary": "",
+                "parameters":[
+                    {
+                        "name": "id",
+                        "type": "int",
+                        "format":"int32",
+                        "in": "query"
+                    },
+                    {
+                        "name": "tenant_id",
+                        "type": "string",
+                        "in": "query"
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "There should be array of rooms located in response",
+                        "schema": {
+                            "$ref": "#/components/schemas/Calendar"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Calendar"
+                ],
+                "summary": "",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Calendar"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Response should contain web page where change will be visible",
+                        "schema": {
+                            "$ref": "#/components/schemas/Calendar"
+                        }
+                    }
+                }
+            }
+        },
+        "/calendar/{id}/": {
+            "delete": {
+                "tags": [
+                    "Calendar"
+                ],
+                "summary": "",
+                "parameters":[
+                    {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "type": "int",
+                    "format": "int32"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "There should be array of rooms located in response",
+                        "schema": 
+                        {
+                            "$ref": "#/components/schemas/Room"
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
