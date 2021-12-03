@@ -12,8 +12,7 @@ import {
   Person as ProfileIcon,
   MeetingRoom as RoomIcon,
 } from '@material-ui/icons'
-
-import { User, UserRole } from '../models'
+import { User, UserRole } from 'cowork_models/models'
 
 const _Menu: (props: MenuProps) => JSX.Element = (props) => {
   const { permissions } = usePermissions()

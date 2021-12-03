@@ -14,8 +14,7 @@ import {
   TextInput,
   useListContext,
 } from 'react-admin'
-
-import { Room } from '../../models'
+import { Room } from 'cowork_models/models'
 
 const useStyles = makeStyles({
   root: {
@@ -55,7 +54,7 @@ const RoomGrid = () => {
           <Card className={classes.card}>
             <CardContent className={classes.title}>
               <Typography variant="h5" component="h2" align="center">
-                {data[id].name}
+                {data[id].title}
               </Typography>
             </CardContent>
             <CardContent>

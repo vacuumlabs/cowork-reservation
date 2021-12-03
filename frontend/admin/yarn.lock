@@ -4431,6 +4431,11 @@ cosmiconfig@^7.0.0:
     path-type "^4.0.0"
     yaml "^1.10.0"
 
+cowork_models@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/cowork_models/-/cowork_models-0.0.1.tgz#9714e017eed358422438369a81dcc05a2324fa6a"
+  integrity sha512-OAxFG3IK+fnMfdcDGLdKeWaDoLo/KgU31+SMaLiTfw6wUqkWn60U6uZPEWzA7+sUvyd95Rv9PAc2ZsNXGlDzMg==
+
 create-ecdh@^4.0.0:
   version "4.0.4"
   resolved "https://registry.npmjs.org/create-ecdh/-/create-ecdh-4.0.4.tgz"

@@ -12,6 +12,7 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/react-router-dom": "^5.3.2",
+    "cowork_models": "^0.0.1",
     "firebase": "^9.4.0",
     "ra-data-json-server": "^3.19.0",
     "react": "^17.0.2",
