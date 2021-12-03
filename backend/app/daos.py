@@ -37,6 +37,10 @@ class RoomDAO:
 
     def get_all(self) -> list:
         return self.to_array(session.query(self.model).all())
+    
+    def get_one(self, id: int) -> list:
+        results = session.query(self.model).filter_by(id=id).first()
+        return self.to_array(results)
 
     def get_by_city(self, city: str):
         results = session.query(self.model).filter_by(city=city).all()

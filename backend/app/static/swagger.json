@@ -214,6 +214,30 @@
             }
         },
         "/room/{id}": {
+            "get": {
+                "tags": [
+                    "Room"
+                ],
+                "summary": "Find room by ID",
+                "parameters":[
+                    {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "type": "int",
+                    "format": "int32"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "There should be array with one room you requested",
+                        "schema": 
+                        {
+                            "$ref": "#/components/schemas/Room"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "tags": [
                     "Room"
