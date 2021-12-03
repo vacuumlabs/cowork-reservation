@@ -10,11 +10,6 @@ def get_room_list():
     #TODO: check if tenant has permissions to view all rooms
     return jsonify(room_dao.get_all())
 
-@room_bp.route("/room/<city>/", methods=["GET"])
-def get_room_by_city(city):
-    #TODO: check if tenant has permissions to view all rooms
-    return jsonify(room_dao.get_by_city(city))
-
 @room_bp.route("/room/<id>/", methods=["DELETE"])
 def delete_room(id):
     room_dao.delete_room(id)
