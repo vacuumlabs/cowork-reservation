@@ -1,11 +1,11 @@
 import { Card, CardContent, CardHeader } from '@material-ui/core'
 import React from 'react'
-import { Show, ShowProps, useGetIdentity } from 'react-admin'
+import { Logout, Show, ShowProps, useGetIdentity } from 'react-admin'
 
 const UserShow: (props: ShowProps) => JSX.Element = (props) => {
   const { identity } = useGetIdentity()
   return (
-    <Show {...props} title="Profile">
+    <Show {...props} title="Cowork Reservation App">
       <Card>
         <CardHeader title={`Hello ${identity?.name}`} />
         <CardContent>
@@ -13,6 +13,7 @@ const UserShow: (props: ShowProps) => JSX.Element = (props) => {
             ? 'You are not part of any organisation.'
             : 'Here is your calendar'}
         </CardContent>
+        <Logout button={true} />
       </Card>
     </Show>
   )
