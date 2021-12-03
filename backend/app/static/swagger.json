@@ -125,7 +125,7 @@
                 }
             }
         },
-        "/room/": {
+        "/room": {
             "get": {
                 "tags": [
                     "Room"
@@ -213,7 +213,7 @@
                 }
             }
         },
-        "/room/{id}/": {
+        "/room/{id}": {
             "delete": {
                 "tags": [
                     "Room"
