@@ -6,7 +6,7 @@ room_bp = Blueprint("room_bp", __name__)
 
 
 @room_bp.route("/room/", methods=["GET"])
-def get_room():
+def get_room_list():
     #TODO: check if tenant has permissions to view all rooms
     return jsonify(room_dao.get_all())
 
@@ -16,12 +16,12 @@ def get_room_by_city(city):
     return jsonify(room_dao.get_by_city(city))
 
 @room_bp.route("/room/<id>/", methods=["DELETE"])
-def del_room(id):
+def delete_room(id):
     room_dao.delete_room(id)
     return jsonify(room_dao.get_all())
 
 @room_bp.route("/room/", methods=["POST"])
-def insert_room():
+def create_room():
     try:
         data = request.json
         room_dao.add_room(
@@ -31,6 +31,6 @@ def insert_room():
             data["building"],
             int(data["room_number"])
         )
-        return get_room()
+        return get_room_list()
     except Exception as err:
         return str(err)
