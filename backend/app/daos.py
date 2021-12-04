@@ -59,6 +59,17 @@ class RoomDAO:
         session.add(new_room)
         session.commit()
         return new_room
+
+    def update_room(self, id: int, update: dict) -> list:
+        results = session.query(self.model).filter_by(id=id).first()
+        for key, value in update.items():
+            try:
+                setattr(results, key, value)
+                session.commit()
+            except:
+                pass
+        return self.to_array(results)
+
     def delete_room(self, id: int):
         try:
             room = session.query(self.model).filter_by(id=id).first()
