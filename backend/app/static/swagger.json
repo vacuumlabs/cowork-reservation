@@ -131,6 +131,43 @@
                     "Room"
                 ],
                 "summary": "",
+                "parameters":[
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "content": {
+                            "application/json":{
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "city":{
+                                            "type": "array",
+                                            "items": {
+                                                "type":"string"
+                                            },
+                                            "default": ["Presov","Kosice","Bratislava"],
+                                            "example": ["Presov","Kosice","Bratislava"]
+                                        }
+                                    }
+                                }
+                            }  
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "type": "string",
+                        "default": "[\"city\",\"ASC\"]",
+                        "example": "[\"city\",\"ASC\"]"
+                    },
+                    {
+                        "name": "range",
+                        "type": "string",
+                        "in": "query",
+                        "default": "[0,100]",
+                        "example": "[0,100]"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "There should be array of rooms located in response",
