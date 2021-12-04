@@ -1,3 +1,4 @@
+from typing import Iterable
 from app.models import Tenant
 from app.models import Room
 from app import db
@@ -35,9 +36,43 @@ class RoomDAO:
     def __init__(self, model):
         self.model = model
 
-    def get_all(self) -> list:
-        return self.to_array(session.query(self.model).all())
-    
+    def get_all(self, filters: dict, sort: list, results_range: list) -> list:
+        results = session.query(self.model)
+        ap_filters = []
+        for key, value in filters.items():
+            try:
+                column = getattr(self.model, key)
+                if type(value) == str or not isinstance(value, Iterable):
+                    value = [value]
+                ap_filters.append(column.in_(value))
+            except:
+                pass
+        if filters:
+            results = results.filter(*ap_filters)
+        if sort:
+            order = sort[1]
+            col = getattr(self.model, sort[0])
+            if order.lower() == "asc":
+                col_sorted = col.asc()
+            else:
+                col_sorted = col.desc()
+            results = results.order_by(col_sorted)
+        if results_range:
+            """if pagination is needed this is the way
+            page = results_range[0]
+            page_size = results_range[1]
+            offset = (page - 1)
+            if offset < 0: offset = 0
+            offset*= page_size
+            results = results.limit(page_size).offset(offset)
+            """
+            start = results_range[0]
+            count = results_range[1] - start
+            if count < 0:
+                count = 0
+            results = results.limit(count).offset(start)
+        return self.to_array(results.all())
+
     def get_one(self, id: int) -> list:
         results = session.query(self.model).filter_by(id=id).first()
         return self.to_array(results)
