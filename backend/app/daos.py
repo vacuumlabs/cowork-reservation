@@ -109,19 +109,22 @@ class RoomDAO:
         except:
             return False
         return True
-    
+
     def to_array(self, results) -> list:
-        return [
-            {
-                "id": row.id,
-                "city": row.city, 
-                "building": row.building, 
-                "room_number": row.room_number,
-                "capacity": row.capacity, 
-                "equipment": row.equipment
-            } 
-            for row in results 
-        ]
+        converted = []
+        try:
+            for row in results:
+                entry = self.to_dict(row)
+                converted.append(entry)
+        except:
+            converted.append(self.to_dict(results))
+        return converted
+
+    def to_dict(self, row) -> dict:
+        entry = {}
+        for column in row.__table__.columns:
+            entry[column.name] = getattr(row, column.name)
+        return entry
 
 
 room_dao = RoomDAO(Room)
