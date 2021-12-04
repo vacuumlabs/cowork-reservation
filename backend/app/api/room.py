@@ -1,14 +1,24 @@
+import json
 from flask import jsonify, request, render_template
 from flask.blueprints import Blueprint
 from app.daos import room_dao
 
 room_bp = Blueprint("room_bp", __name__)
 
-
 @room_bp.route("/room", methods=["GET"])
 def get_room_list():
-    #TODO: check if tenant has permissions to view all rooms
-    return jsonify(room_dao.get_all())
+    # TODO: check if tenant has permissions to view all rooms
+    url_args = request.args.to_dict()
+    filters = {}
+    sort = []
+    results_range = []
+    if "filter" in url_args:
+        filters = json.loads(url_args["filter"])
+    if "sort" in url_args:
+        sort = json.loads(url_args["sort"])
+    if "range" in url_args:
+        results_range = json.loads(url_args["range"])
+    return jsonify(room_dao.get_all(filters, sort, results_range))
 
 @room_bp.route("/room/<id>", methods=["GET"])
 def get_room_one(id):
