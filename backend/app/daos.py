@@ -42,20 +42,16 @@ class RoomDAO:
         results = session.query(self.model).filter_by(id=id).first()
         return self.to_array(results)
 
-    def get_by_city(self, city: str):
-        results = session.query(self.model).filter_by(city=city).all()
-        return self.to_array(results)
-
-    def get_by_building(self, building: str):
-        results = session.query(self.model).filter_by(building=building).all()
-        return self.to_array(results) 
-
-    def add_room(self, city: str, capacity: int, equipment: str, building:str, room_number: int) -> Room:
-        new_room = Room(city=city,
-                        capacity=capacity,
-                        equipment=equipment,
-                        building=building,
-                        room_number=room_number)
+    def add_room(
+        self, city: str, capacity: int, equipment: str, building: str, room_number: int
+    ) -> Room:
+        new_room = Room(
+            city=city,
+            capacity=capacity,
+            equipment=equipment,
+            building=building,
+            room_number=room_number,
+        )
         session.add(new_room)
         session.commit()
         return new_room
