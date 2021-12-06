@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "coworkreservation",
+  "private_key_id": "213a4920386a7a05e89e96224443a605372fb3da",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDjhWJiDy/nvdrV\nkDoIgCLhS8euHp+CVUhwgP+mgQxl2j/4J0v+D1FAEAMO/5M4GN6Lszy4vaZeYGij\nV7iKIk50jwyHKDn5R+I9kT5ZlQHwM6sbp/li3hxxsDuFm1jJF8Gx6r1ldYEZhoQ/\nv8p4ALxtaUnZ5gUFj9L+l48wIP10t651430ImD5jyTsUkjL37jWG4YsFitVLi9Je\nPzWbQzfvpD9dzAUx8wtWaek+vcIdiKY6mEHF2cnvwaxFwMNf73KdK8cYDZuaXdTe\nCWA8RGbWqM2FU5b+k8l4TQydS4yLecGyVY6WGlLcpJKs6TX+9xCQBJJNNQdNLxrR\nuJnh2eIxAgMBAAECggEAB41OiLFhsQWCQAMmNKYG17JA5yypCsBzQ8NkY6Mg8DiL\nAFz9jr9KE8r0RF6DWndThmY6pmnVHd4sBaVMa3lcCqO852I/GmEicfy3icMCaiCs\n60wWC7a8/Eu8jgtr/7DELc2m37lDbGokoEu+GAxI34Yr0gm/3OwQitbTr+XzGRlN\nBu83Ymz9VNIS1TxwYNDQzvlMi9iwCk1NfCVmndbfYxcMNE4XtX63bGPK1FyBFOlR\nki8QxdX1Ey7buzDLvOslw6Dnq1Xjs/JtRKSRJ+OgOI4lCdYMIR3hBFFQeESZZ8AJ\n4UTYtjmoNn4i25jT//PADbS0ySrnhuRl4VTGvgJ9CQKBgQDyHm7cEBrmOqiR4nDj\nrLWO2findLHbKnyN6lURFSwxGPMUTWatysWkMxSJbRSGclpwjcnDNrNzdvbNUeJ3\ntWUZJ52kAPhAA90FXVqzGuep7AhHwDzyKm8CSFdg/4TTMuhJqt8rC/x8s8hLbIuo\nWS6lBV0KjeXqD8OeOgPK8U/gQwKBgQDwkLMKsTVFvvgP0XrzgqCR/OvtPOl3TlPI\ntwvyFoINbuw/7k+voqzI65DHSJlzXMGmKQFMokkQlz2zU11w4zzpfY6wwJlavoAK\nN+Ul5eEoYQ07KToIBChK+CONdcuMWZM9CKHa+rwvvPF1kk9SZn+w9dBE6wuPksnH\nFCND0vk2ewKBgAkwHHbfaZXpDfKTTENnj3A/V09Lf2BYyWc9SEMgsY+facIQeeAI\nfN2RTqs0Z33+ou34g3qT/dVY417BR73RNWfx9+p8Wu9a9i048LMxRy9MlLfcVLO/\n5nyIsEAvEiRNn0EEafmhN9Cnpecu1FHsKHf8rx4yalIqjPrZKsGtzKEvAoGAIsl5\n6pDnmDdeXcM4GWCJYbMGVt8ZD7SW7w5xPse8dL7WkQQgJ9DJVaCi5f58mi8Onb2O\nP4u0Lx7/wB/NAlcJ5uXOLYccZf/oOhINI+bTIWivZh+3EZOwU+8ADSO8lIYbgZbu\n+OCLOAgFjq/iopLJ4kgZnu2yVUevwAcMdnFasmMCgYEArgr2SJ69Ktl9PxgC6leC\nN5wnhZxA3eSrWj9pTtGtUpAB/Bo7IVPMsKMOl6f7WTeu9Ce8b6zRYmwGlCn/eqec\njxu8ETIZSfn8N7jM9ymt5rA9ogHqXvIVy/muWjIRDp/6cF/tw7QM4pNCfqMr+fGp\nMNNUOJl0pvznr5Z+lbwiPbA=\n-----END PRIVATE KEY-----\n",
+  "client_email": "coworkreservationcalendar@coworkreservation.iam.gserviceaccount.com",
+  "client_id": "105067561543799312435",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/coworkreservationcalendar%40coworkreservation.iam.gserviceaccount.com"
+}
