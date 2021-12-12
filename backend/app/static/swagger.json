@@ -133,39 +133,39 @@
                 "summary": "",
                 "parameters":[
                     {
-                        "name": "filter",
-                        "in": "query",
-                        "content": {
-                            "application/json":{
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "city":{
-                                            "type": "array",
-                                            "items": {
-                                                "type":"string"
-                                            },
-                                            "default": ["Presov","Kosice","Bratislava"],
-                                            "example": ["Presov","Kosice","Bratislava"]
-                                        }
-                                    }
-                                }
-                            }  
-                        }
-                    },
-                    {
-                        "name": "sort",
+                        "name": "city",
                         "in": "query",
                         "type": "string",
-                        "default": "[\"city\",\"ASC\"]",
-                        "example": "[\"city\",\"ASC\"]"
+                        "default": "Kosice",
+                        "example": "Kosice"
                     },
                     {
-                        "name": "range",
-                        "type": "string",
+                        "name": "_sort",
                         "in": "query",
-                        "default": "[0,100]",
-                        "example": "[0,100]"
+                        "type": "string",
+                        "default": "city",
+                        "example": "city"
+                    },
+                    {
+                        "name": "_order",
+                        "in": "query",
+                        "type": "string",
+                        "default": "asc",
+                        "example": "asc"
+                    },
+                    {
+                        "name": "_start",
+                        "type": "int",
+                        "in": "query",
+                        "default": 0,
+                        "example": 0
+                    },
+                    {
+                        "name": "_end",
+                        "type": "int",
+                        "in": "query",
+                        "default": 100,
+                        "example": 100
                     }
                 ],
                 "responses": {
