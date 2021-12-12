@@ -125,7 +125,7 @@
                 }
             }
         },
-        "/room": {
+        "/rooms": {
             "get": {
                 "tags": [
                     "Room"
@@ -199,7 +199,7 @@
                 "tags": [
                     "Room"
                 ],
-                "summary": "",
+                "summary": "Create room",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -250,7 +250,7 @@
                 }
             }
         },
-        "/room/{id}": {
+        "/rooms/{id}": {
             "get": {
                 "tags": [
                     "Room"
