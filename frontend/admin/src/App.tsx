@@ -44,9 +44,9 @@ const TENANT_ADMIN_RESOURCES = [
 
 const USER_RESOURCES = [
   <Resource
-    key="tenants"
-    name="tenants"
-    show={Tenant.show}
+    key="users"
+    name="users"
+    show={User.show}
     options={{ label: 'Profile' }}
   />,
 ]
