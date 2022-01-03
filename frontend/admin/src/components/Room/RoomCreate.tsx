@@ -34,10 +34,9 @@ const RoomCreate: (props: CreateProps) => JSX.Element = (props) => {
         >
           <AutocompleteInput />
         </ReferenceInput>
-
         <TextInput source="floor" validate={required()} />
         <TextInput source="capacity" validate={required()} />
-        <TextInput source="equipment" validate={required()} />
+        <TextInput source="equipment" />
       </SimpleForm>
     </Create>
   )
