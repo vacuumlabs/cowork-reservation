@@ -11,7 +11,7 @@ import {
 const UserList: (props: ListProps) => JSX.Element = (props) => {
   return (
     <List {...props}>
-      <Datagrid>
+      <Datagrid rowClick="show">
         <TextField source="name" />
         <EmailField source="email" />
         <ReferenceField
