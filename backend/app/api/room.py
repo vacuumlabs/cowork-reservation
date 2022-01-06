@@ -51,19 +51,19 @@ def update_room(id):
 @room_bp.route("/rooms/<id>", methods=["DELETE"])
 def delete_room(id):
     room_dao.delete_room(id)
-    return jsonify(room_dao.get_all())
+    return jsonify({})
 
 @room_bp.route("/rooms", methods=["POST"])
 def create_room():
-    try:
+   # try:
         data = request.json
-        room_dao.add_room(
+        new_room = room_dao.add_room(
             data["city"],
             int(data["capacity"]),
             data["equipment"],
             data["building"],
-            int(data["room_number"])
+            int(data["room_number"] if "room_number" in data else data["roomNumber"])
         )
-        return get_room_list()
-    except Exception as err:
-        return str(err)
+        return jsonify(new_room)
+    #except Exception as err:
+        #return str(err)
