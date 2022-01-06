@@ -81,7 +81,7 @@ class RoomDAO:
 
     def get_one(self, id: int) -> list:
         results = session.query(self.model).filter_by(id=id).first()
-        return self.to_array(results)
+        return self.to_array(results)[0]
 
     def add_room(
         self, city: str, capacity: int, equipment: str, building: str, room_number: int
@@ -95,7 +95,7 @@ class RoomDAO:
         )
         session.add(new_room)
         session.commit()
-        return new_room
+        return self.to_array(new_room)[0]
 
     def update_room(self, id: int, update: dict) -> list:
         results = session.query(self.model).filter_by(id=id).first()
@@ -105,7 +105,7 @@ class RoomDAO:
                 session.commit()
             except:
                 pass
-        return self.to_array(results)
+        return self.to_array(results)[0]
 
     def delete_room(self, id: int):
         try:
