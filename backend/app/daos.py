@@ -36,7 +36,7 @@ class RoomDAO:
     def __init__(self, model):
         self.model = model
 
-    def get_all(self, filters: dict, sort: list, results_range: list) -> list:
+    def get_all(self, filters: dict, sort: list, results_range: list) -> dict:
         results = session.query(self.model)
         x_total_count = 0
         ap_filters = []
@@ -52,7 +52,8 @@ class RoomDAO:
             results = results.filter(*ap_filters)
             x_total_count = results.count()
         if sort:
-            if x_total_count == 0: x_total_count = results.count()
+            if x_total_count == 0:
+                x_total_count = results.count()
             order = sort[1]
             col = getattr(self.model, sort[0])
             if order.lower() == "asc":
@@ -69,13 +70,14 @@ class RoomDAO:
             offset*= page_size
             results = results.limit(page_size).offset(offset)
             """
-            if x_total_count == 0: x_total_count = results.count()
+            if x_total_count == 0:
+                x_total_count = results.count()
             start = results_range[0]
             count = results_range[1] - start
             if count < 0:
                 count = 0
             results = results.limit(count).offset(start)
-        return {'data': self.to_array(results.all()), 'count':x_total_count}
+        return {"data": self.to_array(results.all()), "count": x_total_count}
 
     def get_one(self, id: int) -> list:
         results = session.query(self.model).filter_by(id=id).first()
