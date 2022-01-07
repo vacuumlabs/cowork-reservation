@@ -44,6 +44,13 @@ def get_calendar(id):
     return jsonify(calendar_dao.get_one(id))
 
 
+@calendar_bp.route("/calendars/<id>", methods=["PUT"])
+def update_calendar(id):
+    # TODO: check if tenant has permissions to update desired calendar
+    data = request.json
+    return jsonify(calendar_dao.update_calendar(id, data))
+
+
 @calendar_bp.route("/calendars/<id>", methods=["DELETE"])
 def delete_calendar(id):
     # TODO: check if tenant has permissions to delete calendars
