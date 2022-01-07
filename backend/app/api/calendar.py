@@ -17,11 +17,12 @@ def get_calendar():
     else:
         return jsonify(calendar_dao.get_all())
 
-@calendar_bp.route("/calendar/<id>/", methods=["DELETE"])
-def del_calendar(id):
-    #TODO: check if tenant has permissions to delete calendars
+@calendar_bp.route("/calendars/<id>", methods=["DELETE"])
+def delete_calendar(id):
+    # TODO: check if tenant has permissions to delete calendars
     calendar_dao.delete_calendar(id)
-    return get_calendar()
+    return jsonify({})
+
 
 @calendar_bp.route("/calendars/", methods=["POST"])
 def create_calendar():
