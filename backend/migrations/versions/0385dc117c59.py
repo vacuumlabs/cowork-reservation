@@ -1,8 +1,8 @@
-"""Migration created at 2021-11-21 20:11:08.197630
+"""empty message
 
 Revision ID: 0385dc117c59
 Revises: 
-Create Date: 2021-11-21 20:11:08.217648
+Create Date: 2022-01-07 21:11:57.747441
 
 """
 from alembic import op
@@ -39,7 +39,7 @@ def upgrade():
     sa.Column('tenant_id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=255), nullable=False),
     sa.Column('google_id', sa.String(length=255), nullable=False),
-    sa.ForeignKeyConstraint(['tenant_id'], ['tenant.id'], ),
+    sa.ForeignKeyConstraint(['tenant_id'], ['tenant.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('event',
@@ -52,9 +52,9 @@ def upgrade():
     sa.Column('google_id', sa.String(length=255), nullable=False),
     sa.Column('tenant_id', sa.Integer(), nullable=True),
     sa.Column('status', sa.Boolean(), nullable=True),
-    sa.ForeignKeyConstraint(['calendar_id'], ['calendar.id'], ),
-    sa.ForeignKeyConstraint(['room_id'], ['room.id'], ),
-    sa.ForeignKeyConstraint(['tenant_id'], ['tenant.id'], ),
+    sa.ForeignKeyConstraint(['calendar_id'], ['calendar.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['room_id'], ['room.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['tenant_id'], ['tenant.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
