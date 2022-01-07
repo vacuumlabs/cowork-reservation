@@ -57,15 +57,20 @@ class CalendarDAO:
         return True
 
     def to_array(self, results) -> list:
-        return [
-            {
-                "id": row.id,
-                "tenant_id": row.tenant_id, 
-                "name": row.name, 
-                "google_id": row.google_id
-            } 
-            for row in results 
-        ]
+        converted = []
+        try:
+            for row in results:
+                entry = self.to_dict(row)
+                converted.append(entry)
+        except:
+            converted.append(self.to_dict(results))
+        return converted
+
+    def to_dict(self, row) -> dict:
+        entry = {}
+        for column in row.__table__.columns:
+            entry[column.name] = getattr(row, column.name)
+        return entry
 
 
 calendar_dao = CalendarDAO(Calendar)
