@@ -38,6 +38,12 @@ def get_calendar_list():
     return resp
 
 
+@calendar_bp.route("/calendars/<id>", methods=["GET"])
+def get_calendar(id):
+    # TODO: check if tenant has permissions to view desired calendar
+    return jsonify(calendar_dao.get_one(id))
+
+
 @calendar_bp.route("/calendars/<id>", methods=["DELETE"])
 def delete_calendar(id):
     # TODO: check if tenant has permissions to delete calendars
