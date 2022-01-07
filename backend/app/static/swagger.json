@@ -125,6 +125,191 @@
                 }
             }
         },
+        "/calendars/": {
+            "get": {
+                "tags": [
+                    "Calendar"
+                ],
+                "summary": "",
+                "parameters":[
+                    {
+                        "name": "tenant_id",
+                        "in": "query",
+                        "type": "int"
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "type": "string"
+                    },
+                    {
+                        "name": "google_id",
+                        "in": "query",
+                        "type": "int"
+                    },
+                    {
+                        "name": "_sort",
+                        "in": "query",
+                        "type": "string",
+                        "default": "name",
+                        "example": "name"
+                    },
+                    {
+                        "name": "_order",
+                        "in": "query",
+                        "type": "string",
+                        "default": "asc",
+                        "example": "asc"
+                    },
+                    {
+                        "name": "_start",
+                        "type": "int",
+                        "in": "query",
+                        "default": 0,
+                        "example": 0
+                    },
+                    {
+                        "name": "_end",
+                        "type": "int",
+                        "in": "query",
+                        "default": 100,
+                        "example": 100
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "There should be array of calendars located in response",
+                        "schema": {
+                            "$ref": "#/components/schemas/Calendar"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Calendar"
+                ],
+                "summary": "Create calendar",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "tenant_id": {
+                                        "type": "int"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "minLength": 1,
+                                        "maxLength": 255
+                                    },
+                                    "google_id": {
+                                        "type": "int"
+                                    }
+                                },
+                                "required": [
+                                    "tenant_id",
+                                    "name",
+                                    "google_id"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Response should contain newly created calendar",
+                        "schema": {
+                            "$ref": "#/components/schemas/Calendar"
+                        }
+                    }
+                }
+            }
+        },
+        "/calendars/{id}": {
+            "get": {
+                "tags": [
+                    "Calendar"
+                ],
+                "summary": "Find calendar by ID",
+                "parameters":[
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "int",
+                        "format": "int32"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "There should be one calendar you requested",
+                        "schema": 
+                        {
+                            "$ref": "#/components/schemas/Calendar"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Calendar"
+                ],
+                "summary": "Update calendar",
+                "parameters":[
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "int",
+                    "format": "int32"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Calendar"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "There should be an updated calendar",
+                        "schema": 
+                        {
+                            "$ref": "#/components/schemas/Calendar"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Calendar"
+                ],
+                "summary": "",
+                "parameters":[
+                    {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "type": "int",
+                    "format": "int32"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "There should be a empty object in response",
+                        "schema": 
+                        {
+                            "$ref": "#/components/schemas/Calendar"
+                        }
+                    }
+                }
+            }
+        },
         "/rooms": {
             "get": {
                 "tags": [
@@ -338,11 +523,6 @@
         "schemas": {
             "Calendar": {
                 "properties": {
-                    "id": {
-                        "type": "integer",
-                        "format": "int32",
-                        "primary_key": "True"
-                    },
                     "tenant_id": {
                         "type": "integer",
                         "format": "int32",
