@@ -14,6 +14,43 @@ const dataProvider = jsonServerProvider(
   'https://my-json-server.typicode.com/Bandius/myJsonServer'
 )
 
+const SUPER_ADMIN_RESOURCES = [
+  <Resource
+    key="tenants"
+    name="tenants"
+    {...Tenant}
+    options={{ label: 'Tenants' }}
+  />,
+  <Resource
+    key="users"
+    name="users"
+    {...User}
+    options={{ label: 'Tenant Admins' }}
+  />,
+  <Resource key="rooms" name="rooms" {...Room} />,
+  <Resource key="buildings" name="buildings" />,
+  <Resource key="cities" name="cities" />,
+]
+
+const TENANT_ADMIN_RESOURCES = [
+  <Resource
+    key="tenants"
+    name="tenants"
+    show={Tenant.show}
+    options={{ label: 'Profile' }}
+  />,
+  <Resource key="users" name="users" {...User} options={{ label: 'Admins' }} />,
+]
+
+const USER_RESOURCES = [
+  <Resource
+    key="users"
+    name="users"
+    show={User.show}
+    options={{ label: 'Profile' }}
+  />,
+]
+
 const App: React.FC = () => {
   // TEMP console.log firebase idToken for dev purposes
   useEffect(() => {
@@ -36,42 +73,10 @@ const App: React.FC = () => {
     >
       {(permissions) =>
         permissions === UserRole.SUPER_ADMIN
-          ? [
-              <Resource
-                key="tenants"
-                name="tenants"
-                {...Tenant}
-                options={{ label: 'Tenants' }}
-              />,
-              <Resource
-                key="users"
-                name="users"
-                {...User}
-                options={{ label: 'Tenant Admins' }}
-              />,
-              <Resource
-                key="rooms"
-                name="rooms"
-                {...Room}
-                options={{ label: 'Rooms' }}
-              />,
-              <Resource key="cities" name="cities" />,
-              <Resource key="buildings" name="buildings" />,
-            ]
-          : [
-              <Resource
-                key="tenants"
-                name="tenants"
-                show={Tenant.show}
-                options={{ label: 'Profile' }}
-              />,
-              <Resource
-                key="users"
-                name="users"
-                {...User}
-                options={{ label: 'Tenant Admins' }}
-              />,
-            ]
+          ? SUPER_ADMIN_RESOURCES
+          : permissions === UserRole.TENANT_ADMIN
+          ? TENANT_ADMIN_RESOURCES
+          : USER_RESOURCES
       }
     </Admin>
   )
