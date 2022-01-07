@@ -45,6 +45,8 @@ class CalendarDAO:
         new_calendar = Calendar(tenant_id=tenant_id, name=name, google_id=google_id)
         session.add(new_calendar)
         session.commit()
+        return self.to_array(new_calendar)[0]
+
     def update_calendar(self, id: int, update: dict) -> list:
         results = session.query(self.model).filter_by(id=id).first()
         for key, value in update.items():
