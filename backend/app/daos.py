@@ -37,9 +37,9 @@ class CalendarDAO:
     def get_all(self) -> list:
         return self.to_array(session.query(self.model).all())
 
-    def get(self, kargs: dict):
-        results = session.query(self.model).filter_by(**kargs).all()
-        return self.to_array(results) 
+    def get_one(self, id: int) -> list:
+        results = session.query(self.model).filter_by(id=id).first()
+        return self.to_array(results)[0]
 
     def add_calendar(self, tenant_id: int, name: str, google_id: str) -> Calendar:
         new_calendar = Calendar(tenant_id=tenant_id, name=name, google_id=google_id)
