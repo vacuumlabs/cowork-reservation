@@ -23,16 +23,13 @@ def del_calendar(id):
     calendar_dao.delete_calendar(id)
     return get_calendar()
 
-@calendar_bp.route("/calendar/", methods=["POST"])
-def insert_calendar():
-     #TODO: check if tenant has permissions to add calendars
-    try:
-        data = request.json
-        calendar_dao.add_calendar(
-            int(data["tenant_id"]),
-            data["name"],
-            data["google_id"]
-        )
-        return get_calendar()
-    except Exception as err:
-        return str(err)
+@calendar_bp.route("/calendars/", methods=["POST"])
+def create_calendar():
+    # TODO: check if tenant has permissions to add calendars
+    # try:
+    data = request.json
+    new_calendar = calendar_dao.add_calendar(
+        int(data["tenant_id"]), data["name"], int(data["google_id"])
+    )
+    return jsonify(new_calendar)
+    # except Exception as err:
