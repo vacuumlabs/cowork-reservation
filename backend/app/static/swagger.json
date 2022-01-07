@@ -311,6 +311,214 @@
             }
         }
     },
+    "/rooms": {
+        "get": {
+            "tags": [
+                "Room"
+            ],
+            "summary": "",
+            "parameters":[
+                {
+                    "name": "city",
+                    "in": "query",
+                    "type": "string",
+                    "default": "Kosice",
+                    "example": "Kosice"
+                },
+                {
+                    "name": "_sort",
+                    "in": "query",
+                    "type": "string",
+                    "default": "city",
+                    "example": "city"
+                },
+                {
+                    "name": "_order",
+                    "in": "query",
+                    "type": "string",
+                    "default": "asc",
+                    "example": "asc"
+                },
+                {
+                    "name": "_start",
+                    "type": "int",
+                    "in": "query",
+                    "default": 0,
+                    "example": 0
+                },
+                {
+                    "name": "_end",
+                    "type": "int",
+                    "in": "query",
+                    "default": 100,
+                    "example": 100
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "There should be array of rooms located in response",
+                    "schema": {
+                        "type": "array",
+                        "properties": {
+                            "object": {
+                                "id": {
+                                    "type": "int",
+                                    "format": "int32"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "city": {
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "type": "string",
+                                    "format": "email"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "post": {
+            "tags": [
+                "Room"
+            ],
+            "summary": "Create room",
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "city": {
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 255
+                                },
+                                "capacity": {
+                                    "type": "int",
+                                    "format": "int32"
+                                },
+                                "equipment": {
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 255
+                                },
+                                "building": {
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 255
+                                },
+                                "room_number": {
+                                    "type": "int",
+                                    "format": "int32"
+                                }
+                            },
+                            "required": [
+                                "city",
+                                "building",
+                                "capacity",
+                                "room_number"
+                            ]
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "Response should contain web page where change will be visible",
+                    "schema": {
+                        "$ref": "#/components/schemas/Tenant"
+                    }
+                }
+            }
+        }
+    },
+    "/rooms/{id}": {
+        "get": {
+            "tags": [
+                "Room"
+            ],
+            "summary": "Find room by ID",
+            "parameters":[
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "type": "int",
+                    "format": "int32"
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "There should be array with one room you requested",
+                    "schema": 
+                    {
+                        "$ref": "#/components/schemas/Room"
+                    }
+                }
+            }
+        },
+        "put": {
+            "tags": [
+                "Room"
+            ],
+            "summary": "Update room",
+            "parameters":[
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "type": "int",
+                "format": "int32"
+                }
+            ],
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Room"
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "There should be array with one room you requested",
+                    "schema": 
+                    {
+                        "$ref": "#/components/schemas/Room"
+                    }
+                }
+            }
+        },
+        "delete": {
+            "tags": [
+                "Room"
+            ],
+            "summary": "",
+            "parameters":[
+                {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "type": "int",
+                "format": "int32"
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "There should be array of rooms located in response",
+                    "schema": 
+                    {
+                        "$ref": "#/components/schemas/Room"
+                    }
+                }
+            }
+        }
+    },
     "components": {
         "schemas": {
             "Calendar": {
