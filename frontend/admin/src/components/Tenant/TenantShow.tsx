@@ -65,11 +65,25 @@ const TenantShow: (props: ShowProps) => JSX.Element = (props) => {
           reference="users"
           target="tenantId"
           sort={{ field: 'id', order: 'ASC' }}
+          filter={{ type: 'email' }}
         >
           <Datagrid>
-            <TextField source="id" />
+            {/* <TextField source="id" /> */}
             <TextField source="name" />
             <TextField source="email" />
+            <EditButton />
+          </Datagrid>
+        </ReferenceManyField>
+        <ReferenceManyField
+          fullWidth
+          label="Domains"
+          reference="users"
+          target="tenantId"
+          sort={{ field: 'id', order: 'ASC' }}
+          filter={{ type: 'domain' }}
+        >
+          <Datagrid>
+            <TextField source="name" />
             <EditButton />
           </Datagrid>
         </ReferenceManyField>
