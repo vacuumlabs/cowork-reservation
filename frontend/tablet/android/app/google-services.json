@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:182196777623:android:425140d8653f0e1c4f2fd2",
+        "mobilesdk_app_id": "1:182196777623:android:6b62e4371f3fbafd4f2fd2",
         "android_client_info": {
           "package_name": "com.tablet"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "182196777623-innnii2p8qkcfktqfobg7fqc56ispmpr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tablet",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
         {
           "client_id": "182196777623-5ids1dgk2ng0vemgspem665t6a2rehv8.apps.googleusercontent.com",
           "client_type": 3
@@ -29,6 +37,13 @@
             {
               "client_id": "182196777623-5ids1dgk2ng0vemgspem665t6a2rehv8.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "182196777623-743nkck014ha318340vf447qa8d0dl3e.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tablet"
+              }
             }
           ]
         }

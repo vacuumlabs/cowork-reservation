@@ -1,4 +1,5 @@
 import auth from '@react-native-firebase/auth'
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
 
 export type IdToken = string | null
 
@@ -21,9 +22,16 @@ const resetPassword: (email: string) => void = async (email) => {
   await auth().sendPasswordResetEmail(email)
 }
 
+const googleSignIn: () => void = async () => {
+  const { idToken } = await GoogleSignin.signIn()
+  const googleCredential = auth.GoogleAuthProvider.credential(idToken)
+  return auth().signInWithCredential(googleCredential)
+}
+
 export default {
   getIdToken,
   signIn,
   signOut,
   resetPassword,
+  googleSignIn,
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { NavigationProps } from '..'
-import authProvider from '../../authProvider'
+import AuthProvider from '../../AuthProvider'
 import { Button, Screen } from '../../components'
 import { Room } from '../../models'
 
@@ -38,7 +38,7 @@ const RoomListScreen: React.FC<NavigationProps> = ({
 }: NavigationProps) => {
   return (
     <Screen>
-      <Button title="Log Out" onPress={() => authProvider.signOut()} />
+      <Button title="Log Out" onPress={() => AuthProvider.signOut()} />
       {dummyRoomList.map((room) => (
         // TODO RoomCard with more info and better design
         <Button
