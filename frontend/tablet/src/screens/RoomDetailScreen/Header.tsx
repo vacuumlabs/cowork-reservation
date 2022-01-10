@@ -1,11 +1,11 @@
 import React from 'react'
 import { View } from 'react-native'
 
-import { Typography, Button } from '../../components'
+import { Typography, Button, Grid } from '../../components'
 
 const Header: React.FC = () => {
   return (
-    <>
+    <Grid direction="row" justify="space-between">
       <View>
         <Typography variant="h3">13:37</Typography>
         <Typography variant="h4">Thursday, Oct 28</Typography>
@@ -17,7 +17,7 @@ const Header: React.FC = () => {
         // eslint-disable-next-line no-console
         onPress={() => console.log('TODO Open find room drawer')}
       />
-    </>
+    </Grid>
   )
 }
 
