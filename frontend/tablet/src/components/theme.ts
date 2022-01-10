@@ -7,13 +7,18 @@ export type TypographyColorVariant = 'turquoise' | 'white' | 'black' | 'gray'
 export type TypographyVariant = 'h1' | 'h2' | 'h3' | 'h4' | 'body' | 'button'
 type SizeVariant = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
+const SPACING_UNIT = 8
+
+export const spacing = (multiplier: number): number =>
+  Math.floor(multiplier * SPACING_UNIT)
+
 const theme = {
   spacing: {
-    xs: 8,
-    sm: 12,
-    md: 16,
-    lg: 20,
-    xl: 32,
+    xs: spacing(1),
+    sm: spacing(1.5),
+    md: spacing(2),
+    lg: spacing(2.5),
+    xl: spacing(4),
   } as { [key in SizeVariant]: number },
   colors: {
     turquoise: '#36DABC',

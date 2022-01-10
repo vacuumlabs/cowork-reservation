@@ -427,6 +427,8 @@ PODS:
   - RNScreens (3.9.0):
     - React-Core
     - React-RCTImage
+  - RNSVG (12.1.1):
+    - React
   - SRSRadialGradient (1.0.9):
     - React
   - Yoga (1.14.0)
@@ -493,6 +495,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNSVG (from `../node_modules/react-native-svg`)
   - SRSRadialGradient (from `../node_modules/react-native-radial-gradient/ios`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -595,6 +598,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSVG:
+    :path: "../node_modules/react-native-svg"
   SRSRadialGradient:
     :path: "../node_modules/react-native-radial-gradient/ios"
   Yoga:
@@ -659,10 +664,11 @@ SPEC CHECKSUMS:
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNReanimated: 65583befd5706cc9c86ae9a081786181ced37b93
   RNScreens: 4d79118be80f79fa1f4aa131909a1d6e86280af3
+  RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   SRSRadialGradient: 49ba49a7a8f257c3fe785c250867b07185d1d01e
   Yoga: 32a18c0e845e185f4a2a66ec76e1fd1f958f22fa
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 8a8cc8223e657e46e1b089f2081d9e18214f7d77
+PODFILE CHECKSUM: 24b13631f20a60922700e12919ee954479ab0f9e
 
 COCOAPODS: 1.11.2

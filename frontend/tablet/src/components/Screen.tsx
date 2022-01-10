@@ -2,19 +2,22 @@ import React, { PropsWithChildren } from 'react'
 import { StyleSheet, View, Dimensions, ViewStyle } from 'react-native'
 import RadialGradient from 'react-native-radial-gradient'
 
+import Grid from './Grid'
 import theme from './theme'
 
 const { height, width } = Dimensions.get('window')
 
 type ScreenProps = PropsWithChildren<{
-  layoutVariant?: ViewStyle['justifyContent']
+  justify?: ViewStyle['justifyContent']
+  alignItems?: ViewStyle['alignItems']
 }>
 
 const Screen: React.FC<ScreenProps> = ({
-  layoutVariant = 'center',
+  justify = 'center',
+  alignItems = 'center',
   children,
 }) => {
-  const styles = createStyles(layoutVariant)
+  const styles = createStyles()
 
   return (
     <View style={styles.screen}>
@@ -24,7 +27,14 @@ const Screen: React.FC<ScreenProps> = ({
         center={[width / 2, height / 2]}
         radius={width / 2}
       >
-        <View style={styles.layout}>{children}</View>
+        <Grid
+          justify={justify}
+          alignItems={alignItems}
+          stretch
+          style={styles.layout}
+        >
+          {children}
+        </Grid>
       </RadialGradient>
     </View>
   )
@@ -32,7 +42,7 @@ const Screen: React.FC<ScreenProps> = ({
 
 export default Screen
 
-const createStyles = (layoutVariant: ViewStyle['justifyContent']) =>
+const createStyles = () =>
   StyleSheet.create({
     screen: {
       flex: 1,
@@ -40,12 +50,7 @@ const createStyles = (layoutVariant: ViewStyle['justifyContent']) =>
     },
     layout: {
       flex: 1,
-      justifyContent: layoutVariant,
+      height: '100%',
       padding: theme.spacing.xl * 2,
-      ...(layoutVariant === 'center'
-        ? {
-            alignItems: 'center',
-          }
-        : {}),
     },
   })

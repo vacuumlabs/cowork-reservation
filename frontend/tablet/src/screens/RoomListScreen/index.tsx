@@ -2,7 +2,7 @@ import React from 'react'
 
 import { NavigationProps } from '..'
 import authProvider from '../../authProvider'
-import { Button, Screen } from '../../components'
+import { Button, Grid, Screen } from '../../components'
 import { Room } from '../../models'
 
 // TODO use real data
@@ -37,20 +37,29 @@ const RoomListScreen: React.FC<NavigationProps> = ({
   navigation,
 }: NavigationProps) => {
   return (
-    <Screen>
-      <Button title="Log Out" onPress={() => authProvider.signOut()} />
-      {dummyRoomList.map((room) => (
-        // TODO RoomCard with more info and better design
+    <Screen justify="flex-start">
+      <Grid alignItems="flex-end">
         <Button
-          key={room.id}
-          title={room.title}
-          onPress={() =>
-            navigation.navigate('RoomDetailScreen', {
-              room,
-            })
-          }
+          key="logout"
+          title="Log Out"
+          onPress={() => authProvider.signOut()}
         />
-      ))}
+      </Grid>
+
+      <Grid alignItems="center" spacing={1}>
+        {dummyRoomList.map((room) => (
+          // TODO RoomCard with more info and better design
+          <Button
+            key={room.id}
+            title={room.title}
+            onPress={() =>
+              navigation.navigate('RoomDetailScreen', {
+                room,
+              })
+            }
+          />
+        ))}
+      </Grid>
     </Screen>
   )
 }
