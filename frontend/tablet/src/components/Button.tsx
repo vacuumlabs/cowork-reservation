@@ -63,6 +63,7 @@ const createStyles = (variant: ButtonVariant) => {
     },
     text: {
       textTransform: 'uppercase',
+      textAlign: 'center',
     },
   })
 }
