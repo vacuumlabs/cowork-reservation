@@ -7,6 +7,7 @@ import Tenant from './components/Tenant'
 import User from './components/User'
 import Room from './components/Room'
 import Layout from './components/Layout'
+import City from './components/City'
 import { UserRole } from './models'
 import LoginPage from './components/LoginPage'
 
@@ -29,7 +30,7 @@ const SUPER_ADMIN_RESOURCES = [
   />,
   <Resource key="rooms" name="rooms" {...Room} />,
   <Resource key="buildings" name="buildings" />,
-  <Resource key="cities" name="cities" />,
+  <Resource key="cities" name="cities" {...City} />,
 ]
 
 const TENANT_ADMIN_RESOURCES = [
