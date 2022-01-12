@@ -9,8 +9,7 @@ import {
   useGetIdentity,
 } from 'react-admin'
 import { Typography } from '@mui/material'
-
-import { User } from '../../models'
+import { User } from 'shared/models'
 
 const UserTitle = ({ record }: { record?: User }) => (
   <span>{record ? record.name : 'User'}</span>

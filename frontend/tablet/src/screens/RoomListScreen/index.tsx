@@ -1,10 +1,10 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
+import { Room } from 'shared/models'
 
 import { NavigationProps } from '..'
 import authProvider from '../../authProvider'
 import { Button, Grid, Screen } from '../../components'
-import { Room } from '../../models'
 
 // TODO use real data
 const dummyRoomList: Room[] = [
