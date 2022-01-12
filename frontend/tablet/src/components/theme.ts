@@ -1,6 +1,7 @@
 export type ColorVariant =
   | 'turquoise'
   | 'red'
+  | 'backgroundLight'
   | 'backgroundDark'
   | 'backgroundDarker'
 export type TypographyColorVariant = 'turquoise' | 'white' | 'black' | 'gray'
@@ -23,6 +24,7 @@ const theme = {
   colors: {
     turquoise: '#36DABC',
     red: '#F15152',
+    backgroundLight: '#A9DEFF',
     backgroundDark: '#00304E',
     backgroundDarker: '#01161F',
   } as { [key in ColorVariant]: string },
@@ -56,6 +58,7 @@ const theme = {
     body: 30,
     button: 28.5,
   } as { [key in TypographyVariant]: number },
+  inputWidth: 300,
 }
 
 export default theme
