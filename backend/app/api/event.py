@@ -53,3 +53,18 @@ def update(id):
 def delete(id):
     event_dao.delete(id)
     return jsonify({})
+
+@event_bp.route("/events", methods=["POST"])
+def create():
+    data = request.json
+    new_event = event_dao.add(
+        int(data["calendar_id"]),
+        int(data["room_id"]),
+        str(data["name"]),
+        datetime.datetime.strptime(data["start"], '%Y-%m-%dT%H:%M:%S.%f%z'),
+        datetime.datetime.strptime(data["end"], '%Y-%m-%dT%H:%M:%S.%f%z'),
+        str(data["google_id"]),
+        int(data["tenant_id"]),
+        bool(data["status"])
+    )
+    return jsonify(new_event)
