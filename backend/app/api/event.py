@@ -37,3 +37,19 @@ def get_multiple():
     resp.headers['Access-Control-Expose-Headers'] = 'X-Total-Count'
     resp.headers['X-Total-Count'] = results['count']
     return resp
+
+@event_bp.route("/events/<id>", methods=["GET"])
+def get_one(id):
+    #TODO: check if tenant has permissions to view desired event
+    return jsonify(event_dao.get_one(id))
+
+@event_bp.route("/events/<id>", methods=["PUT"])
+def update(id):
+    # TODO: check if tenant has permissions to update desired event
+    data = request.json
+    return jsonify(event_dao.update(id, data))
+
+@event_bp.route("/events/<id>", methods=["DELETE"])
+def delete(id):
+    event_dao.delete(id)
+    return jsonify({})
