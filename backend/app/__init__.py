@@ -2,6 +2,7 @@ import os
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, render_template
 from flask_migrate import Migrate
+from flask_cors import CORS
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -9,6 +10,7 @@ migrate = Migrate()
 
 def create_app(config_filename):
     app = Flask(__name__)
+    CORS(app)
     app.config.from_pyfile(config_filename)
     if new_value := os.environ.get("SQLALCHEMY_DATABASE_URI"):
         app.config["SQLALCHEMY_DATABASE_URI"] = new_value
