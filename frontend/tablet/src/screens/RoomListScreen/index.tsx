@@ -1,4 +1,5 @@
 import React from 'react'
+import { StyleSheet } from 'react-native'
 
 import { NavigationProps } from '..'
 import authProvider from '../../authProvider'
@@ -37,7 +38,7 @@ const RoomListScreen: React.FC<NavigationProps> = ({
   navigation,
 }: NavigationProps) => {
   return (
-    <Screen justify="flex-start">
+    <Screen>
       <Grid alignItems="flex-end">
         <Button
           key="logout"
@@ -46,7 +47,12 @@ const RoomListScreen: React.FC<NavigationProps> = ({
         />
       </Grid>
 
-      <Grid alignItems="center" spacing={1}>
+      <Grid
+        justify="center"
+        alignItems="center"
+        spacing={1}
+        style={styles.list}
+      >
         {dummyRoomList.map((room) => (
           // TODO RoomCard with more info and better design
           <Button
@@ -65,3 +71,9 @@ const RoomListScreen: React.FC<NavigationProps> = ({
 }
 
 export default RoomListScreen
+
+const styles = StyleSheet.create({
+  list: {
+    flex: 1,
+  },
+})
