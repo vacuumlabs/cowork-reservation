@@ -46,18 +46,18 @@ def get_room_one(id):
 def update_room(id):
     # TODO: check if tenant has permissions to update desired room
     data = request.json
-    return jsonify(room_dao.update_room(id, data))
+    return jsonify(room_dao.update(id, data))
 
 @room_bp.route("/rooms/<id>", methods=["DELETE"])
 def delete_room(id):
-    room_dao.delete_room(id)
+    room_dao.delete(id)
     return jsonify({})
 
 @room_bp.route("/rooms", methods=["POST"])
 def create_room():
    # try:
         data = request.json
-        new_room = room_dao.add_room(
+        new_room = room_dao.add(
             data["city"],
             int(data["capacity"]),
             data["equipment"],
