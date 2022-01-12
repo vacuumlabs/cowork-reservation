@@ -1,7 +1,9 @@
+import datetime
 from typing import Iterable
 from app.models import Tenant
 from app.models import Calendar
 from app.models import Room
+from app.models import Event
 from app import db
 
 session = db.session
@@ -143,7 +145,32 @@ class RoomDAO(SharedDaoMethods):
         session.commit()
         return self.to_array(new_room)[0]
 
-
+class EventDAO(SharedDaoMethods):
+    def add(
+            self, 
+            calendar_id: int, 
+            room_id: int, 
+            name: str, 
+            start: datetime, 
+            end: datetime,
+            google_id: str,
+            tenant_id: int,
+            status: bool,
+        ) -> Event:
+            new_event = Event(
+                calendar_id=calendar_id, 
+                room_id=room_id, 
+                name=name, 
+                start=start, 
+                end=end,
+                google_id=google_id,
+                tenant_id=tenant_id,
+                status=status,
+            )
+            session.add(new_event)
+            session.commit()
+            return self.to_array(new_event)[0]
 
 room_dao = RoomDAO(Room)
 calendar_dao = CalendarDAO(Calendar)
+event_dao = EventDAO(Event)
