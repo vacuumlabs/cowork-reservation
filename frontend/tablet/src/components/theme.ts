@@ -48,6 +48,14 @@ const theme = {
     body: 22,
     button: 22,
   } as { [key in TypographyVariant]: number },
+  lineHeight: {
+    h1: 92,
+    h2: 94,
+    h3: 52,
+    h4: 36,
+    body: 30,
+    button: 28.5,
+  } as { [key in TypographyVariant]: number },
 }
 
 export default theme

@@ -36,5 +36,8 @@ const createStyles = (
       color: theme.typographyColors[color],
       fontSize: theme.fontSize[variant],
       fontFamily: theme.fontFamily[variant],
+      lineHeight: theme.lineHeight[variant],
+      height: theme.lineHeight[variant],
+      includeFontPadding: false,
     },
   })
