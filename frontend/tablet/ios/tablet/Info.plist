@@ -39,6 +39,9 @@
 	<string></string>
 	<key>UIAppFonts</key>
 	<array>
+		<string>fa-solid-900.ttf</string>
+		<string>fa-regular-400.ttf</string>
+		<string>fa-brands-400.ttf</string>
 		<string>Crete Round.ttf</string>
 		<string>Hind Madurai.ttf</string>
 		<string>PT Sans Caption Bold.ttf</string>
