@@ -1,15 +1,15 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
+import { Room } from 'shared/models'
 
 import { Grid, Icon, theme, Typography } from '../../components'
-import { Room } from '../../models'
 
 type RoomCardProps = Room & {
   onPress: () => void
 }
 
 const RoomCard: React.FC<RoomCardProps> = ({
-  title,
+  name,
   city,
   building,
   capacity,
@@ -21,7 +21,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
       <Grid spacing={1} stretch>
         <Grid direction="row" justify="space-between" alignItems="center">
           <Typography variant="h4" color="black">
-            {title}
+            {name}
           </Typography>
           <Grid direction="row" alignItems="center">
             <Typography color="black">{capacity} </Typography>
