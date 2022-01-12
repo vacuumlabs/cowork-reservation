@@ -517,6 +517,167 @@
                     }
                 }
             }
+        },
+        "/events": {
+            "get": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "",
+                "parameters":[
+                    {
+                        "name": "tenant_id",
+                        "in": "query",
+                        "type": "int"
+                    },
+                    {
+                        "name": "room_id",
+                        "in": "query",
+                        "type": "int"
+                    },
+                    {
+                        "name": "_sort",
+                        "in": "query",
+                        "type": "string",
+                        "example": "room_id"
+                    },
+                    {
+                        "name": "_order",
+                        "in": "query",
+                        "type": "string",
+                        "default": "asc",
+                        "example": "asc"
+                    },
+                    {
+                        "name": "_start",
+                        "type": "int",
+                        "in": "query",
+                        "default": 0,
+                        "example": 0
+                    },
+                    {
+                        "name": "_end",
+                        "type": "int",
+                        "in": "query",
+                        "default": 100,
+                        "example": 100
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "There should be array of events located in response",
+                        "schema": {
+                            "$ref": "#/components/schemas/Event"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Create event",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Event"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Response should contain newly created event",
+                        "schema": {
+                            "$ref": "#/components/schemas/Event"
+                        }
+                    }
+                }
+            }
+        },
+        "/events/{id}": {
+            "get": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Find event by ID",
+                "parameters":[
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "int",
+                        "format": "int32"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "There should be one event you requested",
+                        "schema": 
+                        {
+                            "$ref": "#/components/schemas/Event"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Update event",
+                "parameters":[
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "int",
+                    "format": "int32"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Event"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "There should be an updated event",
+                        "schema": 
+                        {
+                            "$ref": "#/components/schemas/Event"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "",
+                "parameters":[
+                    {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "type": "int",
+                    "format": "int32"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{}",
+                        "schema": 
+                        {
+                            "$ref": "#/components/schemas/Event"
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -572,11 +733,6 @@
             },
             "Event": {
                 "properties": {
-                    "id": {
-                        "type": "integer",
-                        "format": "int32",
-                        "primary_key": "True"
-                    },
                     "calendar_id": {
                         "type": "integer",
                         "format": "int32",
