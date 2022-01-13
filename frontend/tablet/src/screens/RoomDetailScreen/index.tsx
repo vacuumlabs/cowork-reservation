@@ -1,6 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import React from 'react'
 import { StyleSheet } from 'react-native'
+import SystemNavigationBar from 'react-native-system-navigation-bar'
 
 import { NavigatorStackParamList } from '..'
 import { Typography, Screen, Grid } from '../../components'
@@ -17,6 +18,8 @@ const RoomDetailScreen: React.FC<RoomDetailProps> = ({
   route,
 }: RoomDetailProps) => {
   const { room } = route.params
+
+  SystemNavigationBar.stickyImmersive()
 
   return (
     <Screen>
