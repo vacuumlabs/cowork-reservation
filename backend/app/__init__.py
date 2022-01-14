@@ -2,6 +2,7 @@ import os
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, render_template
 from flask_migrate import Migrate
+from flask_cors import CORS
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -9,6 +10,7 @@ migrate = Migrate()
 
 def create_app(config_filename):
     app = Flask(__name__)
+    CORS(app)
     app.config.from_pyfile(config_filename)
     if new_value := os.environ.get("SQLALCHEMY_DATABASE_URI"):
         app.config["SQLALCHEMY_DATABASE_URI"] = new_value
@@ -25,6 +27,7 @@ def register_blueprints(app: Flask):
     from .api.tenant import tenant_bp
     from .api.calendar import calendar_bp
     from .api.room import room_bp
+    from .api.event import event_bp
 
     # Blueprints registrations
     app.register_blueprint(default_bp)
@@ -32,6 +35,7 @@ def register_blueprints(app: Flask):
     app.register_blueprint(tenant_bp)
     app.register_blueprint(calendar_bp)
     app.register_blueprint(room_bp)
+    app.register_blueprint(event_bp)
 
 
 def register_error_handlers(app: Flask):

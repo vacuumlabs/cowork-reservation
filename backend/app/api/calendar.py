@@ -48,13 +48,13 @@ def get_calendar(id):
 def update_calendar(id):
     # TODO: check if tenant has permissions to update desired calendar
     data = request.json
-    return jsonify(calendar_dao.update_calendar(id, data))
+    return jsonify(calendar_dao.update(id, data))
 
 
 @calendar_bp.route("/calendars/<id>", methods=["DELETE"])
 def delete_calendar(id):
     # TODO: check if tenant has permissions to delete calendars
-    calendar_dao.delete_calendar(id)
+    calendar_dao.delete(id)
     return jsonify({})
 
 
@@ -63,7 +63,7 @@ def create_calendar():
     # TODO: check if tenant has permissions to add calendars
     # try:
     data = request.json
-    new_calendar = calendar_dao.add_calendar(
+    new_calendar = calendar_dao.add(
         int(data["tenant_id"]), data["name"], int(data["google_id"])
     )
     return jsonify(new_calendar)

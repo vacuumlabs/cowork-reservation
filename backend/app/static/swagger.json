@@ -33,32 +33,74 @@
         }
     ],
     "paths": {
-        "/tenant": {
-            "get": {
-                "tags": [
+        "/tenants": {
+            "get":{
+                "tags":[
                     "Tenant"
                 ],
-                "summary": "",
-                "responses": {
-                    "200": {
-                        "description": "There should be array of tenant located in response",
-                        "schema": {
-                            "type": "array",
-                            "properties": {
-                                "object": {
-                                    "id": {
-                                        "type": "int",
-                                        "format": "int32"
+                "summary":"",
+                "parameters":[
+                    {
+                        "name": "association_id",
+                        "in": "query",
+                        "type": "int"
+                    },
+                    {
+                        "name": "city",
+                        "in": "query",
+                        "type": "string",
+                        "default": "Kosice",
+                        "example": "Kosice"
+                    },
+                    {
+                        "name": "_sort",
+                        "in": "query",
+                        "type": "string",
+                        "default": "city",
+                        "example": "city"
+                    },
+                    {
+                        "name": "_order",
+                        "in": "query",
+                        "type": "string",
+                        "default": "asc",
+                        "example": "asc"
+                    },
+                    {
+                        "name": "_start",
+                        "in": "query",
+                        "type": "int",
+                        "default": "0",
+                        "example": "0"
+                    },
+                    {
+                        "name": "_end",
+                        "in": "query",
+                        "type": "int",
+                        "default": "100",
+                        "example": "100"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"There should be array of tenants located in response",
+                        "schema":{
+                            "type":"array",
+                            "properties":{
+                                "object":{
+                                    "id":{
+                                        "type":"int",
+                                        "format":"int32"
                                     },
-                                    "name": {
-                                        "type": "string"
+                                    "name":{
+                                        "type":"string"
                                     },
-                                    "city": {
-                                        "type": "string"
+                                    "city":{
+                                        "type":"string"
                                     },
-                                    "email": {
-                                        "type": "string",
-                                        "format": "email"
+                                    "email":{
+                                        "type":"string",
+                                        "format":"email"
                                     }
                                 }
                             }
@@ -104,12 +146,16 @@
                                             "notFake@email.com",
                                             "not.fake@email.com"
                                         ]
+                                    },
+                                    "association_id": {
+                                        "type": "int"
                                     }
                                 },
                                 "required": [
                                     "name",
                                     "city",
-                                    "email"
+                                    "email",
+                                    "association_id"
                                 ]
                             }
                         }
@@ -119,6 +165,95 @@
                     "200": {
                         "description": "Response should contain web page where change will be visible",
                         "schema": {
+                            "$ref": "#/components/schemas/Tenant"
+                        }
+                    }
+                }
+            }
+        },
+        
+        "/tenants/{id}": {
+            "get": {
+                "tags": [
+                    "Tenant"
+                ],
+                "summary": "Find tenant by ID",
+                "parameters":[
+                    {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "type": "int",
+                    "format": "int32"
+                    }
+                ],
+                "security":[
+                    {
+                    "cookieAuth":[]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "There should be array with one tenant you requested",
+                        "schema": 
+                        {
+                            "$ref": "#/components/schemas/Tenant"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Tenant"
+                ],
+                "summary": "Update tenant by ID",
+                "parameters":[
+                    {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "type": "int",
+                    "format": "int32"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Tenant"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "There should be array with one tenant you updated",
+                        "schema": 
+                        {
+                            "$ref": "#/components/schemas/Tenant"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Tenant"
+                ],
+                "summary": "",
+                "parameters":[
+                    {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "type": "int",
+                    "format": "int32"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "There should be array of tenants located in response",
+                        "schema": 
+                        {
                             "$ref": "#/components/schemas/Tenant"
                         }
                     }
@@ -517,9 +652,177 @@
                     }
                 }
             }
+        },
+        "/events": {
+            "get": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "",
+                "parameters":[
+                    {
+                        "name": "tenant_id",
+                        "in": "query",
+                        "type": "int"
+                    },
+                    {
+                        "name": "room_id",
+                        "in": "query",
+                        "type": "int"
+                    },
+                    {
+                        "name": "_sort",
+                        "in": "query",
+                        "type": "string",
+                        "example": "room_id"
+                    },
+                    {
+                        "name": "_order",
+                        "in": "query",
+                        "type": "string",
+                        "default": "asc",
+                        "example": "asc"
+                    },
+                    {
+                        "name": "_start",
+                        "type": "int",
+                        "in": "query",
+                        "default": 0,
+                        "example": 0
+                    },
+                    {
+                        "name": "_end",
+                        "type": "int",
+                        "in": "query",
+                        "default": 100,
+                        "example": 100
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "There should be array of events located in response",
+                        "schema": {
+                            "$ref": "#/components/schemas/Event"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Create event",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Event"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Response should contain newly created event",
+                        "schema": {
+                            "$ref": "#/components/schemas/Event"
+                        }
+                    }
+                }
+            }
+        },
+        "/events/{id}": {
+            "get": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Find event by ID",
+                "parameters":[
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "int",
+                        "format": "int32"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "There should be one event you requested",
+                        "schema": 
+                        {
+                            "$ref": "#/components/schemas/Event"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Update event",
+                "parameters":[
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "int",
+                    "format": "int32"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Event"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "There should be an updated event",
+                        "schema": 
+                        {
+                            "$ref": "#/components/schemas/Event"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "",
+                "parameters":[
+                    {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "type": "int",
+                    "format": "int32"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{}",
+                        "schema": 
+                        {
+                            "$ref": "#/components/schemas/Event"
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
+        "securitySchemes": {
+            "cookieAuth":{
+                "type":"apiKey",
+                "in": "cookie",
+                "name": "login_token"
+            }
+        },
         "schemas": {
             "Calendar": {
                 "properties": {
@@ -572,11 +875,6 @@
             },
             "Event": {
                 "properties": {
-                    "id": {
-                        "type": "integer",
-                        "format": "int32",
-                        "primary_key": "True"
-                    },
                     "calendar_id": {
                         "type": "integer",
                         "format": "int32",
