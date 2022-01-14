@@ -31,3 +31,16 @@ export type Room = {
   capacity: string
   equipment: string
 }
+
+export type Building = {
+  id: string
+  name: string
+  cityId: string
+  city: string
+  address: string
+}
+
+export type City = {
+  id: string
+  name: string
+}

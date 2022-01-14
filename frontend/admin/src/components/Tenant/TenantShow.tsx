@@ -51,7 +51,6 @@ const TenantShow: (props: ShowProps) => JSX.Element = (props) => {
     <Show title={<TenantTitle />} {...props}>
       <SimpleShowLayout>
         <TextField source="name" label="" />
-        <TextField source="email" label="Email" />
         {permissions === UserRole.SUPER_ADMIN
           ? [<AddAdminButton key="adminButton" />]
           : [
