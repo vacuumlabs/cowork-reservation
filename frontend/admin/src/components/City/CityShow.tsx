@@ -17,6 +17,7 @@ const CityTitle = ({ record }: { record?: City }) => (
 const CityShow: (props: ShowProps) => JSX.Element = (props) => (
   <Show title={<CityTitle />} {...props}>
     <SimpleShowLayout>
+      <TextField source="name" label="City" />
       <ReferenceManyField
         fullWidth
         label="Buildings"

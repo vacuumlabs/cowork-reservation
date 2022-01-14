@@ -10,7 +10,6 @@ import Room from './components/Room'
 import Layout from './components/Layout'
 import City from './components/City'
 import Building from './components/Building'
-
 import LoginPage from './components/LoginPage'
 
 const dataProvider = jsonServerProvider(
