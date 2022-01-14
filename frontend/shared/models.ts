@@ -26,7 +26,7 @@ export type Room = {
   cityId: string
   city: string
   buildingId: string
-  building: string
+  building: Building
   floor: string
   capacity: string
   equipment: string
@@ -36,7 +36,7 @@ export type Building = {
   id: string
   name: string
   cityId: string
-  city: string
+  city: City
   address: string
 }
 
