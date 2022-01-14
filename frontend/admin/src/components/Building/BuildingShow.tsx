@@ -12,7 +12,7 @@ import {
 import { Building } from 'shared/models'
 
 const BuildingTitle = ({ record }: { record?: Building }) => (
-  <span>{record ? record.name + ', ' + record.city : 'Building'}</span>
+  <span>{record ? record.name : 'Building'}</span>
 )
 
 const BuildingShow: (props: ShowProps) => JSX.Element = (props) => (
@@ -32,9 +32,15 @@ const BuildingShow: (props: ShowProps) => JSX.Element = (props) => (
       >
         <Datagrid>
           <TextField source="name" />
-          <TextField source="floor" />
-          <TextField source="capacity" />
-          <TextField source="equipment" />
+          <TextField source="city" />
+          <ReferenceField
+            label="Address"
+            source="buildingId"
+            reference="buildings"
+            link={false}
+          >
+            <TextField source="address" />
+          </ReferenceField>
           <EditButton />
         </Datagrid>
       </ReferenceManyField>
