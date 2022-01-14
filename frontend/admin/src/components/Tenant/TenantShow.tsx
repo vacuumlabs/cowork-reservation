@@ -12,8 +12,7 @@ import {
 } from 'react-admin'
 import { Link } from 'react-router-dom'
 import { Add as AddIcon } from '@material-ui/icons'
-
-import { Tenant, UserRole } from '../../models'
+import { Tenant, UserRole } from 'shared/models'
 
 const TenantTitle = ({ record }: { record?: Tenant }) => (
   <span>{record ? record.name : 'Tenant'}</span>
@@ -69,7 +68,6 @@ const TenantShow: (props: ShowProps) => JSX.Element = (props) => {
           <Datagrid>
             <TextField source="id" />
             <TextField source="name" />
-            <TextField source="email" />
             <EditButton />
           </Datagrid>
         </ReferenceManyField>

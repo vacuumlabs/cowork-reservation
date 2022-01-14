@@ -2,6 +2,7 @@ import React from 'react'
 import {
   AutocompleteInput,
   Datagrid,
+  EditButton,
   List,
   ListProps,
   ReferenceInput,
@@ -28,6 +29,7 @@ const RoomList: (props: ListProps) => JSX.Element = (props) => (
       <TextField source="building" />
       <TextField source="floor" />
       <TextField source="capacity" />
+      <EditButton />
     </Datagrid>
   </List>
 )

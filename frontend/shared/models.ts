@@ -1,4 +1,3 @@
-// TODO re-use models from a shared file between Admin and Tablet FE
 export type Tenant = {
   id: string
   name: string
