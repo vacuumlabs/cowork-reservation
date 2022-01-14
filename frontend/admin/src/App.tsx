@@ -8,6 +8,7 @@ import Tenant from './components/Tenant'
 import User from './components/User'
 import Room from './components/Room'
 import Layout from './components/Layout'
+import Building from './components/Building'
 import LoginPage from './components/LoginPage'
 
 const dataProvider = jsonServerProvider(
@@ -28,7 +29,7 @@ const SUPER_ADMIN_RESOURCES = [
     options={{ label: 'Tenant Admins' }}
   />,
   <Resource key="rooms" name="rooms" {...Room} />,
-  <Resource key="buildings" name="buildings" />,
+  <Resource key="buildings" name="buildings" {...Building} />,
   <Resource key="cities" name="cities" />,
 ]
 
