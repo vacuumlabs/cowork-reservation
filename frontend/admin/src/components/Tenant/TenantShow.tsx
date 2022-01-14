@@ -52,7 +52,6 @@ const TenantShow: (props: ShowProps) => JSX.Element = (props) => {
     <Show title={<TenantTitle />} {...props}>
       <SimpleShowLayout>
         <TextField source="name" label="" />
-        <TextField source="email" label="Email" />
         {permissions === UserRole.SUPER_ADMIN
           ? [<AddAdminButton key="adminButton" />]
           : [
@@ -67,7 +66,7 @@ const TenantShow: (props: ShowProps) => JSX.Element = (props) => {
           sort={{ field: 'id', order: 'ASC' }}
           filter={{ type: 'email' }}
         >
-          <Datagrid>
+          <Datagrid rowClick="show">
             <TextField source="name" />
             <TextField source="email" />
             <EditButton />
