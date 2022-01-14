@@ -9,7 +9,6 @@ import User from './components/User'
 import Room from './components/Room'
 import Layout from './components/Layout'
 import City from './components/City'
-import { UserRole } from './models'
 import LoginPage from './components/LoginPage'
 
 const dataProvider = jsonServerProvider(
