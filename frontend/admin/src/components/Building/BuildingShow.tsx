@@ -2,6 +2,7 @@ import React from 'react'
 import {
   Datagrid,
   EditButton,
+  ReferenceField,
   ReferenceManyField,
   Show,
   ShowProps,
@@ -17,6 +18,11 @@ const BuildingTitle = ({ record }: { record?: Building }) => (
 const BuildingShow: (props: ShowProps) => JSX.Element = (props) => (
   <Show {...props} title={<BuildingTitle />}>
     <SimpleShowLayout>
+      <TextField source="name" />
+      <ReferenceField label="City" reference="cities" source="cityId">
+        <TextField source="name" />
+      </ReferenceField>
+      <TextField source="address" />
       <ReferenceManyField
         fullWidth
         label="Rooms"
