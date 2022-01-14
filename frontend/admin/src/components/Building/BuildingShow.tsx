@@ -30,17 +30,11 @@ const BuildingShow: (props: ShowProps) => JSX.Element = (props) => (
         target="buildingId"
         sort={{ field: 'id', order: 'ASC' }}
       >
-        <Datagrid>
+        <Datagrid rowClick="show">
           <TextField source="name" />
-          <TextField source="city" />
-          <ReferenceField
-            label="Address"
-            source="buildingId"
-            reference="buildings"
-            link={false}
-          >
-            <TextField source="address" />
-          </ReferenceField>
+          <TextField source="floor" />
+          <TextField source="capacity" />
+          <TextField source="equipment" />
           <EditButton />
         </Datagrid>
       </ReferenceManyField>
