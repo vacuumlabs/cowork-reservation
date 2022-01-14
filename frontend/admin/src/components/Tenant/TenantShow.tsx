@@ -69,7 +69,6 @@ const TenantShow: (props: ShowProps) => JSX.Element = (props) => {
           <Datagrid>
             <TextField source="id" />
             <TextField source="name" />
-            <TextField source="email" />
             <EditButton />
           </Datagrid>
         </ReferenceManyField>
