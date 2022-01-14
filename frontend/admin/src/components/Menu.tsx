@@ -14,8 +14,7 @@ import {
   HomeWork as BuildingIcon,
   LocationCity as CityIcon,
 } from '@material-ui/icons'
-
-import { User, UserRole } from '../models'
+import { User, UserRole } from 'shared/models'
 
 const useMenuItems = (user?: User) => {
   const ProfileMenuItemLink = () => (

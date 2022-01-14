@@ -6,6 +6,7 @@ import {
   TextField,
   EmailField,
   ReferenceField,
+  EditButton,
 } from 'react-admin'
 
 const UserList: (props: ListProps) => JSX.Element = (props) => {
@@ -22,6 +23,7 @@ const UserList: (props: ListProps) => JSX.Element = (props) => {
         >
           <TextField source="name" />
         </ReferenceField>
+        <EditButton />
       </Datagrid>
     </List>
   )

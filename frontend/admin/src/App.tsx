@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { Admin, Resource } from 'react-admin'
 import jsonServerProvider from 'ra-data-json-server'
+import { UserRole } from 'shared/models'
 
 import authProvider, { getIdToken } from './authProvider'
 import Tenant from './components/Tenant'

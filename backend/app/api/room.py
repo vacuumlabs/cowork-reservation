@@ -2,6 +2,7 @@ import json
 from flask import jsonify, request, make_response, render_template
 from flask.blueprints import Blueprint
 from app.daos import room_dao
+from app.firebase_utils import have_claims
 
 room_bp = Blueprint("room_bp", __name__)
 
@@ -44,26 +45,30 @@ def get_room_one(id):
 
 @room_bp.route("/rooms/<id>", methods=["PUT"])
 def update_room(id):
-    # TODO: check if tenant has permissions to update desired room
+    if not have_claims(request.cookies.get("login_token"),"SUPER_ADMIN"):
+        return make_response(jsonify({}), 403)
     data = request.json
-    return jsonify(room_dao.update_room(id, data))
+    return jsonify(room_dao.update(id, data))
 
 @room_bp.route("/rooms/<id>", methods=["DELETE"])
 def delete_room(id):
-    room_dao.delete_room(id)
+    if not have_claims(request.cookies.get("login_token"),"SUPER_ADMIN"):
+        return make_response(jsonify({}), 403)
+    room_dao.delete(id)
     return jsonify({})
+
 
 @room_bp.route("/rooms", methods=["POST"])
 def create_room():
-   # try:
-        data = request.json
-        new_room = room_dao.add_room(
-            data["city"],
-            int(data["capacity"]),
-            data["equipment"],
-            data["building"],
-            int(data["room_number"] if "room_number" in data else data["roomNumber"])
-        )
-        return jsonify(new_room)
-    #except Exception as err:
-        #return str(err)
+    if not have_claims(request.cookies.get("login_token"),"SUPER_ADMIN"):
+        return make_response(jsonify({}), 403)
+    data = request.json
+    new_room = room_dao.add(
+        data["city"],
+        int(data["capacity"]),
+        data["equipment"],
+        data["building"],
+        int(data["room_number"] if "room_number" in data else data["roomNumber"])
+    )
+    return jsonify(new_room)
+    

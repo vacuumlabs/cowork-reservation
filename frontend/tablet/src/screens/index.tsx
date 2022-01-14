@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { createStackNavigator, StackScreenProps } from '@react-navigation/stack'
+import { Room } from 'shared/models'
 
-import { Room } from '../models'
 import LoginScreen from './LoginScreen'
 import RoomListScreen from './RoomListScreen'
 import RoomDetailScreen from './RoomDetailScreen'
