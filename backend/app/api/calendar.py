@@ -47,7 +47,7 @@ def get_calendar(id):
 
 @calendar_bp.route("/calendars/<id>", methods=["PUT"])
 def update_calendar(id):
-    if not have_claims(request.cookies.get("login_token")):
+    if not have_claims(request.headers.get("Authorization")):
         return make_response(jsonify({}), 403)
     data = request.json
     return jsonify(calendar_dao.update(id, data))
@@ -55,7 +55,7 @@ def update_calendar(id):
 
 @calendar_bp.route("/calendars/<id>", methods=["DELETE"])
 def delete_calendar(id):
-    if not have_claims(request.cookies.get("login_token")):
+    if not have_claims(request.headers.get("Authorization")):
         return make_response(jsonify({}), 403)
     calendar_dao.delete(id)
     return jsonify({})
@@ -63,7 +63,7 @@ def delete_calendar(id):
 
 @calendar_bp.route("/calendars/", methods=["POST"])
 def create_calendar():
-    if not have_claims(request.cookies.get("login_token")):
+    if not have_claims(request.headers.get("Authorization")):
         return make_response(jsonify({}), 403)
     data = request.json
     new_calendar = calendar_dao.add(
