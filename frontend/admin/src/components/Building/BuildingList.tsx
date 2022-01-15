@@ -9,7 +9,7 @@ import {
   TextField,
 } from 'react-admin'
 
-const RoomFilters = [
+const BuildingFilters = [
   <ReferenceInput
     key="city"
     label="City"
@@ -21,17 +21,15 @@ const RoomFilters = [
   </ReferenceInput>,
 ]
 
-const RoomList: (props: ListProps) => JSX.Element = (props) => (
-  <List {...props} filters={RoomFilters}>
+const BuildingList: (props: ListProps) => JSX.Element = (props) => (
+  <List {...props} filters={BuildingFilters}>
     <Datagrid rowClick="show">
       <TextField source="name" />
       <TextField source="city" />
-      <TextField source="building" />
-      <TextField source="floor" />
-      <TextField source="capacity" />
+      <TextField source="address" />
       <EditButton />
     </Datagrid>
   </List>
 )
 
-export default RoomList
+export default BuildingList
