@@ -29,8 +29,8 @@ const RoomCard: React.FC<RoomCardProps> = ({
           </Grid>
         </Grid>
         <Grid>
-          <Typography color="black">{city}</Typography>
-          <Typography color="black">{building}</Typography>
+          <Typography color="black">{city.name}</Typography>
+          <Typography color="black">{building.name}</Typography>
           <Typography color="black">Floor {floor}</Typography>
         </Grid>
       </Grid>
