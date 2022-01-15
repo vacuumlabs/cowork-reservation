@@ -104,14 +104,17 @@ const TabbedDatagrid = (props: DatagridProps) => {
 
 const UserList: (props: ListProps) => JSX.Element = (props) => {
   const { identity } = useGetIdentity()
+  let filterValues = {}
+  {
+    identity?.role === 'SUPER_ADMIN'
+      ? (filterValues = { role: 'tenantAdmin' })
+      : (filterValues = { role: 'tenantAdmin', tenantId: identity?.tenantId })
+  }
   return (
     <List
       {...props}
-      filterDefaultValues={{
-        role: 'tenantAdmin',
-        tenantId: identity?.tenantId,
-      }}
-      sort={{ field: 'date', order: 'DESC' }}
+      filterDefaultValues={filterValues}
+      sort={{ field: 'id', order: 'DESC' }}
       perPage={25}
     >
       <TabbedDatagrid />
