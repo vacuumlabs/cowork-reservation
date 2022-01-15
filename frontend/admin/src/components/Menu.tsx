@@ -67,7 +67,7 @@ const useMenuItems = (user?: User) => {
       <MenuItemLink
         key="users"
         to="/users"
-        primaryText="My Admins"
+        primaryText="My People"
         leftIcon={<UsersIcon />}
       />,
     ],
