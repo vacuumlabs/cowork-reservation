@@ -1,5 +1,5 @@
 import { Tabs, Tab, Divider } from '@mui/material'
-import React, { Fragment, useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   ListProps,
   List,
@@ -14,10 +14,11 @@ import {
   ListContextProvider,
   useGetIdentity,
 } from 'react-admin'
+import { UserRole } from 'shared/models'
 
 const tabs = [
-  { id: 'tenantAdmin', name: 'Admins' },
-  { id: 'employee', name: 'employees' },
+  { id: UserRole.TENANT_ADMIN, name: 'Admins' },
+  { id: UserRole.USER, name: 'Employees' },
 ]
 
 const TabbedDatagrid = (props: DatagridProps) => {
@@ -26,13 +27,14 @@ const TabbedDatagrid = (props: DatagridProps) => {
   const [admins, setAdmins] = useState<Identifier[]>([] as Identifier[])
   const [employees, setEmployees] = useState<Identifier[]>([] as Identifier[])
   const { identity } = useGetIdentity()
+
   useEffect(() => {
     if (ids && ids !== filterValues.role) {
       switch (filterValues.role) {
-        case 'tenantAdmin':
+        case UserRole.TENANT_ADMIN:
           setAdmins(ids)
           break
-        case 'employee':
+        case UserRole.USER:
           setEmployees(ids)
           break
       }
@@ -51,7 +53,7 @@ const TabbedDatagrid = (props: DatagridProps) => {
   )
 
   return (
-    <Fragment>
+    <>
       <Tabs
         variant="fullWidth"
         centered
@@ -59,57 +61,44 @@ const TabbedDatagrid = (props: DatagridProps) => {
         indicatorColor="primary"
         onChange={handleChange}
       >
-        {tabs.map((choice) => (
-          <Tab key={choice.id} label={choice.name} value={choice.id} />
+        {tabs.map((tab) => (
+          <Tab key={tab.id} label={tab.name} value={tab.id} />
         ))}
       </Tabs>
       <Divider />
-      {filterValues.role === 'tenantAdmin' && (
-        <ListContextProvider value={{ ...listContext, ids: admins }}>
-          <Datagrid {...props} rowClick="show">
+      <ListContextProvider
+        value={{
+          ...listContext,
+          ids: filterValues.role === UserRole.TENANT_ADMIN ? admins : employees,
+        }}
+      >
+        <Datagrid {...props} rowClick="show">
+          <TextField source="name" />
+          <EmailField source="email" />
+          <ReferenceField
+            source="tenantId"
+            reference="tenants"
+            link={false}
+            label="Tenant"
+          >
             <TextField source="name" />
-            <EmailField source="email" />
-            <ReferenceField
-              source="tenantId"
-              reference="tenants"
-              link={false}
-              label="Tenant"
-            >
-              <TextField source="name" />
-            </ReferenceField>
-            <EditButton />
-          </Datagrid>
-        </ListContextProvider>
-      )}
-      {filterValues.role === 'employee' && (
-        <ListContextProvider value={{ ...listContext, ids: employees }}>
-          <Datagrid {...props} rowClick="show">
-            <TextField source="name" />
-            <EmailField source="email" />
-            <ReferenceField
-              source="tenantId"
-              reference="tenants"
-              link={false}
-              label="Tenant"
-            >
-              <TextField source="name" />
-            </ReferenceField>
-            <EditButton />
-          </Datagrid>
-        </ListContextProvider>
-      )}
-    </Fragment>
+          </ReferenceField>
+          <EditButton />
+        </Datagrid>
+      </ListContextProvider>
+    </>
   )
 }
 
 const UserList: (props: ListProps) => JSX.Element = (props) => {
   const { identity } = useGetIdentity()
-  let filterValues = {}
-  {
-    identity?.role === 'SUPER_ADMIN'
-      ? (filterValues = { role: 'tenantAdmin' })
-      : (filterValues = { role: 'tenantAdmin', tenantId: identity?.tenantId })
+  const filterValues = {
+    role: UserRole.TENANT_ADMIN,
+    ...(identity?.role === UserRole.TENANT_ADMIN
+      ? { tenantId: identity?.tenantId }
+      : {}),
   }
+
   return (
     <List
       {...props}
