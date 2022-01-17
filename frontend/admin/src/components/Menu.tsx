@@ -57,7 +57,7 @@ const useMenuItems = (user?: User) => {
       />,
     ],
     [UserRole.TENANT_ADMIN]: [
-      ProfileMenuItemLink,
+      <ProfileMenuItemLink key="profile" />,
       <MenuItemLink
         key="tenant-profile"
         to={user ? `/tenants/${(user as User).tenantId}/show` : ''}
@@ -67,7 +67,7 @@ const useMenuItems = (user?: User) => {
       <MenuItemLink
         key="users"
         to="/users"
-        primaryText="My Admins"
+        primaryText="My People"
         leftIcon={<UsersIcon />}
       />,
     ],
