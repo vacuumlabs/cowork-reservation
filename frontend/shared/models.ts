@@ -23,13 +23,12 @@ export type User = {
 export type Room = {
   id: string
   name: string
-  cityId: string
-  city: string
   buildingId: string
   building: Building
   floor: string
   capacity: string
   equipment: string
+  event: Event[]
 }
 
 export type Building = {
@@ -43,4 +42,14 @@ export type Building = {
 export type City = {
   id: string
   name: string
+}
+
+export type Event = {
+  calendarId: string
+  name: string
+  author: string
+  startDate: Date
+  endDate: Date
+  googleId: string
+  tenantId: string
 }
