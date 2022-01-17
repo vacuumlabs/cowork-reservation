@@ -3,7 +3,19 @@ import { StyleSheet } from 'react-native'
 
 import { Typography, Button, theme, Grid } from '../../components'
 
-const Footer: React.FC = () => {
+type FooterProps = {
+  name: string
+  startDate: Date
+  endDate: Date
+  author: string
+}
+
+const Footer: React.FC<FooterProps> = ({
+  name,
+  startDate,
+  endDate,
+  author,
+}) => {
   return (
     <Grid direction="row" justify="space-between">
       <Grid justify="flex-end">
@@ -35,10 +47,13 @@ const Footer: React.FC = () => {
       <Grid justify="flex-end" alignItems="flex-end">
         <Typography variant="button">NEXT MEETING</Typography>
         <Typography variant="h4" style={styles.meetingName}>
-          Team Meeting
+          {name}
         </Typography>
-        <Typography>14:00 - 14:30</Typography>
-        <Typography color="gray">Karol Sloboda</Typography>
+        <Typography>
+          {startDate.toLocaleTimeString().substring(0, 5)} -
+          {endDate.toLocaleTimeString().substring(0, 5)}
+        </Typography>
+        <Typography color="gray">{author}</Typography>
       </Grid>
     </Grid>
   )
