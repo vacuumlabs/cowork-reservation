@@ -9,6 +9,7 @@ import {
   required,
   useGetIdentity,
 } from 'react-admin'
+import { UserRole } from 'shared/models'
 
 const UserCreate: (props: CreateProps) => JSX.Element = (props) => {
   const { identity } = useGetIdentity()
@@ -16,15 +17,16 @@ const UserCreate: (props: CreateProps) => JSX.Element = (props) => {
     <Create title="Add Admin" {...props}>
       <SimpleForm>
         <TextInput source="email" validate={required()} />
-        <ReferenceInput
-          source="tenantId"
-          reference="tenants"
-          link={false}
-          defaultValue={identity?.tenantId}
-          disabled
-        >
-          <AutocompleteInput />
-        </ReferenceInput>
+        {identity?.role === UserRole.SUPER_ADMIN && (
+          <ReferenceInput
+            source="tenantId"
+            reference="tenants"
+            link={false}
+            defaultValue={identity?.tenantId}
+          >
+            <AutocompleteInput />
+          </ReferenceInput>
+        )}
         <AutocompleteInput
           source="role"
           choices={[
