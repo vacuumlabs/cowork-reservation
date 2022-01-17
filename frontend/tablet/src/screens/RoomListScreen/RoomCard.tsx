@@ -10,7 +10,6 @@ type RoomCardProps = Room & {
 
 const RoomCard: React.FC<RoomCardProps> = ({
   name,
-  city,
   building,
   capacity,
   floor,
@@ -29,7 +28,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
           </Grid>
         </Grid>
         <Grid>
-          <Typography color="black">{city.name}</Typography>
+          <Typography color="black">{building.city.name}</Typography>
           <Typography color="black">{building.name}</Typography>
           <Typography color="black">Floor {floor}</Typography>
         </Grid>
