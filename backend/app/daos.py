@@ -124,8 +124,6 @@ class CalendarDAO(SharedDaoMethods):
         session.commit()
         return self.to_array(new_calendar)[0]
 
-
-
 class RoomDAO(SharedDaoMethods):
     def add(
         self, city: str, capacity: int, equipment: str, building: str, room_number: int
@@ -224,6 +222,40 @@ class EventDAO(SharedDaoMethods):
 
         return {"data": self.to_array(results.all()), "count": x_total_count}
 
+    def change_duration(self, event_id:int, minutes: int):
+        event = self.get_one(event_id)
+        if minutes > 0:
+            conflict = session.query(self.model)
+            conflict = conflict.filter(
+                (Event.room_id == event["room_id"]) & (Event.id != event_id))
+            new_end = event["end"] + datetime.timedelta(minutes=abs(minutes))
+            conflict = conflict.filter(
+                (Event.start <= new_end) | (Event.end <= new_end))
+            conflict = conflict.filter(Event.end > event["start"])
+            conflict = self.to_array(conflict.all())
+            if conflict: 
+                return {"error": "bad request", 
+                "details":"changing duration would result in conflict"}
+            return self.update(event_id, {"end": new_end}) 
+        else:
+            minutes_diff = (event["end"] - event["start"]).total_seconds() / 60.0
+            if (minutes_diff + minutes) <= 0: return {"error": "bad request"}
+            new_end = event["end"] - datetime.timedelta(minutes=abs(minutes))
+            return self.update(event_id, {"end": new_end}) 
+    
+    def cancel_event(self, event_id:int):
+        event_to_cancel = event_dao.get_one(event_id)
+        if not event_to_cancel:
+            return {"error": "bad request"}
+        time = datetime.datetime.now()
+        if event_to_cancel["start"] > time:
+            return self.delete(event_id)
+        if event_to_cancel["end"] < time:
+            return event_to_cancel
+        return event_dao.update(event_id, {
+            "end": time
+        })
+        
 
 class TenantDAO(SharedDaoMethods):
     def add(self, tenant_name: str, city: str, email: str) -> Tenant:
