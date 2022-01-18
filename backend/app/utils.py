@@ -1,6 +1,7 @@
 import configparser
 import logging
 import logging.config
+import google.cloud.logging
 
 from flask import Flask
 
@@ -8,6 +9,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 
 def config_logging():
+    client = google.cloud.logging.Client()
+    client.setup_logging()
     logging.config.fileConfig(
         "config/logging.conf",
     )
