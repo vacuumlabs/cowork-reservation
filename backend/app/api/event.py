@@ -31,12 +31,20 @@ def get_one(id):
 def update(id):
     # TODO: check if tenant has permissions to update desired event
     data = request.json
-    return jsonify(event_dao.update(id, data))
+    if "minutes" in data:
+        event_dao.update(id, data)
+        return jsonify(event_dao.change_duration(id, data["minutes"]))
+    else:    
+        return jsonify(event_dao.update(id, data))
 
 @event_bp.route("/events/<id>", methods=["DELETE"])
 def delete(id):
     event_dao.delete(id)
     return jsonify({})
+
+@event_bp.route("/events/<id>/cancel", methods=["GET"])
+def end_event(id):
+    return jsonify(event_dao.cancel_event(id))
 
 @event_bp.route("/events", methods=["POST"])
 def create():
@@ -45,8 +53,8 @@ def create():
         int(data["calendar_id"]),
         int(data["room_id"]),
         str(data["name"]),
-        datetime.datetime.strptime(data["start"], '%Y-%m-%dT%H:%M:%S.%f%z'),
-        datetime.datetime.strptime(data["end"], '%Y-%m-%dT%H:%M:%S.%f%z'),
+        datetime.datetime.strptime(data["start"], '%Y-%m-%dT%H:%M:%S'),
+        datetime.datetime.strptime(data["end"], '%Y-%m-%dT%H:%M:%S'),
         str(data["google_id"]),
         int(data["tenant_id"]),
         bool(data["status"])

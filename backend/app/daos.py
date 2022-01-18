@@ -16,6 +16,56 @@ class SharedDaoMethods:
     def get_all(self, filters: dict, sort: list, results_range: list) -> dict:
         results = session.query(self.model)
         x_total_count = 0
+        
+        if filters:
+            results = self.apply_filters(filters, results)
+            x_total_count = results.count()
+
+        if sort:
+            if x_total_count == 0:
+                x_total_count = results.count()
+            results = self.apply_sort(sort, results)
+
+        if results_range:
+            if x_total_count == 0:
+                x_total_count = results.count()
+            results = self.apply_range(results_range, results)
+
+        return {"data": self.to_array(results.all()), "count": x_total_count}
+
+    def apply_range(self, results_range:list, results=None):
+        if not results:
+            results = session.query(self.model)
+        """if pagination is needed this is the way
+            page = results_range[0]
+            page_size = results_range[1]
+            offset = (page - 1)
+            if offset < 0: offset = 0
+            offset*= page_size
+            results = results.limit(page_size).offset(offset)
+            """
+        start = results_range[0]
+        count = results_range[1] - start
+        if count < 0:
+            count = 0
+        results = results.limit(count).offset(start)
+        return results
+
+    def apply_sort(self, sort: list, results=None):
+        if not results:
+            results = session.query(self.model)
+        order = sort[1]
+        col = getattr(self.model, sort[0])
+        if order.lower() == "asc":
+            col_sorted = col.asc()
+        else:
+            col_sorted = col.desc()
+        results = results.order_by(col_sorted)
+        return results
+
+    def apply_filters(self, filters:dict, results=None):
+        if not results:
+            results = session.query(self.model)
         ap_filters = []
         for key, value in filters.items():
             try:
@@ -25,37 +75,9 @@ class SharedDaoMethods:
                 ap_filters.append(column.in_(value))
             except:
                 pass
-        if filters:
-            results = results.filter(*ap_filters)
-            x_total_count = results.count()
-        if sort:
-            if x_total_count == 0:
-                x_total_count = results.count()
-            order = sort[1]
-            col = getattr(self.model, sort[0])
-            if order.lower() == "asc":
-                col_sorted = col.asc()
-            else:
-                col_sorted = col.desc()
-            results = results.order_by(col_sorted)
-        if results_range:
-            """if pagination is needed this is the way
-            page = results_range[0]
-            page_size = results_range[1]
-            offset = (page - 1)
-            if offset < 0: offset = 0
-            offset*= page_size
-            results = results.limit(page_size).offset(offset)
-            """
-            if x_total_count == 0:
-                x_total_count = results.count()
-            start = results_range[0]
-            count = results_range[1] - start
-            if count < 0:
-                count = 0
-            results = results.limit(count).offset(start)
-        return {"data": self.to_array(results.all()), "count": x_total_count}
-
+        results = results.filter(*ap_filters)
+        return results
+    
     def get_one(self, id: int) -> list:
         results = session.query(self.model).filter_by(id=id).first()
         return self.to_array(results)[0] if results else {}
@@ -102,8 +124,6 @@ class CalendarDAO(SharedDaoMethods):
         session.commit()
         return self.to_array(new_calendar)[0]
 
-
-
 class RoomDAO(SharedDaoMethods):
     def add(
         self, city: str, capacity: int, equipment: str, building: str, room_number: int
@@ -118,6 +138,34 @@ class RoomDAO(SharedDaoMethods):
         session.add(new_room)
         session.commit()
         return self.to_array(new_room)[0]
+
+    def get_all(self, filters: dict = None, sort: list = None, results_range: list = None, with_events: bool = False, with_next_events: bool = False) -> dict:
+        results = session.query(self.model)
+        x_total_count = 0
+        if filters:
+            results = self.apply_filters(filters, results)
+            x_total_count = results.count()
+
+        if sort:
+            if x_total_count == 0:
+                x_total_count = results.count()
+            results = self.apply_sort(sort, results)
+
+        if results_range:
+            if x_total_count == 0:
+                x_total_count = results.count()
+            results = self.apply_range(results_range, results)
+        
+        results = self.to_array(results.all())
+        if with_events or with_next_events:
+            for room in results:
+                room_events_filters = {"room_id": room["id"]}
+                if with_next_events:
+                    room_events_filters["_after"] = datetime.datetime.now()
+                room_events = event_dao.get_all(filters=room_events_filters)
+                if room_events: room_events = room_events["data"]
+                room["room_events"] = room_events
+        return {"data": results, "count": x_total_count}
 
 class EventDAO(SharedDaoMethods):
     def add(
@@ -144,6 +192,70 @@ class EventDAO(SharedDaoMethods):
             session.add(new_event)
             session.commit()
             return self.to_array(new_event)[0]
+            
+    def get_all(self, filters: dict = None, sort: list = None, results_range: list = None) -> dict:
+        results = session.query(self.model)
+        x_total_count = 0
+        if filters:
+            results = self.apply_filters(filters, results)
+            if "_before" in filters:
+                if type(filters["_before"]) is str:
+                    before = datetime.datetime.strptime(filters["_before"], '%Y-%m-%dT%H:%M:%S')
+                else: before = filters["_before"]
+                results = results.filter(Event.start < before)
+            if "_after" in filters:
+                if type(filters["_after"]) is str:
+                    after = datetime.datetime.strptime(filters["_after"], '%Y-%m-%dT%H:%M:%S')
+                else: after = filters["_after"]
+                results = results.filter(Event.end > after)
+            x_total_count = results.count()
+
+        if sort:
+            if x_total_count == 0:
+                x_total_count = results.count()
+            results = self.apply_sort(sort, results)
+
+        if results_range:
+            if x_total_count == 0:
+                x_total_count = results.count()
+            results = self.apply_range(results_range, results)
+
+        return {"data": self.to_array(results.all()), "count": x_total_count}
+
+    def change_duration(self, event_id:int, minutes: int):
+        event = self.get_one(event_id)
+        if minutes > 0:
+            conflict = session.query(self.model)
+            conflict = conflict.filter(
+                (Event.room_id == event["room_id"]) & (Event.id != event_id))
+            new_end = event["end"] + datetime.timedelta(minutes=abs(minutes))
+            conflict = conflict.filter(
+                (Event.start <= new_end) | (Event.end <= new_end))
+            conflict = conflict.filter(Event.end > event["start"])
+            conflict = self.to_array(conflict.all())
+            if conflict: 
+                return {"error": "bad request", 
+                "details":"changing duration would result in conflict"}
+            return self.update(event_id, {"end": new_end}) 
+        else:
+            minutes_diff = (event["end"] - event["start"]).total_seconds() / 60.0
+            if (minutes_diff + minutes) <= 0: return {"error": "bad request"}
+            new_end = event["end"] - datetime.timedelta(minutes=abs(minutes))
+            return self.update(event_id, {"end": new_end}) 
+    
+    def cancel_event(self, event_id:int):
+        event_to_cancel = event_dao.get_one(event_id)
+        if not event_to_cancel:
+            return {"error": "bad request"}
+        time = datetime.datetime.now()
+        if event_to_cancel["start"] > time:
+            return self.delete(event_id)
+        if event_to_cancel["end"] < time:
+            return event_to_cancel
+        return event_dao.update(event_id, {
+            "end": time
+        })
+        
 
 class TenantDAO(SharedDaoMethods):
     def add(self, tenant_name: str, city: str, email: str) -> Tenant:
