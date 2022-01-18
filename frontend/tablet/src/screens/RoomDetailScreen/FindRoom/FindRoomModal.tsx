@@ -2,16 +2,13 @@ import Modal from 'react-native-modal'
 import React, { useState } from 'react'
 import { Dimensions, StyleSheet, View } from 'react-native'
 
-import { Button, Grid, theme, Typography } from '../../components'
-import { dummyRoomList } from '../RoomListScreen'
+import { Button, Grid, theme, Typography } from '../../../components'
+import { dummyRoomList } from '../../RoomListScreen'
+import RoomAvailabilityList from './RoomAvailabilityList'
 
 const { height } = Dimensions.get('window')
 
-type FindRoomModalProps = {
-  roomId: string
-}
-
-const FindRoomModal: React.FC<FindRoomModalProps> = ({ roomId }) => {
+const FindRoomModal: React.FC = () => {
   // TODO replace with fetched data
   const rooms = dummyRoomList
   const [isVisible, setIsVisible] = useState(false)
@@ -31,26 +28,20 @@ const FindRoomModal: React.FC<FindRoomModalProps> = ({ roomId }) => {
       <Modal
         onBackdropPress={onDismiss}
         isVisible={isVisible}
-        onSwipeComplete={onDismiss}
-        swipeDirection="right"
-        animationIn="fadeInRight"
-        animationOut="fadeOutRight"
         style={styles.modal}
       >
         <Grid style={styles.content} stretch>
-          <Grid direction="row" justify="flex-end">
+          <Grid
+            direction="row"
+            justify="space-between"
+            alignItems="flex-end"
+            style={styles.header}
+          >
+            <Typography variant="h3">Find room</Typography>
             <Button title="Close" variant="secondary" onPress={onDismiss} />
           </Grid>
-          <Grid>
-            {rooms.map((room) => (
-              <Typography
-                key={room.id}
-                color={room.id === roomId ? 'turquoise' : 'white'}
-              >
-                {room.name}
-              </Typography>
-            ))}
-          </Grid>
+
+          <RoomAvailabilityList rooms={rooms} />
         </Grid>
       </Modal>
     </View>
@@ -69,5 +60,11 @@ const styles = StyleSheet.create({
     height: height,
     padding: theme.spacing.xl,
     backgroundColor: theme.colors.backgroundDarker,
+  },
+  header: {
+    borderBottomColor: theme.colors.backgroundLight,
+    borderBottomWidth: 1,
+    paddingBottom: theme.spacing.md,
+    marginBottom: theme.spacing.lg,
   },
 })

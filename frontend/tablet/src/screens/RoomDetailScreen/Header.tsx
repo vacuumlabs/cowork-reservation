@@ -2,13 +2,9 @@ import React from 'react'
 import { View } from 'react-native'
 
 import { Typography, Grid } from '../../components'
-import FindRoomModal from './FindRoomModal'
+import FindRoomModal from './FindRoom/FindRoomModal'
 
-type HeaderProps = {
-  roomId: string
-}
-
-const Header: React.FC<HeaderProps> = ({ roomId }) => {
+const Header: React.FC = () => {
   return (
     <Grid direction="row" justify="space-between">
       <View>
@@ -16,7 +12,7 @@ const Header: React.FC<HeaderProps> = ({ roomId }) => {
         <Typography variant="h4">Thursday, Oct 28</Typography>
       </View>
 
-      <FindRoomModal roomId={roomId} />
+      <FindRoomModal />
     </Grid>
   )
 }

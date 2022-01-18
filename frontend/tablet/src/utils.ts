@@ -2,8 +2,8 @@ import { Room } from 'shared/models'
 
 export const isRoomAvailable: (room: Room) => boolean = (room) => {
   const now = new Date()
-  return room.events.some(
-    (event) => event.startDate < now && now < event.endDate
+  return room.events.every(
+    (event) => !(event.startDate < now && now < event.endDate)
   )
 }
 
