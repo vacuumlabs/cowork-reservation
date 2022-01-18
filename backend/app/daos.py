@@ -141,6 +141,34 @@ class RoomDAO(SharedDaoMethods):
         session.commit()
         return self.to_array(new_room)[0]
 
+    def get_all(self, filters: dict = None, sort: list = None, results_range: list = None, with_events: bool = False, with_next_events: bool = False) -> dict:
+        results = session.query(self.model)
+        x_total_count = 0
+        if filters:
+            results = self.apply_filters(filters, results)
+            x_total_count = results.count()
+
+        if sort:
+            if x_total_count == 0:
+                x_total_count = results.count()
+            results = self.apply_sort(sort, results)
+
+        if results_range:
+            if x_total_count == 0:
+                x_total_count = results.count()
+            results = self.apply_range(results_range, results)
+        
+        results = self.to_array(results.all())
+        if with_events or with_next_events:
+            for room in results:
+                room_events_filters = {"room_id": room["id"]}
+                if with_next_events:
+                    room_events_filters["_after"] = datetime.datetime.now()
+                room_events = event_dao.get_all(filters=room_events_filters)
+                if room_events: room_events = room_events["data"]
+                room["room_events"] = room_events
+        return {"data": results, "count": x_total_count}
+
 class EventDAO(SharedDaoMethods):
     def add(
             self, 
@@ -166,6 +194,36 @@ class EventDAO(SharedDaoMethods):
             session.add(new_event)
             session.commit()
             return self.to_array(new_event)[0]
+            
+    def get_all(self, filters: dict = None, sort: list = None, results_range: list = None) -> dict:
+        results = session.query(self.model)
+        x_total_count = 0
+        if filters:
+            results = self.apply_filters(filters, results)
+            if "_before" in filters:
+                if type(filters["_before"]) is str:
+                    before = datetime.datetime.strptime(filters["_before"], '%Y-%m-%dT%H:%M:%S')
+                else: before = filters["_before"]
+                results = results.filter(Event.start < before)
+            if "_after" in filters:
+                if type(filters["_after"]) is str:
+                    after = datetime.datetime.strptime(filters["_after"], '%Y-%m-%dT%H:%M:%S')
+                else: after = filters["_after"]
+                results = results.filter(Event.end > after)
+            x_total_count = results.count()
+
+        if sort:
+            if x_total_count == 0:
+                x_total_count = results.count()
+            results = self.apply_sort(sort, results)
+
+        if results_range:
+            if x_total_count == 0:
+                x_total_count = results.count()
+            results = self.apply_range(results_range, results)
+
+        return {"data": self.to_array(results.all()), "count": x_total_count}
+
 
 class TenantDAO(SharedDaoMethods):
     def add(self, tenant_name: str, city: str, email: str) -> Tenant:
