@@ -1,9 +1,10 @@
 from app.models import Event, Calendar, Tenant, Room
-from datetime import datetime
+import datetime
 from random import randrange
 from flask import Flask
 from math import floor
 from app import db
+import string, secrets
 
 num_of_entries = 25
 
@@ -60,18 +61,62 @@ def calendarSeed(num: int):
         db.session.commit()
 
 
-def eventSeed(num: int, from_now: bool = True, from_date_time: datetime = datetime.now()):
+def eventSeed():
+    if Event.query.count() != 0:
+        db.session.query(Event).delete()    
     if Event.query.count() == 0:
-        name = "Event_number_"
-        time_periods = [10, 15, 20, 25, 30]  # in minutes
-        spaces_between = 5  # in minutes
-        tenantSeed(num)
-        calendarSeed(num)
-        roomSeed(num)
-        tenants = Tenant.query.limit(1).all()
-        calendars = Calendar.query.limit(1).filter_by(tenants[0])
-        for idx in range(num):
-            event = Event()
+        #Room 1 schedule
+        db.session.add(Event( calendar_id=1, room_id=1, name="Daily meeting (show and tell)",
+        start=datetime.datetime.now() - datetime.timedelta(minutes=115),
+        end=datetime.datetime.now() - datetime.timedelta(minutes=100),
+        google_id=''.join(secrets.choice(string.ascii_letters + string.digits) for i in range(16)),
+        tenant_id=1, status=True))
+
+        db.session.add(Event( calendar_id=1, room_id=1, name="Team Meeting VC",
+        start=datetime.datetime.now() + datetime.timedelta(minutes=15),
+        end=datetime.datetime.now() + datetime.timedelta(minutes=30),
+        google_id=''.join(secrets.choice(string.ascii_letters + string.digits) for i in range(16)),
+        tenant_id=1, status=True))
+
+        db.session.add(Event( calendar_id=1, room_id=1, name="Customer presentation",
+        start=datetime.datetime.now() + datetime.timedelta(minutes=36),
+        end=datetime.datetime.now() + datetime.timedelta(minutes=66),
+        google_id=''.join(secrets.choice(string.ascii_letters + string.digits) for i in range(16)),
+        tenant_id=1, status=True))
+
+        db.session.add(Event( calendar_id=1, room_id=1, name="Investor meeting",
+        start=datetime.datetime.now() + datetime.timedelta(hours=2),
+        end=datetime.datetime.now() + datetime.timedelta(hours=3),
+        google_id=''.join(secrets.choice(string.ascii_letters + string.digits) for i in range(16)),
+        tenant_id=1, status=True))
+
+        #Room 2 event schedule
+
+        db.session.add(Event( calendar_id=1, room_id=2, name="Idea presentation",
+        start=datetime.datetime.now() - datetime.timedelta(minutes=115),
+        end=datetime.datetime.now() - datetime.timedelta(minutes=100),
+        google_id=''.join(secrets.choice(string.ascii_letters + string.digits) for i in range(16)),
+        tenant_id=1, status=True))
+
+        db.session.add(Event( calendar_id=1, room_id=2, name="Employee interview",
+        start=datetime.datetime.now() - datetime.timedelta(minutes=25),
+        end=datetime.datetime.now() + datetime.timedelta(minutes=5),
+        google_id=''.join(secrets.choice(string.ascii_letters + string.digits) for i in range(16)),
+        tenant_id=1, status=True))
+
+        db.session.add(Event( calendar_id=1, room_id=2, name="Team building exercise",
+        start=datetime.datetime.now() + datetime.timedelta(minutes=6),
+        end=datetime.datetime.now() + datetime.timedelta(minutes=66),
+        google_id=''.join(secrets.choice(string.ascii_letters + string.digits) for i in range(16)),
+        tenant_id=1, status=True))
+
+        db.session.add(Event( calendar_id=1, room_id=2, name="Watch party",
+        start=datetime.datetime.now() + datetime.timedelta(hours=2),
+        end=datetime.datetime.now() + datetime.timedelta(hours=3),
+        google_id=''.join(secrets.choice(string.ascii_letters + string.digits) for i in range(16)),
+        tenant_id=1, status=True))
+
+        db.session.commit()
 
 
 def clamp(minimum, x, maximum):
@@ -83,3 +128,4 @@ def seed_database(app: Flask):
         roomSeed(num_of_entries)
         tenantSeed(num_of_entries)
         calendarSeed(num_of_entries)
+        eventSeed()
