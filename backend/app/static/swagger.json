@@ -41,44 +41,22 @@
                 "summary":"",
                 "parameters":[
                     {
-                        "name": "association_id",
-                        "in": "query",
-                        "type": "int"
-                    },
-                    {
-                        "name": "city",
+                        "name": "filters",
                         "in": "query",
                         "type": "string",
-                        "default": "Kosice",
-                        "example": "Kosice"
+                        "example": "{\"city\":[\"Kosice\",\"Bratislava\",\"Presov\"]}"
                     },
                     {
-                        "name": "_sort",
+                        "name": "sort",
                         "in": "query",
                         "type": "string",
-                        "default": "city",
-                        "example": "city"
+                        "example": "[\"id\",\"ASC\"]"
                     },
                     {
-                        "name": "_order",
-                        "in": "query",
+                        "name": "range",
                         "type": "string",
-                        "default": "asc",
-                        "example": "asc"
-                    },
-                    {
-                        "name": "_start",
                         "in": "query",
-                        "type": "int",
-                        "default": "0",
-                        "example": "0"
-                    },
-                    {
-                        "name": "_end",
-                        "in": "query",
-                        "type": "int",
-                        "default": "100",
-                        "example": "100"
+                        "example": "[0,100]"
                     }
                 ],
                 "responses":{
@@ -89,7 +67,7 @@
                             "properties":{
                                 "object":{
                                     "id":{
-                                        "type":"int",
+                                        "type":"integer",
                                         "format":"int32"
                                     },
                                     "name":{
@@ -148,7 +126,7 @@
                                         ]
                                     },
                                     "association_id": {
-                                        "type": "int"
+                                        "type": "integer"
                                     }
                                 },
                                 "required": [
@@ -183,7 +161,7 @@
                     "name": "id",
                     "in": "path",
                     "required": true,
-                    "type": "int",
+                    "type": "integer",
                     "format": "int32"
                     }
                 ],
@@ -212,7 +190,7 @@
                     "name": "id",
                     "in": "path",
                     "required": true,
-                    "type": "int",
+                    "type": "integer",
                     "format": "int32"
                     }
                 ],
@@ -245,7 +223,7 @@
                     "name": "id",
                     "in": "path",
                     "required": true,
-                    "type": "int",
+                    "type": "integer",
                     "format": "int32"
                     }
                 ],
@@ -268,47 +246,22 @@
                 "summary": "",
                 "parameters":[
                     {
-                        "name": "tenant_id",
-                        "in": "query",
-                        "type": "int"
-                    },
-                    {
-                        "name": "name",
-                        "in": "query",
-                        "type": "string"
-                    },
-                    {
-                        "name": "google_id",
-                        "in": "query",
-                        "type": "int"
-                    },
-                    {
-                        "name": "_sort",
+                        "name": "filters",
                         "in": "query",
                         "type": "string",
-                        "default": "name",
-                        "example": "name"
+                        "example": "{\"calendar\":[1,2,3]}"
                     },
                     {
-                        "name": "_order",
+                        "name": "sort",
                         "in": "query",
                         "type": "string",
-                        "default": "asc",
-                        "example": "asc"
+                        "example": "[\"id\",\"ASC\"]"
                     },
                     {
-                        "name": "_start",
-                        "type": "int",
+                        "name": "range",
+                        "type": "string",
                         "in": "query",
-                        "default": 0,
-                        "example": 0
-                    },
-                    {
-                        "name": "_end",
-                        "type": "int",
-                        "in": "query",
-                        "default": 100,
-                        "example": 100
+                        "example": "[0,100]"
                     }
                 ],
                 "responses": {
@@ -332,7 +285,7 @@
                                 "type": "object",
                                 "properties": {
                                     "tenant_id": {
-                                        "type": "int"
+                                        "type": "integer"
                                     },
                                     "name": {
                                         "type": "string",
@@ -340,7 +293,7 @@
                                         "maxLength": 255
                                     },
                                     "google_id": {
-                                        "type": "int"
+                                        "type": "integer"
                                     }
                                 },
                                 "required": [
@@ -373,7 +326,7 @@
                         "name": "id",
                         "in": "path",
                         "required": true,
-                        "type": "int",
+                        "type": "integer",
                         "format": "int32"
                     }
                 ],
@@ -397,7 +350,7 @@
                         "name": "id",
                         "in": "path",
                         "required": true,
-                        "type": "int",
+                        "type": "integer",
                     "format": "int32"
                     }
                 ],
@@ -430,7 +383,7 @@
                     "name": "id",
                     "in": "path",
                     "required": true,
-                    "type": "int",
+                    "type": "integer",
                     "format": "int32"
                     }
                 ],
@@ -453,39 +406,27 @@
                 "summary": "",
                 "parameters":[
                     {
-                        "name": "city",
+                        "name": "filters",
                         "in": "query",
                         "type": "string",
-                        "default": "Kosice",
-                        "example": "Kosice"
+                        "example": "{\"city\":[\"Kosice\",\"Bratislava\",\"Presov\"]}"
                     },
                     {
-                        "name": "_sort",
+                        "name": "sort",
                         "in": "query",
                         "type": "string",
-                        "default": "city",
-                        "example": "city"
+                        "example": "[\"id\",\"ASC\"]"
                     },
                     {
-                        "name": "_order",
-                        "in": "query",
+                        "name": "range",
                         "type": "string",
-                        "default": "asc",
-                        "example": "asc"
+                        "in": "query",
+                        "example": "[0,100]"
                     },
                     {
-                        "name": "_start",
-                        "type": "int",
-                        "in": "query",
-                        "default": 0,
-                        "example": 0
-                    },
-                    {
-                        "name": "_end",
-                        "type": "int",
-                        "in": "query",
-                        "default": 100,
-                        "example": 100
+                        "name": "with-events",
+                        "type": "string",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -496,7 +437,7 @@
                             "properties": {
                                 "object": {
                                     "id": {
-                                        "type": "int",
+                                        "type": "integer",
                                         "format": "int32"
                                     },
                                     "name": {
@@ -524,38 +465,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "city": {
-                                        "type": "string",
-                                        "minLength": 1,
-                                        "maxLength": 255
-                                    },
-                                    "capacity": {
-                                        "type": "int",
-                                        "format": "int32"
-                                    },
-                                    "equipment": {
-                                        "type": "string",
-                                        "minLength": 1,
-                                        "maxLength": 255
-                                    },
-                                    "building": {
-                                        "type": "string",
-                                        "minLength": 1,
-                                        "maxLength": 255
-                                    },
-                                    "room_number": {
-                                        "type": "int",
-                                        "format": "int32"
-                                    }
-                                },
-                                "required": [
-                                    "city",
-                                    "building",
-                                    "capacity",
-                                    "room_number"
-                                ]
+                                "$ref": "#/components/schemas/Room"
                             }
                         }
                     }
@@ -564,7 +474,7 @@
                     "200": {
                         "description": "Response should contain web page where change will be visible",
                         "schema": {
-                            "$ref": "#/components/schemas/Tenant"
+                            "$ref": "#/components/schemas/Room"
                         }
                     }
                 }
@@ -581,7 +491,7 @@
                         "name": "id",
                         "in": "path",
                         "required": true,
-                        "type": "int",
+                        "type": "integer",
                         "format": "int32"
                     }
                 ],
@@ -605,7 +515,7 @@
                         "name": "id",
                         "in": "path",
                         "required": true,
-                        "type": "int",
+                        "type": "integer",
                     "format": "int32"
                     }
                 ],
@@ -638,13 +548,13 @@
                     "name": "id",
                     "in": "path",
                     "required": true,
-                    "type": "int",
+                    "type": "integer",
                     "format": "int32"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "There should be array of rooms located in response",
+                        "description": "There should be an empty object in response",
                         "schema": 
                         {
                             "$ref": "#/components/schemas/Room"
@@ -661,41 +571,22 @@
                 "summary": "",
                 "parameters":[
                     {
-                        "name": "tenant_id",
-                        "in": "query",
-                        "type": "int"
-                    },
-                    {
-                        "name": "room_id",
-                        "in": "query",
-                        "type": "int"
-                    },
-                    {
-                        "name": "_sort",
+                        "name": "filters",
                         "in": "query",
                         "type": "string",
-                        "example": "room_id"
+                        "example": "{\"number\":[1,2,3]}"
                     },
                     {
-                        "name": "_order",
+                        "name": "sort",
                         "in": "query",
                         "type": "string",
-                        "default": "asc",
-                        "example": "asc"
+                        "example": "[\"id\",\"ASC\"]"
                     },
                     {
-                        "name": "_start",
-                        "type": "int",
+                        "name": "range",
+                        "type": "string",
                         "in": "query",
-                        "default": 0,
-                        "example": 0
-                    },
-                    {
-                        "name": "_end",
-                        "type": "int",
-                        "in": "query",
-                        "default": 100,
-                        "example": 100
+                        "example": "[0,100]"
                     }
                 ],
                 "responses": {
@@ -742,7 +633,7 @@
                         "name": "id",
                         "in": "path",
                         "required": true,
-                        "type": "int",
+                        "type": "integer",
                         "format": "int32"
                     }
                 ],
@@ -766,7 +657,7 @@
                         "name": "id",
                         "in": "path",
                         "required": true,
-                        "type": "int",
+                        "type": "integer",
                     "format": "int32"
                     }
                 ],
@@ -774,7 +665,42 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/Event"
+                                "type":"object",
+                                "properties": {
+                                    "calendar_id": {
+                                        "type":"number",
+                                        "example": 1
+                                    },
+                                    "room_id": {
+                                        "type":"number",
+                                        "example": 1
+                                    },
+                                    "name": {
+                                        "type":"string",
+                                        "example": "Team meeting XYZ"
+                                    },
+                                    "start": {
+                                        "type":"string",
+                                        "format":"date-time"
+                                    },
+                                    "end": {
+                                        "type":"string",
+                                        "format":"date-time"
+                                    },
+                                    "google_id": {
+                                        "type":"string",
+                                        "example": "as15d7ex2z7d"
+                                    },
+                                    "tenant_id": {
+                                        "type":"number",
+                                        "example": 1
+                                    },
+                                    "minutes": {
+                                        "type":"number",
+                                        "example": 15,
+                                        "description": "If this property is included in update request, then after update, duration of the event will be changed based on the number of minutes provided +-number"
+                                    }
+                                }
                             }
                         }
                     }
@@ -799,13 +725,39 @@
                     "name": "id",
                     "in": "path",
                     "required": true,
-                    "type": "int",
+                    "type": "integer",
                     "format": "int32"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "{}",
+                        "schema": 
+                        {
+                            "$ref": "#/components/schemas/Event"
+                        }
+                    }
+                }
+            }
+        },
+        "/events/{id}/cancel": {
+            "get": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Find event by ID and cancel it immediately",
+                "parameters":[
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "There should be one event you requested",
                         "schema": 
                         {
                             "$ref": "#/components/schemas/Event"
@@ -913,10 +865,6 @@
                         "type": "integer",
                         "format": "int32",
                         "description": "Foreing key from Tenant table"
-                    },
-                    "status": {
-                        "type": "boolean",
-                        "description": ""
                     }
                 }
             },
@@ -934,7 +882,7 @@
                         "description": ""
                     },
                     "capacity": {
-                        "type": "int",
+                        "type": "integer",
                         "format": "int32",
                         "nullable": "False",
                         "description": ""
@@ -950,7 +898,7 @@
                         "description": ""
                     },
                     "room_number": {
-                        "type": "int",
+                        "type": "integer",
                         "format": "int32",
                         "nullable": "False",
                         "description": ""
