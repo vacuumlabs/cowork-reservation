@@ -24,7 +24,7 @@ const RoomDetailScreen: React.FC<RoomDetailProps> = ({
   return (
     <Screen>
       <Grid justify="space-between" stretch style={styles.wrapper}>
-        <Header />
+        <Header roomId={room.id} />
 
         <Grid justify="center" alignItems="center" spacing={2}>
           <Typography variant="h1">{room.name}</Typography>

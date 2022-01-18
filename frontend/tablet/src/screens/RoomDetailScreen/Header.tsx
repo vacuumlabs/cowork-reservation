@@ -1,9 +1,14 @@
 import React from 'react'
 import { View } from 'react-native'
 
-import { Typography, Button, Grid } from '../../components'
+import { Typography, Grid } from '../../components'
+import FindRoomModal from './FindRoomModal'
 
-const Header: React.FC = () => {
+type HeaderProps = {
+  roomId: string
+}
+
+const Header: React.FC<HeaderProps> = ({ roomId }) => {
   return (
     <Grid direction="row" justify="space-between">
       <View>
@@ -11,12 +16,7 @@ const Header: React.FC = () => {
         <Typography variant="h4">Thursday, Oct 28</Typography>
       </View>
 
-      <Button
-        title="Find Room"
-        // TODO Add find room drawer
-        // eslint-disable-next-line no-console
-        onPress={() => console.log('TODO Open find room drawer')}
-      />
+      <FindRoomModal roomId={roomId} />
     </Grid>
   )
 }
