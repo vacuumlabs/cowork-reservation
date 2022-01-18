@@ -16,6 +16,56 @@ class SharedDaoMethods:
     def get_all(self, filters: dict, sort: list, results_range: list) -> dict:
         results = session.query(self.model)
         x_total_count = 0
+        
+        if filters:
+            results = self.apply_filters(filters, results)
+            x_total_count = results.count()
+
+        if sort:
+            if x_total_count == 0:
+                x_total_count = results.count()
+            results = self.apply_sort(sort, results)
+
+        if results_range:
+            if x_total_count == 0:
+                x_total_count = results.count()
+            results = self.apply_range(results_range, results)
+
+        return {"data": self.to_array(results.all()), "count": x_total_count}
+
+    def apply_range(self, results_range:list, results=None):
+        if not results:
+            results = session.query(self.model)
+        """if pagination is needed this is the way
+            page = results_range[0]
+            page_size = results_range[1]
+            offset = (page - 1)
+            if offset < 0: offset = 0
+            offset*= page_size
+            results = results.limit(page_size).offset(offset)
+            """
+        start = results_range[0]
+        count = results_range[1] - start
+        if count < 0:
+            count = 0
+        results = results.limit(count).offset(start)
+        return results
+
+    def apply_sort(self, sort: list, results=None):
+        if not results:
+            results = session.query(self.model)
+        order = sort[1]
+        col = getattr(self.model, sort[0])
+        if order.lower() == "asc":
+            col_sorted = col.asc()
+        else:
+            col_sorted = col.desc()
+        results = results.order_by(col_sorted)
+        return results
+
+    def apply_filters(self, filters:dict, results=None):
+        if not results:
+            results = session.query(self.model)
         ap_filters = []
         for key, value in filters.items():
             try:
@@ -25,37 +75,9 @@ class SharedDaoMethods:
                 ap_filters.append(column.in_(value))
             except:
                 pass
-        if filters:
-            results = results.filter(*ap_filters)
-            x_total_count = results.count()
-        if sort:
-            if x_total_count == 0:
-                x_total_count = results.count()
-            order = sort[1]
-            col = getattr(self.model, sort[0])
-            if order.lower() == "asc":
-                col_sorted = col.asc()
-            else:
-                col_sorted = col.desc()
-            results = results.order_by(col_sorted)
-        if results_range:
-            """if pagination is needed this is the way
-            page = results_range[0]
-            page_size = results_range[1]
-            offset = (page - 1)
-            if offset < 0: offset = 0
-            offset*= page_size
-            results = results.limit(page_size).offset(offset)
-            """
-            if x_total_count == 0:
-                x_total_count = results.count()
-            start = results_range[0]
-            count = results_range[1] - start
-            if count < 0:
-                count = 0
-            results = results.limit(count).offset(start)
-        return {"data": self.to_array(results.all()), "count": x_total_count}
-
+        results = results.filter(*ap_filters)
+        return results
+    
     def get_one(self, id: int) -> list:
         results = session.query(self.model).filter_by(id=id).first()
         return self.to_array(results)[0] if results else {}
