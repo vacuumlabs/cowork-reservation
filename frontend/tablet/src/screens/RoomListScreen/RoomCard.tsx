@@ -23,7 +23,9 @@ const RoomCard: React.FC<RoomCardProps> = ({
             {name}
           </Typography>
           <Grid direction="row" alignItems="center">
-            <Typography color="black">{capacity} </Typography>
+            <Typography color="black" variant="button">
+              {capacity}{' '}
+            </Typography>
             <Icon name="userFriends" />
           </Grid>
         </Grid>

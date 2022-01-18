@@ -7,6 +7,8 @@ import FontAwesome, {
   parseIconFromClassName,
 } from 'react-native-fontawesome'
 
+import theme, { TypographyColorVariant } from './theme'
+
 // browse icons at https://fontawesome.com/v5.15/icons?d=gallery&p=2
 
 type IconProps = {
@@ -14,13 +16,22 @@ type IconProps = {
     | keyof typeof SolidIcons
     | keyof typeof RegularIcons
     | keyof typeof BrandIcons
+  color?: TypographyColorVariant
 }
 
-const Icon: React.FC<IconProps> = ({ name }) => {
+const Icon: React.FC<IconProps> = ({ name, color }) => {
   return (
     <View>
-      {/* @ts-ignore lib types missing*/}
-      <FontAwesome icon={parseIconFromClassName(name)} />
+      <FontAwesome
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        icon={parseIconFromClassName(name)}
+        style={{
+          color: color
+            ? theme.typographyColors[color]
+            : theme.colors.backgroundDark,
+        }}
+      />
     </View>
   )
 }

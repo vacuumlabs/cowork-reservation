@@ -28,7 +28,7 @@ export type Room = {
   floor: string
   capacity: string
   equipment: string
-  event: Event[]
+  events: Event[]
 }
 
 export type Building = {
