@@ -31,14 +31,14 @@ def get_room_one(id):
 
 @room_bp.route("/rooms/<id>", methods=["PUT"])
 def update_room(id):
-    if not have_claims(request.cookies.get("login_token"),"SUPER_ADMIN"):
+    if not have_claims(request.headers.get("Authorization"),"SUPER_ADMIN"):
         return make_response(jsonify({}), 403)
     data = request.json
     return jsonify(room_dao.update(id, data))
 
 @room_bp.route("/rooms/<id>", methods=["DELETE"])
 def delete_room(id):
-    if not have_claims(request.cookies.get("login_token"),"SUPER_ADMIN"):
+    if not have_claims(request.headers.get("Authorization"),"SUPER_ADMIN"):
         return make_response(jsonify({}), 403)
     room_dao.delete(id)
     return jsonify({})
@@ -46,7 +46,7 @@ def delete_room(id):
 
 @room_bp.route("/rooms", methods=["POST"])
 def create_room():
-    if not have_claims(request.cookies.get("login_token"),"SUPER_ADMIN"):
+    if not have_claims(request.headers.get("Authorization"),"SUPER_ADMIN"):
         return make_response(jsonify({}), 403)
     data = request.json
     new_room = room_dao.add(
