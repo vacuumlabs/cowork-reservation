@@ -16,6 +16,8 @@ def get_room_list():
         params['filters'],
         params['sort'], 
         params['range'],
+        True if "with-events" in request.args else False,
+        True if "with-next-events" in request.args else False
         )
     resp = make_response(jsonify(results['data']), 200)
     resp.headers['Access-Control-Expose-Headers'] = 'X-Total-Count'
@@ -55,4 +57,5 @@ def create_room():
         int(data["room_number"] if "room_number" in data else data["roomNumber"])
     )
     return jsonify(new_room)
+
     
