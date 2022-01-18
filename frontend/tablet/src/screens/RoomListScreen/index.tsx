@@ -52,7 +52,7 @@ const dummyEventList: Event[] = [
   },
 ]
 
-const dummyRoomList: Room[] = [
+export const dummyRoomList: Room[] = [
   {
     id: '1',
     name: 'Matrix',
@@ -94,7 +94,7 @@ const RoomListScreen: React.FC<NavigationProps> = ({
         <Button
           key="logout"
           title="Log Out"
-          variant="error"
+          variant="secondary"
           onPress={() => authProvider.signOut()}
         />
       </Grid>
