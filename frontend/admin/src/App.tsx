@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import { Admin, Resource } from 'react-admin'
+import React from 'react'
 import jsonServerProvider from 'ra-data-json-server'
 import { UserRole } from 'shared/models'
 
@@ -54,18 +53,6 @@ const USER_RESOURCES = [
 ]
 
 const App: React.FC = () => {
-  // TEMP console.log firebase idToken for dev purposes
-  useEffect(() => {
-    const logIdToken = async () => {
-      // eslint-disable-next-line no-console
-      console.log(await getIdToken())
-    }
-
-    if (process.env.NODE_ENV === 'development') {
-      logIdToken()
-    }
-  }, [])
-
   return (
     <Admin
       dataProvider={dataProvider}
