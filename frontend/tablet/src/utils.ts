@@ -1,4 +1,4 @@
-import { Room } from 'shared/models'
+import { Room, RoomEvent } from 'shared/models'
 
 export const isRoomAvailable: (room: Room) => boolean = (room) => {
   const now = new Date()
@@ -16,6 +16,20 @@ export const findRoomNextChangeDate: (room: Room) => Date | undefined = (
     if (!nextChangeDate && event.startDate > now) return event.startDate
     return nextChangeDate
   }, undefined)
+}
+
+export const findRoomNextEvent: (room: Room) => RoomEvent | undefined = (
+  room
+) => {
+  const now = new Date()
+  return room?.events.reduce<RoomEvent | undefined>(
+    (nextEvent, event) =>
+      event.startDate > now &&
+      (!nextEvent || nextEvent.startDate > event.startDate)
+        ? event
+        : nextEvent,
+    undefined
+  )
 }
 
 export const formatDuration: (duration: Duration) => string = (duration) => {

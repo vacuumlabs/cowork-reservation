@@ -1,11 +1,16 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 
-import { Typography, Button, theme, Grid } from '../../components'
+import { Typography, Button, theme, Grid } from '../../../components'
+import NextEvent from './NextEvent'
 
-const Footer: React.FC = () => {
+type FooterProps = {
+  currentRoomId: string
+}
+
+const Footer: React.FC<FooterProps> = ({ currentRoomId }) => {
   return (
-    <Grid direction="row" justify="space-between">
+    <Grid direction="row" justify="space-between" alignItems="flex-end">
       <Grid justify="flex-end">
         <Typography variant="button">QUICK RESERVATION</Typography>
         <Grid direction="row" spacing={1} style={styles.buttons}>
@@ -32,14 +37,7 @@ const Footer: React.FC = () => {
         </Grid>
       </Grid>
 
-      <Grid justify="flex-end" alignItems="flex-end">
-        <Typography variant="button">NEXT MEETING</Typography>
-        <Typography variant="h4" style={styles.meetingName}>
-          Team Meeting
-        </Typography>
-        <Typography>14:00 - 14:30</Typography>
-        <Typography color="gray">Karol Sloboda</Typography>
-      </Grid>
+      <NextEvent currentRoomId={currentRoomId} />
     </Grid>
   )
 }
