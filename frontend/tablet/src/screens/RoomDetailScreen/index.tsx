@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native'
 import SystemNavigationBar from 'react-native-system-navigation-bar'
 
 import { NavigatorStackParamList } from '..'
-import { Typography, Screen, Grid } from '../../components'
+import { Typography, Screen, Grid, Button, theme } from '../../components'
 import Clock from './Clock'
 import Header from './Header'
 import Footer from './Footer/Footer'
@@ -32,7 +32,19 @@ const RoomDetailScreen: React.FC<RoomDetailProps> = ({
           <Typography variant="h3">
             {isRoomAvailable(room) ? 'FREE' : 'BOOKED'}
           </Typography>
-          <Clock color="turquoise" max={10} />
+          {isRoomAvailable(room) ? (
+            <Clock color="turquoise" max={10} />
+          ) : (
+            <Clock color="red" max={10} />
+          )}
+          {!isRoomAvailable(room) && (
+            <Button
+              title="End early"
+              onPress={() => 'TODO end earlier meet'}
+              variant="error"
+              style={styles.earlyButton}
+            />
+          )}
         </Grid>
 
         <Footer currentRoomId={room.id} />
@@ -46,5 +58,10 @@ export default RoomDetailScreen
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
+  },
+  earlyButton: {
+    top: -theme.spacing.xl * 2,
+    position: 'absolute',
+    alignSelf: 'center',
   },
 })
