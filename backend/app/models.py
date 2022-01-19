@@ -9,6 +9,9 @@ class Calendar(BaseModel):
     tenant_id = db.Column(db.Integer, db.ForeignKey("tenant.id"), nullable=False)
     name = db.Column(db.String(255), nullable=False)
     google_id = db.Column(db.String(255), nullable=False)
+    resource_id = db.Column(db.String(255))
+    webhook_id = db.Column(db.String(255))
+    expiration = db.Column(db.String(255))
 
     events = db.relationship("Event", backref="calendar")
 
@@ -32,7 +35,6 @@ class Event(BaseModel):
     end = db.Column(db.DateTime, nullable=False)
     google_id = db.Column(db.String(255), nullable=False)
     tenant_id = db.Column(db.Integer, db.ForeignKey("tenant.id"))
-    status = db.Column(db.Boolean)
 
 
 class Room(BaseModel):
