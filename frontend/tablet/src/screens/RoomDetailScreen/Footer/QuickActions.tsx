@@ -3,7 +3,7 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 
 import { Typography, Grid, theme, Button } from '../../../components'
-import { findRoomNextEvent, quickIsRoomAvailable } from '../../../utils'
+import { findRoomNextEvent, isRoomAvailable } from '../../../utils'
 import { dummyRoomList } from '../../RoomListScreen'
 
 type QuickActionsProps = {
@@ -49,7 +49,7 @@ const QuickActions: React.FC<QuickActionsProps> = ({ currentRoomId }) => {
   return (
     <Grid justify="flex-end">
       <Typography variant="button">
-        {quickIsRoomAvailable(room) ? 'QUICK RESERVATION' : 'EXTEND MEETING'}
+        {isRoomAvailable(room) ? 'QUICK RESERVATION' : 'EXTEND MEETING'}
       </Typography>
       <Grid direction="row" spacing={1} style={styles.buttons}>
         {isBefore(addMinutes(new Date(), 15), startDate) ? (
