@@ -23,7 +23,6 @@ const Clock: (props: ClockProps) => JSX.Element = ({
   const inputRef = React.useRef<TextInput>(null)
   const circumference = 2 * Math.PI * RADIUS
   const halfCircle = RADIUS + STROKE_WIDTH
-  const timeLeft = 10
 
   const animation = (toValue: number) => {
     return Animated.timing(animated, {
@@ -32,12 +31,12 @@ const Clock: (props: ClockProps) => JSX.Element = ({
       useNativeDriver: true,
       easing: Easing.out(Easing.ease),
     }).start(() => {
-      animation(toValue === 0 ? 10 : toValue - 1)
+      animation(toValue === 0 ? max : toValue - 1)
     })
   }
 
   React.useEffect(() => {
-    animation(timeLeft)
+    animation(max)
     animated.addListener((v) => {
       const maxPerc = (100 * v.value) / max
       const strokeDashoffset = circumference - (circumference * maxPerc) / 100
