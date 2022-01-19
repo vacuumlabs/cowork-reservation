@@ -11,7 +11,7 @@ calendar_bp = Blueprint("calendar_bp", __name__)
 def get_calendar_list():
     accessible_roles = ["*"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
-    if returned_value[0]:
+    if returned_value["have_access"]:
         url_args = request.args
         params = calendar_service.url_args_to_query_params_dict(url_args)
         results = calendar_dao.get_all(
@@ -29,7 +29,7 @@ def get_calendar_list():
 def get_calendar(id):
     accessible_roles = ["*"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
-    if returned_value[0]:
+    if returned_value["have_access"]:
         return jsonify(calendar_dao.get_one(id))
     return make_response(jsonify({}), 403)
 
@@ -38,7 +38,7 @@ def get_calendar(id):
 def update_calendar(id):
     accessible_roles = ["SUPER_ADMIN","TENANT_ADMIN"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
-    if returned_value[0]:
+    if returned_value["have_access"]:
         data = request.json
         return jsonify(calendar_dao.update(id, data))
     return make_response(jsonify({}), 403)
@@ -48,7 +48,7 @@ def update_calendar(id):
 def delete_calendar(id):
     accessible_roles = ["SUPER_ADMIN","TENANT_ADMIN"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
-    if returned_value[0]:
+    if returned_value["have_access"]:
         calendar_dao.delete(id)
         return jsonify({})
     return make_response(jsonify({}), 403)
@@ -58,7 +58,7 @@ def delete_calendar(id):
 def create_calendar():
     accessible_roles = ["SUPER_ADMIN","TENANT_ADMIN"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
-    if returned_value[0]:
+    if returned_value["have_access"]:
         data = request.json
         new_calendar = calendar_dao.add(
             int(data["tenant_id"]), data["name"], int(data["google_id"])

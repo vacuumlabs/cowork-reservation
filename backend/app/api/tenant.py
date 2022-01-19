@@ -12,7 +12,7 @@ tenant_bp = Blueprint("tenant_bp", __name__)
 def get_one_tenant(id):
     accessible_roles = ["SUPER_ADMIN","TENANT_ADMIN"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
-    if returned_value[0]:
+    if returned_value["have_access"]:
             return jsonify(tenant_dao.get_one(id))
     else:
         return make_response(jsonify({}),403)
@@ -21,7 +21,7 @@ def get_one_tenant(id):
 def update_tenant(id):
     accessible_roles = ["SUPER_ADMIN"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
-    if returned_value[0]:
+    if returned_value["have_access"]:
         data = request.json
         return jsonify(tenant_dao.update(id, data))
     else:
@@ -31,7 +31,7 @@ def update_tenant(id):
 def del_tenant(id):
     accessible_roles = ["SUPER_ADMIN"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
-    if returned_value[0]:
+    if returned_value["have_access"]:
         tenant_dao.delete(id)
         return jsonify({})
     else:
@@ -39,7 +39,9 @@ def del_tenant(id):
 
 @tenant_bp.route("/tenants", methods=["POST"])
 def insert_tenant():
-    if have_claims(request.headers.get("Authorization")):
+    accessible_roles = ["SUPER_ADMIN"]
+    returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
+    if returned_value["have_access"]:
         try:
             if request.method == "POST":
                 new_tenant = tenant_dao.add(
@@ -57,8 +59,8 @@ def insert_tenant():
 def get_multiple():
     accessible_roles = ["SUPER_ADMIN","TENANT_ADMIN"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
-    if returned_value[0]:
-        if "SUPER_ADMIN" == accessible_roles[0]:
+    if returned_value["have_access"]:
+        if returned_value["user_role"] == accessible_roles[0]:
             values_for_return = get_users()
         else:
             values_for_return = get_users(returned_value[1])

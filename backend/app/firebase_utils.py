@@ -53,16 +53,16 @@ def get_logged_uid_new(id_token):
 #Check if user have needed claims       
 def have_claims(id_token, claims = "*") -> list:
     have_access = False
-    values_for_return = []
+    values_for_return = {}
     if not id_token:
-        values_for_return = [False,403]
+        values_for_return = {"have_access":False}
         return values_for_return  
     user_auth_token = get_token_from_cookies(id_token)
     custom_claim = get_required_info(user_auth_token)
     for claim in claims:
         if custom_claim[0] == claim or claim == "*":
             have_access = True
-    values_for_return = [have_access, custom_claim[1], custom_claim[0]]
+    values_for_return = {"have_access":have_access, "tenant_id":custom_claim[1], "user_role":custom_claim[0]}
     return values_for_return
 
 def get_required_info(id_token) -> list:

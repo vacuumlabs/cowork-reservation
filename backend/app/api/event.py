@@ -12,7 +12,7 @@ event_bp = Blueprint("event_bp", __name__)
 def get_multiple():
     accessible_roles = ["*"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
-    if returned_value[0]:
+    if returned_value["have_access"]:
         url_args = request.args
         params = event_service.url_args_to_query_params_dict(url_args)
         results = event_dao.get_all(
@@ -30,7 +30,7 @@ def get_multiple():
 def get_one(id):
     accessible_roles = ["*"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
-    if returned_value[0]:
+    if returned_value["have_access"]:
         return jsonify(event_dao.get_one(id))
     return make_response(jsonify({}), 403)
 
@@ -38,7 +38,7 @@ def get_one(id):
 def update(id):
     accessible_roles = ["*"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
-    if returned_value[0]:
+    if returned_value["have_access"]:
         data = request.json
         if "minutes" in data:
             event_dao.update(id, data)
@@ -51,7 +51,7 @@ def update(id):
 def delete(id):
     accessible_roles = ["SUPER_ADMIN","TENANT_ADMIN"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
-    if returned_value[0]:
+    if returned_value["have_access"]:
         event_dao.delete(id)
         return jsonify({})
     return make_response(jsonify({}), 403)
@@ -60,7 +60,7 @@ def delete(id):
 def end_event(id):
     accessible_roles = ["*"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
-    if returned_value[0]:
+    if returned_value["have_access"]:
         return jsonify(event_dao.cancel_event(id))
     return make_response(jsonify({}), 403)
 
@@ -68,7 +68,7 @@ def end_event(id):
 def create():
     accessible_roles = ["SUPER_ADMIN","TENANT_ADMIN"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
-    if returned_value[0]:
+    if returned_value["have_access"]:
         data = request.json
         new_event = event_dao.add(
             int(data["calendar_id"]),
