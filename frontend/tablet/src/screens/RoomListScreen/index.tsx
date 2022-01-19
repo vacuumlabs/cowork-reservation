@@ -92,9 +92,9 @@ export const dummyRoomList: Room[] = [
     events: [
       {
         calendarId: '3',
-        name: 'TLK Meeting',
-        author: 'Milan Hevier',
-        startDate: addHours(new Date(), 1),
+        name: 'Design Daily',
+        author: 'Michal Novák',
+        startDate: addMinutes(new Date(), 25),
         endDate: addHours(new Date(), 2),
         googleId: '3',
         tenantId: '3',
