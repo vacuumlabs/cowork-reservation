@@ -50,18 +50,25 @@ def get_logged_uid_new(id_token):
     except (faa.TokenSignError, faa.ExpiredIdTokenError, faa.InvalidIdTokenError, faa.RevokedIdTokenError):
         return 0
 
-#Check if it is tenant or superuser       
-def have_claims(id_token, claims = "*") -> bool:
-    
+#Check if user have needed claims       
+def have_claims(id_token, claims = "*") -> list:
+    have_access = False
+    values_for_return = []
     if not id_token:
-        return False    
-    jano = get_token_from_cookies(id_token)
-    custom_claim = get_custom_claims(jano)
-    if claims == "*" and (custom_claim == 'TENANT_ADMIN' or custom_claim == 'SUPER_ADMIN'):
-        return True
-    elif custom_claim == claims:
-        return True
-    return False        
+        values_for_return = [False,403]
+        return values_for_return  
+    user_auth_token = get_token_from_cookies(id_token)
+    custom_claim = get_required_info(user_auth_token)
+    for claim in claims:
+        if custom_claim[0] == claim or claim == "*":
+            have_access = True
+    values_for_return = [have_access, custom_claim[1], custom_claim[0]]
+    return values_for_return
+
+def get_required_info(id_token) -> list:
+    user = auth.get_user(get_logged_uid(id_token))
+    values_for_return = [user.custom_claims.get("role"), user.custom_claims.get("tenantId")]
+    return values_for_return
 
 #Return custom claims of user
 def get_custom_claims(id_token):
@@ -78,3 +85,26 @@ def has_user_custom_claim(id_token, custom_claim):
 def get_token_from_cookies(cookie):
     final = "".join(cookie)
     return final
+
+def get_users(id_of_tenant = "*"):
+    # implement filters
+    list_of_users = []
+    if id_of_tenant == "*":
+        for user in auth.list_users().iterate_all():
+            if user.custom_claims:
+                list_of_users.append({"name":user.display_name, "email":user.email, "tenantId":user.custom_claims.get("tenantId")})
+    else:
+        for user in auth.list_users().iterate_all():
+            if user.custom_claims and user.custom_claims.get("tenantId") == id_of_tenant:
+                list_of_users.append({"name":user.display_name, "email":user.email, "tenantId":user.custom_claims.get("tenantId")})
+    return list_of_users
+
+def create_user(user_name: dict, user_email: dict, user_password: dict) -> bool:
+    user = auth.create_user(
+        email=user_email,
+        password=user_password,
+        display_name=user_name,
+        disabled=False)
+    if user.uid:
+        return True
+    return False
