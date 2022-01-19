@@ -2,7 +2,7 @@ import json
 from flask import jsonify, request, make_response, render_template
 from flask.blueprints import Blueprint
 from app.daos import tenant_dao
-from app.firebase_utils import have_claims
+from app.firebase_utils import have_claims, get_users
 from app.services import tenant_service
 
 tenant_bp = Blueprint("tenant_bp", __name__)
@@ -10,19 +10,18 @@ tenant_bp = Blueprint("tenant_bp", __name__)
 
 @tenant_bp.route("/tenants/<id>", methods=["GET"])
 def get_one_tenant(id):
-    if have_claims(request.headers.get("Authorization")):
-        if have_claims(request.headers.get("Authorization"),"SUPER_ADMIN"):
-            return jsonify(tenant_dao.get_one(id))
-        else:
-            #premenna = tenant_dao.get_one(id)
-
+    accessible_roles = ["SUPER_ADMIN","TENANT_ADMIN"]
+    returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
+    if returned_value[0]:
             return jsonify(tenant_dao.get_one(id))
     else:
         return make_response(jsonify({}),403)
 
 @tenant_bp.route("/tenants/<id>", methods=["PUT"])
 def update_tenant(id):
-    if have_claims(request.headers.get("Authorization")):
+    accessible_roles = ["SUPER_ADMIN"]
+    returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
+    if returned_value[0]:
         data = request.json
         return jsonify(tenant_dao.update(id, data))
     else:
@@ -30,26 +29,11 @@ def update_tenant(id):
 
 @tenant_bp.route("/tenants/<id>", methods=["DELETE"])
 def del_tenant(id):
-    if have_claims(request.headers.get("Authorization")):
+    accessible_roles = ["SUPER_ADMIN"]
+    returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
+    if returned_value[0]:
         tenant_dao.delete(id)
         return jsonify({})
-    else:
-        return make_response(jsonify({}),403)
-
-@tenant_bp.route("/tenants", methods=["GET"])
-def get_tenant_list():
-    if have_claims(request.headers.get("Authorization")):
-        url_args = request.args
-        params = tenant_service.url_args_to_query_params_dict(url_args)
-        results = tenant_dao.get_all(
-            params['filters'],
-            params['sort'], 
-            params['range']
-            )
-        resp = make_response(jsonify(results['data']), 200)
-        resp.headers['Access-Control-Expose-Headers'] = 'X-Total-Count'
-        resp.headers['X-Total-Count'] = results['count']
-        return resp
     else:
         return make_response(jsonify({}),403)
 
@@ -69,3 +53,15 @@ def insert_tenant():
     else:
         return make_response(jsonify({}),403)
 
+@tenant_bp.route("/tenants", methods=["GET"])
+def get_multiple():
+    accessible_roles = ["SUPER_ADMIN","TENANT_ADMIN"]
+    returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
+    if returned_value[0]:
+        if "SUPER_ADMIN" == accessible_roles[0]:
+            values_for_return = get_users()
+        else:
+            values_for_return = get_users(returned_value[1])
+        return make_response(jsonify(values_for_return),200)
+    else:
+        return make_response(jsonify({}),403)
