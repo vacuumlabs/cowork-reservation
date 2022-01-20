@@ -50,3 +50,12 @@ export const diffChangeDateAndNow: (changeDate: Date | undefined) => number = (
     return (changeDate.getTime() - now.getTime()) / 1000
   } else return (endOfToday().getTime() - now.getTime()) / 1000
 }
+
+export const findRoomCurrentEvent: (room: Room) => RoomEvent | undefined = (
+  room
+) => {
+  const now = new Date()
+  return room.events.find(
+    (event) => event.startDate < now && now < event.endDate
+  )
+}
