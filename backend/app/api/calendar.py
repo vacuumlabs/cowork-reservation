@@ -12,11 +12,7 @@ def get_calendar_list():
     # TODO: check if tenant has permissions to view all calendars
     url_args = request.args
     params = calendar_service.url_args_to_query_params_dict(url_args)
-    results = calendar_dao.get_all(
-        params['filters'],
-        params['sort'], 
-        params['range']
-        )
+    results = calendar_dao.get_all(params["filters"], params["sort"], params["range"])
     resp = make_response(jsonify(results["data"]), 200)
     resp.headers["Access-Control-Expose-Headers"] = "Content-Range"
     resp.headers["Content-Range"] = results["count"]
@@ -51,7 +47,10 @@ def create_calendar():
         return make_response(jsonify({}), 403)
     data = request.json
     new_calendar = calendar_dao.add(
-        int(data["tenant_id"]), data["name"], int(data["google_id"])
+        int(data["tenant_id"]),
+        data["name"],
+        data["google_id"],
+        data["resource_id"],
+        data["webhook_id"],
     )
     return jsonify(new_calendar)
-    

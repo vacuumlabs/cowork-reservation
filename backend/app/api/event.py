@@ -1,11 +1,11 @@
 import datetime
-import json
 from flask import jsonify, request, make_response, render_template
 from flask.blueprints import Blueprint
 from app.daos import event_dao
 from app.services import event_service
 
 event_bp = Blueprint("event_bp", __name__)
+
 
 @event_bp.route("/events", methods=["GET"])
 def get_multiple():
@@ -22,10 +22,12 @@ def get_multiple():
     resp.headers['Content-Range'] = results['count']
     return resp
 
+
 @event_bp.route("/events/<id>", methods=["GET"])
 def get_one(id):
-    #TODO: check if tenant has permissions to view desired event
+    # TODO: check if tenant has permissions to view desired event
     return jsonify(event_dao.get_one(id))
+
 
 @event_bp.route("/events/<id>", methods=["PUT"])
 def update(id):
@@ -34,17 +36,20 @@ def update(id):
     if "minutes" in data:
         event_dao.update(id, data)
         return jsonify(event_dao.change_duration(id, data["minutes"]))
-    else:    
+    else:
         return jsonify(event_dao.update(id, data))
+
 
 @event_bp.route("/events/<id>", methods=["DELETE"])
 def delete(id):
     event_dao.delete(id)
     return jsonify({})
 
+
 @event_bp.route("/events/<id>/cancel", methods=["GET"])
 def end_event(id):
     return jsonify(event_dao.cancel_event(id))
+
 
 @event_bp.route("/events", methods=["POST"])
 def create():
@@ -53,10 +58,9 @@ def create():
         int(data["calendar_id"]),
         int(data["room_id"]),
         str(data["name"]),
-        datetime.datetime.strptime(data["start"], '%Y-%m-%dT%H:%M:%S'),
-        datetime.datetime.strptime(data["end"], '%Y-%m-%dT%H:%M:%S'),
+        datetime.datetime.strptime(data["start"], "%Y-%m-%dT%H:%M:%S"),
+        datetime.datetime.strptime(data["end"], "%Y-%m-%dT%H:%M:%S"),
         str(data["google_id"]),
         int(data["tenant_id"]),
-        bool(data["status"])
     )
     return jsonify(new_event)
