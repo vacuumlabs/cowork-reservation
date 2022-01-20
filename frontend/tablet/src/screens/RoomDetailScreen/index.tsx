@@ -8,7 +8,11 @@ import { Typography, Screen, Grid, Button, theme } from '../../components'
 import Clock from './Clock'
 import Header from './Header'
 import Footer from './Footer/Footer'
-import { isRoomAvailable } from '../../utils'
+import {
+  diffChangeDateAndNow,
+  findRoomNextChangeDate,
+  isRoomAvailable,
+} from '../../utils'
 
 type RoomDetailProps = StackScreenProps<
   NavigatorStackParamList,
@@ -19,6 +23,7 @@ const RoomDetailScreen: React.FC<RoomDetailProps> = ({
   route,
 }: RoomDetailProps) => {
   const { room } = route.params
+  const changeDate = room ? findRoomNextChangeDate(room) : undefined
 
   SystemNavigationBar.stickyImmersive()
 
@@ -33,9 +38,9 @@ const RoomDetailScreen: React.FC<RoomDetailProps> = ({
             {isRoomAvailable(room) ? 'FREE' : 'BOOKED'}
           </Typography>
           {isRoomAvailable(room) ? (
-            <Clock color="turquoise" max={10} />
+            <Clock color="turquoise" max={diffChangeDateAndNow(changeDate)} />
           ) : (
-            <Clock color="red" max={10} />
+            <Clock color="red" max={diffChangeDateAndNow(changeDate)} />
           )}
           {!isRoomAvailable(room) && (
             <Button
