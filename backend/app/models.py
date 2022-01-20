@@ -53,10 +53,12 @@ class Building(BaseModel):
 
 class Room(BaseModel):
     id = db.Column(db.Integer, primary_key=True)
-    city = db.Column(db.String(255), nullable=False)
     capacity = db.Column(db.Integer, nullable=False)
+    floor = db.Column(db.Integer)
+    name = db.Column(db.String(255))
     equipment = db.Column(db.String(255))
-    building = db.Column(db.String(255), nullable=False)
-    room_number = db.Column(db.Integer, nullable=False)
+    building_id = db.Column(db.Integer, db.ForeignKey("building.id"))
+    city_id = db.Column(db.Integer, db.ForeignKey("city.id"))
 
     events = db.relationship("Event", backref="room")
+
