@@ -1,5 +1,4 @@
 import datetime
-import json
 from flask import jsonify, request, make_response, render_template
 from flask.blueprints import Blueprint
 from app.daos import event_dao
@@ -13,10 +12,14 @@ def get_multiple():
     # TODO: check if tenant has permissions to view all events
     url_args = request.args
     params = event_service.url_args_to_query_params_dict(url_args)
-    results = event_dao.get_all(params["filters"], params["sort"], params["range"])
-    resp = make_response(jsonify(results["data"]), 200)
-    resp.headers["Access-Control-Expose-Headers"] = "X-Total-Count"
-    resp.headers["X-Total-Count"] = results["count"]
+    results = event_dao.get_all(
+        params['filters'],
+        params['sort'], 
+        params['range']
+        )
+    resp = make_response(jsonify(results['data']), 200)
+    resp.headers['Access-Control-Expose-Headers'] = 'Content-Range'
+    resp.headers['Content-Range'] = results['count']
     return resp
 
 
