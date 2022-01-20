@@ -9,7 +9,7 @@ import {
   useGetIdentity,
 } from 'react-admin'
 import { Typography } from '@mui/material'
-import { User } from 'shared/models'
+import { User, UserRole } from 'shared/models'
 
 const UserTitle = ({ record }: { record?: User }) => (
   <span>{record ? record.name : 'User'}</span>
@@ -27,14 +27,19 @@ const UserShow: (props: ShowProps) => JSX.Element = (props) => {
         <SimpleShowLayout>
           <TextField source="name" />
           <EmailField source="email" />
-          <ReferenceField
-            source="tenantId"
-            reference="tenants"
-            link={true}
-            label="Tenant"
-          >
-            <TextField source="name" />
-          </ReferenceField>
+          {identity.role === UserRole.SUPER_ADMIN ? (
+            <></>
+          ) : (
+            <ReferenceField
+              source="tenantId"
+              reference="tenants"
+              link={true}
+              label="Tenant"
+            >
+              <TextField source="name" />
+            </ReferenceField>
+          )}
+          <TextField source="role" />
         </SimpleShowLayout>
       )}
     </Show>
