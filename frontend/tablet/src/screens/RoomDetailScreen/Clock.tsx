@@ -41,9 +41,13 @@ const Clock: (props: ClockProps) => JSX.Element = ({
       const maxPerc = (100 * v.value) / max
       const strokeDashoffset = circumference - (circumference * maxPerc) / 100
       if (inputRef?.current) {
-        const sec = Math.round(v.value)
+        const hours = Math.floor(v.value / 3600)
+        const minutes = Math.floor((v.value - hours * 3600) / 60)
+        const seconds = Math.floor(v.value) - hours * 3600 - minutes * 60
         inputRef.current.setNativeProps({
-          text: `00:00:${sec < 10 ? '0' : ''}${sec}`,
+          text: `${hours < 10 ? '0' : ''}${hours}:${
+            minutes < 10 ? '0' : ''
+          }${minutes}:${seconds < 10 ? '0' : ''}${seconds}`,
         })
       }
       if (circleRef?.current) {
