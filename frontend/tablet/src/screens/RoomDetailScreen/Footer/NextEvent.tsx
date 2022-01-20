@@ -21,7 +21,7 @@ const NextEvent: React.FC<NextEventProps> = ({ currentRoomId }) => {
     )
   }
 
-  const { name, startDate, endDate, author } = nextEvent
+  const { name, startDate, endDate, author, tenantName } = nextEvent
 
   return (
     <Grid alignItems="flex-end" spacing={2}>
@@ -32,6 +32,7 @@ const NextEvent: React.FC<NextEventProps> = ({ currentRoomId }) => {
           {format(startDate, 'HH:mm')} - {format(endDate, 'HH:mm')}
         </Typography>
         <Typography color="gray">{author}</Typography>
+        <Typography color="white">{tenantName}</Typography>
       </Grid>
     </Grid>
   )
