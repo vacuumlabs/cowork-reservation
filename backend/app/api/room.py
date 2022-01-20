@@ -20,8 +20,8 @@ def get_room_list():
         True if "with-next-events" in request.args else False
         )
     resp = make_response(jsonify(results['data']), 200)
-    resp.headers['Access-Control-Expose-Headers'] = 'X-Total-Count'
-    resp.headers['X-Total-Count'] = results['count']
+    resp.headers['Access-Control-Expose-Headers'] = 'Content-Range'
+    resp.headers['Content-Range'] = results['count']
     return resp
 
 @room_bp.route("/rooms/<id>", methods=["GET"])

@@ -14,8 +14,8 @@ def get_calendar_list():
     params = calendar_service.url_args_to_query_params_dict(url_args)
     results = calendar_dao.get_all(params["filters"], params["sort"], params["range"])
     resp = make_response(jsonify(results["data"]), 200)
-    resp.headers["Access-Control-Expose-Headers"] = "X-Total-Count"
-    resp.headers["X-Total-Count"] = results["count"]
+    resp.headers["Access-Control-Expose-Headers"] = "Content-Range"
+    resp.headers["Content-Range"] = results["count"]
     return resp
 
 

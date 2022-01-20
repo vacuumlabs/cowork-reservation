@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react'
-import { Admin, Resource } from 'react-admin'
+import React from 'react'
+import { Admin, Resource, fetchUtils } from 'react-admin'
 import jsonServerProvider from 'ra-data-json-server'
+import simpleRestProvider from 'ra-data-simple-rest'
 import { UserRole } from 'shared/models'
 
 import authProvider, { getIdToken } from './authProvider'
@@ -12,9 +13,32 @@ import City from './components/City'
 import Building from './components/Building'
 import LoginPage from './components/LoginPage'
 
-const dataProvider = jsonServerProvider(
+// TODO extract to env file
+const USE_BACKEND_API = true
+const BACKEND_URL = 'https://cowork-reservation-jjr73225zq-lm.a.run.app/'
+
+const jsonProvider = jsonServerProvider(
   'https://my-json-server.typicode.com/Bandius/myJsonServer'
 )
+
+const httpClient: (
+  url: string,
+  options?: fetchUtils.Options
+) => Promise<{
+  status: number
+  headers: Headers
+  body: string
+  json: string
+}> = async (url, options = {}) => {
+  if (!options.headers) {
+    options.headers = new Headers({ Accept: 'application/json' })
+  }
+  ;(options.headers as Headers).set('Authorization', (await getIdToken()) || '')
+  return fetchUtils.fetchJson(url, options)
+}
+const restProvider = simpleRestProvider(BACKEND_URL, httpClient)
+
+const dataProvider = USE_BACKEND_API ? restProvider : jsonProvider
 
 const SUPER_ADMIN_RESOURCES = [
   <Resource
@@ -54,18 +78,6 @@ const USER_RESOURCES = [
 ]
 
 const App: React.FC = () => {
-  // TEMP console.log firebase idToken for dev purposes
-  useEffect(() => {
-    const logIdToken = async () => {
-      // eslint-disable-next-line no-console
-      console.log(await getIdToken())
-    }
-
-    if (process.env.NODE_ENV === 'development') {
-      logIdToken()
-    }
-  }, [])
-
   return (
     <Admin
       dataProvider={dataProvider}
