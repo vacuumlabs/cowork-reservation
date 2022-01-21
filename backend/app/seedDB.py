@@ -59,7 +59,7 @@ def calendarSeed(num: int):
     if Calendar.query.count() == 0:
         google_id = ["a1b2c3d4e5f6g7"]
         name = "Calendar_number_"
-        tenantSeed(num)
+        tenantSeed()
         tenants = Tenant.query.all()
         for idx in range(num):
             calendar = Calendar()
