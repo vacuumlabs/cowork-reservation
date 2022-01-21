@@ -36,13 +36,29 @@ class Event(BaseModel):
     google_id = db.Column(db.String(255), nullable=False)
     tenant_id = db.Column(db.Integer, db.ForeignKey("tenant.id"))
 
+class City(BaseModel):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+
+    rooms = db.relationship("Room", backref="city")
+    buildings = db.relationship("Building", backref="city")
+
+class Building(BaseModel):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+    address = db.Column(db.String(255), nullable=False)
+    city_id = db.Column(db.Integer, db.ForeignKey("city.id"))
+
+    rooms = db.relationship("Room", backref="building")
 
 class Room(BaseModel):
     id = db.Column(db.Integer, primary_key=True)
-    city = db.Column(db.String(255), nullable=False)
     capacity = db.Column(db.Integer, nullable=False)
+    floor = db.Column(db.Integer)
+    name = db.Column(db.String(255))
     equipment = db.Column(db.String(255))
-    building = db.Column(db.String(255), nullable=False)
-    room_number = db.Column(db.Integer, nullable=False)
+    building_id = db.Column(db.Integer, db.ForeignKey("building.id"))
+    city_id = db.Column(db.Integer, db.ForeignKey("city.id"))
 
     events = db.relationship("Event", backref="room")
+

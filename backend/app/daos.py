@@ -1,6 +1,6 @@
 import datetime
 from typing import Iterable
-from app.models import Tenant
+from app.models import Building, City, Tenant
 from app.models import Calendar
 from app.models import Room
 from app.models import Event
@@ -12,6 +12,12 @@ session = db.session
 class SharedDaoMethods:
     def __init__(self, model):
         self.model = model
+
+    def add(self, data: dict) -> dict:
+        new_record = self.model(**data)
+        session.add(new_record)
+        session.commit()
+        return self.to_dict(new_record)
 
     def get_all(self, filters: dict, sort: list, results_range: list) -> dict:
         results = session.query(self.model)
@@ -339,3 +345,5 @@ room_dao = RoomDAO(Room)
 calendar_dao = CalendarDAO(Calendar)
 event_dao = EventDAO(Event)
 tenant_dao = TenantDAO(Tenant)            
+building_dao = SharedDaoMethods(Building)            
+city_dao = SharedDaoMethods(City)            
