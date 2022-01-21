@@ -12,14 +12,13 @@ import {
 const RoomEdit: (props: EditProps) => JSX.Element = (props) => (
   <Edit {...props}>
     <SimpleForm>
-      <ReferenceInput source="cityId" reference="cities" label="City" disabled>
+      <ReferenceInput source="cityId" reference="cities" label="City">
         <AutocompleteInput />
       </ReferenceInput>
       <ReferenceInput
         source="buildingId"
         reference="buildings"
         label="Building"
-        disabled
       >
         <AutocompleteInput />
       </ReferenceInput>
