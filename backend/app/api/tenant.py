@@ -13,9 +13,25 @@ def get_one_tenant(id):
     accessible_roles = ["SUPER_ADMIN","TENANT_ADMIN"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
     if returned_value["have_access"]:
-            return jsonify(tenant_dao.get_one(id))
+            return tenant_service.response(tenant_dao.get_one(id))
     else:
-        return make_response(jsonify({}),403)
+        return tenant_service.response(status_code=403)
+
+@tenant_bp.route("/tenants", methods=["GET"])
+def get_tenant_list():
+    accessible_roles = {"SUPER_ADMIN","TENANT_ADMIN"}
+    returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
+    if returned_value["have_access"]:
+        url_args = request.args
+        params = tenant_service.url_args_to_query_params_dict(url_args)
+        results = tenant_dao.get_all(
+            params['filters'],
+            params['sort'], 
+            params['range']
+            )
+        return tenant_service.response(results['data'],results['count'], 200)
+    else:
+        return tenant_service.response(status_code=403)
 
 @tenant_bp.route("/tenants/<id>", methods=["PUT"])
 def update_tenant(id):
@@ -23,9 +39,9 @@ def update_tenant(id):
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
     if returned_value["have_access"]:
         data = request.json
-        return jsonify(tenant_dao.update(id, data))
+        return tenant_service.response(tenant_dao.update(id, data))
     else:
-        return make_response(jsonify({}),403)
+        return tenant_service.response(status_code=403)
 
 @tenant_bp.route("/tenants/<id>", methods=["DELETE"])
 def del_tenant(id):
@@ -33,37 +49,18 @@ def del_tenant(id):
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
     if returned_value["have_access"]:
         tenant_dao.delete(id)
-        return jsonify({})
+        return tenant_service.response()
     else:
-        return make_response(jsonify({}),403)
+        return tenant_service.response(status_code=403)
 
 @tenant_bp.route("/tenants", methods=["POST"])
 def insert_tenant():
     accessible_roles = ["SUPER_ADMIN"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
     if returned_value["have_access"]:
-        try:
-            if request.method == "POST":
-                new_tenant = tenant_dao.add(
-                    request.form.get("name"),
-                    request.form.get("city"),
-                    request.form.get("email")
-                )
-                return jsonify(new_tenant)
-        except Exception as err:
-            return str(err)
+        data = request.json
+        new_tenant = tenant_dao.add(data)
+        return tenant_service.response(new_tenant)
     else:
-        return make_response(jsonify({}),403)
-
-@tenant_bp.route("/tenants", methods=["GET"])
-def get_multiple():
-    accessible_roles = ["SUPER_ADMIN","TENANT_ADMIN"]
-    returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
-    if returned_value["have_access"]:
-        if returned_value["user_role"] == accessible_roles[0]:
-            values_for_return = get_users()
-        else:
-            values_for_return = get_users(returned_value[1])
-        return make_response(jsonify(values_for_return),200)
-    else:
-        return make_response(jsonify({}),403)
+        return tenant_service.response(status_code=403)
+        
