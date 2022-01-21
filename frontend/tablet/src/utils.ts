@@ -1,4 +1,3 @@
-import { endOfToday } from 'date-fns'
 import { Room, RoomEvent } from 'shared/models'
 
 export const isRoomAvailable: (room: Room | undefined) => boolean = (room) => {
@@ -48,7 +47,7 @@ export const diffChangeDateAndNow: (changeDate: Date | undefined) => number = (
   const now = new Date()
   if (changeDate) {
     return (changeDate.getTime() - now.getTime()) / 1000
-  } else return (endOfToday().getTime() - now.getTime()) / 1000
+  } else return 1
 }
 
 export const findRoomCurrentEvent: (room: Room) => RoomEvent | undefined = (
