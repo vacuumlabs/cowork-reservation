@@ -51,8 +51,8 @@ class SharedServices:
         parameters = {"filters": filters, "sort": sort, "range": results_range}
         return camel_to_snake_dict(parameters) if to_snake_case else parameters 
 
-    def response(self, data: any = {}, content_range: int = 0, status_code: int = 200, to_cameCase: bool = True):
-        if to_cameCase:
+    def response(self, data: any = {}, content_range: int = 0, status_code: int = 200, to_camelCase: bool = True):
+        if to_camelCase:
             if type(data) is list or type(data) is array:
                 for idx in range(len(data)):
                     if type(data[idx]) is dict:
