@@ -1,7 +1,7 @@
 import time
 import uuid
 import datetime
-from app.daos import event_dao,room_dao,tenant_dao,calendar_dao
+from app.daos import event_dao,room_dao,tenant_dao,calendar_dao,service_accounts_dao
 import os
 from pprint import pprint
 from app.api.service_account.services_for_service_account import *
@@ -9,9 +9,10 @@ import json
 
 API_NAME='calendar'
 API_VERSION = 'v3'
-SCOPES = ['https://www.googleapis.com/auth/calendar']
-location  = os.path.dirname(os.path.abspath(__file__)) +'/coworkreservation-213a4920386a.json'
-Mask = 'coworkreservationcalendar@coworkreservation.iam.gserviceaccount.com'
+SCOPES = ['https://www.googleapis.com/auth/calendar','https://www.googleapis.com/auth/admin.directory.user','https://www.googleapis.com/auth/admin.directory.resource.calendar','https://www.googleapis.com/auth/admin.directory.group']
+location  = os.path.dirname(os.path.abspath(__file__)) +'/zeta-store-338710-8b9920bd4b01.json'
+Mask = 'serviceaccountforcalendars@zeta-store-338710.iam.gserviceaccount.com'
+Mask1 = 'service@coworkreservation.me'
 
 
 #object for service account with Domain Wide Delegation
@@ -51,7 +52,8 @@ def get_all_events_names(calendar_id):
     return list_of_events
 
 
-def get_all_events(calendar_id):
+def get_all_events(calendar_id,mask):
+    service = get_service(API_NAME, API_VERSION, SCOPES, location, mask)
     events = service.events().list(calendarId=calendar_id).execute()
     return events
 
@@ -71,15 +73,16 @@ def import_event(request_body,calendarID):
     imported_event = service.events().import_(calendarId=calendarID, body=request_body).execute()
     return imported_event
 
-def delete_event(calendar_id,id):
-    a = service.events().delete(calendarId=calendar_id, eventId=id).execute()
-    print(a)
+def delete_event(calendar_id,id,mask):
+    service = get_service(API_NAME, API_VERSION, SCOPES, location, mask)
+    service.events().delete(calendarId=calendar_id, eventId=id).execute()
 
-def create_event(summary,calendar_id,start,end,location):
+def create_event(summary,calendar_id,start,end,mask,locations):
+
+    service = get_service(API_NAME, API_VERSION, SCOPES, location, mask)
     body = {
         'summary': summary,
         'description': 'A chance to hear more about Google\'s developer products.',
-        'location': location,
         'start': {
             'dateTime': change_to_web(str(start)),
             'timeZone': 'Europe/Prague',
@@ -88,6 +91,35 @@ def create_event(summary,calendar_id,start,end,location):
             'dateTime': change_to_web(str(end)),
             'timeZone': 'Europe/Prague',
         },
+        'attendees': [
+            {'email': locations},
+        ],
+        'reminders': {
+            'useDefault': False,
+            'overrides': [
+                {'method': 'email', 'minutes': 24 * 60},
+                {'method': 'popup', 'minutes': 10},
+            ],
+        },
+    }
+
+
+    event = service.events().insert(calendarId=calendar_id, body=body).execute()
+    return event
+
+def create_event_test(summary,calendar_id,start,end):
+    body = {
+        'summary': summary,
+        'description': 'A chance to hear more about Google\'s developer products.',
+        'start': {
+            'dateTime': change_to_web(str(start)),
+            'timeZone': 'Europe/Prague',
+        },
+        'end': {
+            'dateTime': change_to_web(str(end)),
+            'timeZone': 'Europe/Prague',
+        },
+
         'reminders': {
             'useDefault': False,
             'overrides': [
@@ -119,8 +151,14 @@ def add_events_to_db(id):
 
 
 def change_to_db(data):
-    data = data.split("+")
-    return data[0]
+    substring = "+"
+    if substring in data:
+        data = data.split("+")
+        return data[0]
+    else:
+        datas = data.split('T')
+        data = datas[0]+'T'+(datas[1].split('-')[0])
+        return data
 
 def change_to_web(data):
     data = data.split(" ")
@@ -189,7 +227,11 @@ def change_to_dict_db(datadatabaza,name):
 
 def add_differnet_events_to_db(data,holder):
     calendar_id = holder['id']
-    room_id = room_dao.get_all_id_by_name(data['location'])[0]['id']
+    try:
+        room_id = room_dao.get_all_id_by_name(data['location'])[0]['id']
+    except:
+        print('ERROR IN ROOM ID DONT EXIST')
+        return
     name =  data['name']
     start = data['start']
     end = data['end']
@@ -197,25 +239,29 @@ def add_differnet_events_to_db(data,holder):
     tenant_id = holder['tenant_id']
     event_dao.add(calendar_id, room_id, name, start, end, google_id, tenant_id)
 
-def add_differnet_events_to_web(data,holder):
-    for i in range(len(holder)):
+def add_differnet_events_to_web(data,holder,calendars):
+
+    for i in range(len(calendars)):
         calendar_id_id = holder[i]['id']
-        calendar_id = holder[i]['google_id']
+        location = holder[i]['google_id']
+        calendar_id = calendars[0][i]['google_id']
         room_id = room_dao.get_all_id_by_name(data['location'])[0]['id']
-        location = data['location']
         name =  data['name']
         start = data['start']
         end = data['end']
         tenant_id = holder[i]['tenant_id']
         try:
-            data_from_created = create_event(name,calendar_id,start,end,location)
+            if calendar_id == "2livateegthoron91afp2tg054@group.calendar.google.com":
+                data_from_created = create_event_test(name,calendar_id,start,end)
+            else:
+             data_from_created = create_event(name,calendar_id,start,end,calendar_id,location)
         except:
-            print('error na calendar_id pridavanie do ostatnych kalendarov')
+            print('error in calendar_id inserting into other calendars')
             continue
         try:
             event_dao.add(calendar_id_id, room_id, name, start, end,data_from_created['id'], tenant_id)
         except:
-            print('Error pri pridavani do db v add sync')
+            print('Error in adding into db in add sync')
             continue
 
 def delete_different_events_from_db(data):
@@ -224,20 +270,63 @@ def delete_different_events_from_db(data):
         try:
             event_dao.delete(holder[i]['id'])
         except:
-            print('Chyba pri delete z db')
+            print('ERROR in delete from db')
 
 def delete_different_events_from_web(data,id):
     holder = calendar_dao.get_all_id_by_name_exept_id(data['location'],id)
+    event_data = event_dao.get_all_events_by_name_and_date_are_not_google_id(data['start'], data['end'], data['name'], data['id'])
+    get_data_for_web = []
+
     for i in range(len(holder)):
-        event_data = event_dao.get_all_events_by_name_and_date_are_not_google_id(data['start'],data['end'],data['name'],data['id'])
         try:
             event_dao.delete(event_data[i]['id'])
         except:
-            print("ERROR V DELETE Z db")
+                print("ERROR in DELETE from db")
         try:
-            delete_event(holder[i]['google_id'],event_data[i]['google_id'])
+            tenant_data = service_accounts_dao.get_by_tennant_id(str(event_data[i]['tenant_id']))
+            delete_event(tenant_data[0]['google_id'],event_data[i]['google_id'],tenant_data[0]['google_id'])
         except:
-            print("ERROR V DELETE Z WEBU")
+            print("ERROR In DELET FROM WEB")
 
+
+def create_building(mask):
+    service_for_b = get_service_for_directory(SCOPES,location,mask)
+    BuildingCoordinates = {
+                              "latitude": 48.153244,
+                              "longitude": 17.122691
+                          }
+    # BuildingAddress = {
+    #     "regionCode": string,
+    #     "languageCode": string,
+    #     "postalCode": string,
+    #     "administrativeArea": string,
+    #     "locality": string,
+    #     "sublocality": string,
+    #     "addressLines": [
+    #         string
+    #     ]
+    # }
+    body = {  "buildingId" :"new",
+              "buildingName":'new',
+              "resourceId": 'Test1',
+              "resourceName": "test",
+              "RoomName": 'new',
+              "description": 'null',
+              "Floor":'1',
+              "coordinates": {
+                  "latitude": 48.153244,
+                  "longitude": 17.122691
+              },
+              "kind": 'Meeting space',
+              "floorNames": [
+                '2'
+              ],
+
+            }
+
+    #TODO ADD TO DB
+
+    pprint(service_for_b.resources().calendars().insert(body = body,customer = 'my_customer').execute())
+    return
 
 

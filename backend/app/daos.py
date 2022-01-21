@@ -4,6 +4,7 @@ from app.models import Building, City, Tenant
 from app.models import Calendar
 from app.models import Room
 from app.models import Event
+from app.models import ServiceAccounts
 from app import db
 
 session = db.session
@@ -140,6 +141,8 @@ class SharedDaoMethods:
             converted.append(self.to_dict(results))
         return converted
 
+
+
 class CalendarDAO(SharedDaoMethods):
     def add(self, tenant_id: int, name: str, google_id: str, resource_id=None, webhook_id=None, expiration=None) -> Calendar:
         new_calendar = Calendar(tenant_id=tenant_id, name=name, google_id=google_id, resource_id = resource_id,webhook_id= webhook_id, expiration = expiration )
@@ -165,7 +168,7 @@ class CalendarDAO(SharedDaoMethods):
     def get_all_calendar_by_resource_and_webhook_id(self, resource_id: str, webhook_id: str):
         data = session.query(self.model)
         data = data.filter((Calendar.resource_id == resource_id) & (Calendar.webhook_id == webhook_id))
-        return data.first().id,data.first().name,data.first().google_id
+        return data.first().id,data.first().name,data.first().google_id, data.first().tenant_id
 
 class RoomDAO(SharedDaoMethods):
     def add(
@@ -340,10 +343,24 @@ class TenantDAO(SharedDaoMethods):
         return self.to_dict(new_tenant)
 
 
+class ServiceAccountsDao(SharedDaoMethods):
+    def add(self,calendar_id: int,name: str,tenant_id: int) -> ServiceAccounts:
+            new_serviceaccount = ServiceAccounts(calendar_id=calendar_id,name=name ,tenant_id=tenant_id)
+            session.add(new_serviceaccount)
+            session.commit()
+            return self.to_array(new_serviceaccount)[0]
+
+    def get_by_tennant_id(self,tennant_id:str):
+        data = session.query(self.model)
+        data = data.filter(ServiceAccounts.tenant_id == tennant_id)
+        if data.first() == None:
+            return None
+        return self.to_array(data.first())
 
 room_dao = RoomDAO(Room)
 calendar_dao = CalendarDAO(Calendar)
 event_dao = EventDAO(Event)
 tenant_dao = TenantDAO(Tenant)            
-building_dao = SharedDaoMethods(Building)            
-city_dao = SharedDaoMethods(City)            
+service_accounts_dao = ServiceAccountsDao(ServiceAccounts)
+building_dao = SharedDaoMethods(Building)
+city_dao = SharedDaoMethods(City)

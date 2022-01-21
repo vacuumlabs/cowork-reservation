@@ -62,3 +62,10 @@ class Room(BaseModel):
 
     events = db.relationship("Event", backref="room")
 
+
+class ServiceAccounts(BaseModel):
+    id = db.Column(db.Integer, primary_key=True)
+    google_id = db.Column(db.String(255), nullable=False)
+    name = db.Column(db.String(255), nullable=False)
+    tenant_id = db.Column(db.Integer, db.ForeignKey("tenant.id"))
+
