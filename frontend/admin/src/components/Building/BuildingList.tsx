@@ -5,6 +5,7 @@ import {
   EditButton,
   List,
   ListProps,
+  ReferenceField,
   ReferenceInput,
   TextField,
 } from 'react-admin'
@@ -25,7 +26,14 @@ const BuildingList: (props: ListProps) => JSX.Element = (props) => (
   <List {...props} filters={BuildingFilters}>
     <Datagrid rowClick="show">
       <TextField source="name" />
-      <TextField source="city" />
+      <ReferenceField
+        source="cityId"
+        reference="cities"
+        link={false}
+        label="City"
+      >
+        <TextField source="name" />
+      </ReferenceField>
       <TextField source="address" />
       <EditButton />
     </Datagrid>
