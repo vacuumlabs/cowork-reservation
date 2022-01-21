@@ -16,8 +16,8 @@ class Calendar(BaseModel):
 class Tenant(BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
-    city = db.Column(db.String(255), nullable=False)
-    email = db.Column(db.String(255), nullable=False)
+    #city = db.Column(db.String(255))
+    #email = db.Column(db.String(255))
 
     calendars = db.relationship("Calendar", backref="tenant")
     events = db.relationship("Event", backref="tenant")
