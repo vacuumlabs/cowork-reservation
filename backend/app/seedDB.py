@@ -28,21 +28,20 @@ def roomSeed(num: int):
         db.session.commit()
 
 
-def tenantSeed(num: int, allow_same_names: bool = False):
+def tenantSeed():
     if Tenant.query.count() == 0:
-        names = ["Andrej Testovač", "Tom Test", "Juraj Mrkva Jahoda", "Peter Hruška"]
-        cities = ["Bratislava", "Kosice", "Presov"]
-        for idx in range(num):
-            tenant = Tenant()
-            tenant.city = cities[randrange(len(cities))]
-            if allow_same_names:
-                tenant.name = names[idx % len(names)]
-            else:
-                tenant.name = names[idx % len(names)] + str(int(floor(idx / len(names))))
-            tenant.email = tenant.name.lower()
-            tenant.email = tenant.email.replace(" ", ".")
-            tenant.email += "@gmail.com"
-            db.session.add(tenant)
+        db.session.add(Tenant(name="Vacuumlabs"))
+        db.session.add(Tenant(name="Siemens"))
+        db.session.add(Tenant(name="TUKE"))
+        db.session.add(Tenant(name="IBM"))
+        db.session.add(Tenant(name="Wirecard"))
+        db.session.add(Tenant(name="FPT"))
+        db.session.add(Tenant(name="Ness"))
+        db.session.add(Tenant(name="AT&T"))
+        db.session.add(Tenant(name="Telekom"))
+        db.session.add(Tenant(name="O2"))
+        db.session.add(Tenant(name="Google"))
+        db.session.add(Tenant(name="Microsoft"))
         db.session.commit()
 
 
@@ -126,6 +125,6 @@ def clamp(minimum, x, maximum):
 def seed_database(app: Flask):
     with app.app_context():
         roomSeed(num_of_entries)
-        tenantSeed(num_of_entries)
+        tenantSeed()
         calendarSeed(num_of_entries)
         eventSeed()
