@@ -39,9 +39,11 @@ const Clock: (props: ClockProps) => JSX.Element = ({
 
   React.useEffect(() => {
     animation(max)
-    if (max !== 1 && bookedTime) {
+    if (max !== 1) {
       animated.addListener((v) => {
-        const maxPerc = ((100 * v.value) / bookedTime) * 2
+        const maxPerc = bookedTime
+          ? (100 * v.value) / bookedTime
+          : (100 * v.value) / max
         const strokeDashoffset = circumference - (circumference * maxPerc) / 100
         if (inputRef?.current) {
           const hours = Math.floor(v.value / 3600)

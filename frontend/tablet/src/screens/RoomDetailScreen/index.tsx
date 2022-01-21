@@ -28,6 +28,15 @@ const RoomDetailScreen: React.FC<RoomDetailProps> = ({
   const changeDate = room ? findRoomNextChangeDate(room) : undefined
   const currentEvent = room ? findRoomCurrentEvent(room) : undefined
 
+  const currentEventStartEndDate = currentEvent
+    ? hoursToSeconds(currentEvent.endDate.getHours()) +
+      minutesToSeconds(currentEvent.endDate.getMinutes()) +
+      currentEvent.endDate.getSeconds() -
+      (hoursToSeconds(currentEvent.startDate.getHours()) +
+        minutesToSeconds(currentEvent.startDate.getMinutes()) +
+        currentEvent.startDate.getSeconds())
+    : 0
+
   SystemNavigationBar.stickyImmersive()
 
   return (
@@ -46,16 +55,7 @@ const RoomDetailScreen: React.FC<RoomDetailProps> = ({
             <Clock
               color="red"
               max={diffChangeDateAndNow(changeDate)}
-              bookedTime={
-                currentEvent
-                  ? hoursToSeconds(currentEvent.endDate.getHours()) +
-                    minutesToSeconds(currentEvent.endDate.getMinutes()) +
-                    currentEvent.endDate.getSeconds() -
-                    (hoursToSeconds(currentEvent.startDate.getHours()) +
-                      minutesToSeconds(currentEvent.startDate.getMinutes()) +
-                      currentEvent.startDate.getSeconds())
-                  : 0
-              }
+              bookedTime={currentEventStartEndDate}
             />
           )}
           {!isRoomAvailable(room) && (
