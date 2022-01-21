@@ -54,7 +54,7 @@ class SharedDaoMethods:
         count = results_range[1] - start
         if count < 0:
             count = 0
-        results = results.limit(count).offset(start)
+        results = results.limit(count + 1).offset(start)
         return results
 
     def apply_sort(self, sort: list, results=None):
