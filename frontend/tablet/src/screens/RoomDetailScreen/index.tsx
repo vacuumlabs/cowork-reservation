@@ -65,8 +65,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   earlyButton: {
-    top: -theme.spacing.xl * 2,
+    top: -theme.spacing.xl,
     position: 'absolute',
     alignSelf: 'center',
+    opacity: 0.85,
   },
 })
