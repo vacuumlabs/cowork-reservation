@@ -19,35 +19,32 @@ def get_room_list():
         True if "with-events" in request.args else False,
         True if "with-next-events" in request.args else False
         )
-    resp = make_response(jsonify(results['data']), 200)
-    resp.headers['Access-Control-Expose-Headers'] = 'Content-Range'
-    resp.headers['Content-Range'] = results['count']
-    return resp
+    return room_service.response(results['data'],results['count'])
 
 @room_bp.route("/rooms/<id>", methods=["GET"])
 def get_room_one(id):
     #TODO: check if tenant has permissions to view desired room
-    return jsonify(room_dao.get_one(id))
+    return room_service.response(room_dao.get_one(id))
 
 @room_bp.route("/rooms/<id>", methods=["PUT"])
 def update_room(id):
     if not have_claims(request.headers.get("Authorization"),"SUPER_ADMIN"):
-        return make_response(jsonify({}), 403)
+        return room_service.response(status_code=403)
     data = request.json
-    return jsonify(room_dao.update(id, data))
+    return room_service.response(room_dao.update(id, data))
 
 @room_bp.route("/rooms/<id>", methods=["DELETE"])
 def delete_room(id):
     if not have_claims(request.headers.get("Authorization"),"SUPER_ADMIN"):
-        return make_response(jsonify({}), 403)
+        return room_service.response(status_code=403)
     room_dao.delete(id)
-    return jsonify({})
+    return room_service.response()
 
 
 @room_bp.route("/rooms", methods=["POST"])
 def create_room():
     if not have_claims(request.headers.get("Authorization"),"SUPER_ADMIN"):
-        return make_response(jsonify({}), 403)
+        return room_service.response(status_code=403)
     data = request.json
     new_room = room_dao.add(
         data["city"],
@@ -56,6 +53,6 @@ def create_room():
         data["building"],
         int(data["room_number"] if "room_number" in data else data["roomNumber"])
     )
-    return jsonify(new_room)
+    return room_service.response(new_room)
 
     
