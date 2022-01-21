@@ -1,11 +1,27 @@
 import React from 'react'
-import { EditProps, Edit, SimpleForm, TextInput, required } from 'react-admin'
+import {
+  EditProps,
+  Edit,
+  SimpleForm,
+  TextInput,
+  required,
+  ReferenceInput,
+  AutocompleteInput,
+} from 'react-admin'
 
 const RoomEdit: (props: EditProps) => JSX.Element = (props) => (
   <Edit {...props}>
     <SimpleForm>
-      <TextInput source="city" disabled />
-      <TextInput source="building" disabled />
+      <ReferenceInput source="cityId" reference="cities" label="City">
+        <AutocompleteInput />
+      </ReferenceInput>
+      <ReferenceInput
+        source="buildingId"
+        reference="buildings"
+        label="Building"
+      >
+        <AutocompleteInput />
+      </ReferenceInput>
       <TextInput source="name" validate={required()} />
       <TextInput source="floor" validate={required()} />
       <TextInput source="capacity" validate={required()} />
