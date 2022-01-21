@@ -2,6 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import SystemNavigationBar from 'react-native-system-navigation-bar'
+import { hoursToSeconds, minutesToSeconds } from 'date-fns'
 
 import { NavigatorStackParamList } from '..'
 import { Typography, Screen, Grid, Button, theme } from '../../components'
@@ -10,6 +11,7 @@ import Header from './Header'
 import Footer from './Footer/Footer'
 import {
   diffChangeDateAndNow,
+  findRoomCurrentEvent,
   findRoomNextChangeDate,
   isRoomAvailable,
 } from '../../utils'
@@ -24,6 +26,7 @@ const RoomDetailScreen: React.FC<RoomDetailProps> = ({
 }: RoomDetailProps) => {
   const { room } = route.params
   const changeDate = room ? findRoomNextChangeDate(room) : undefined
+  const currentEvent = room ? findRoomCurrentEvent(room) : undefined
 
   SystemNavigationBar.stickyImmersive()
 
@@ -40,7 +43,20 @@ const RoomDetailScreen: React.FC<RoomDetailProps> = ({
           {isRoomAvailable(room) ? (
             <Clock color="turquoise" max={diffChangeDateAndNow(changeDate)} />
           ) : (
-            <Clock color="red" max={diffChangeDateAndNow(changeDate)} />
+            <Clock
+              color="red"
+              max={diffChangeDateAndNow(changeDate)}
+              bookedTime={
+                currentEvent
+                  ? hoursToSeconds(currentEvent.endDate.getHours()) +
+                    minutesToSeconds(currentEvent.endDate.getMinutes()) +
+                    currentEvent.endDate.getSeconds() -
+                    (hoursToSeconds(currentEvent.startDate.getHours()) +
+                      minutesToSeconds(currentEvent.startDate.getMinutes()) +
+                      currentEvent.startDate.getSeconds())
+                  : 0
+              }
+            />
           )}
           {!isRoomAvailable(room) && (
             <Button

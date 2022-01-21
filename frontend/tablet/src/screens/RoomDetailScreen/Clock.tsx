@@ -12,11 +12,13 @@ const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
 type ClockProps = {
   color: Extract<ColorVariant, 'turquoise' | 'red'>
   max: number
+  bookedTime?: number
 }
 
 const Clock: (props: ClockProps) => JSX.Element = ({
   color,
   max,
+  bookedTime,
 }: ClockProps) => {
   const animated = React.useRef(new Animated.Value(0)).current
   const circleRef = React.useRef<View>(null)
@@ -37,9 +39,9 @@ const Clock: (props: ClockProps) => JSX.Element = ({
 
   React.useEffect(() => {
     animation(max)
-    if (max !== 1) {
+    if (max !== 1 && bookedTime) {
       animated.addListener((v) => {
-        const maxPerc = (100 * v.value) / max
+        const maxPerc = ((100 * v.value) / bookedTime) * 2
         const strokeDashoffset = circumference - (circumference * maxPerc) / 100
         if (inputRef?.current) {
           const hours = Math.floor(v.value / 3600)
