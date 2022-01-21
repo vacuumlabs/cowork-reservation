@@ -333,11 +333,11 @@ class EventDAO(SharedDaoMethods):
         
 
 class TenantDAO(SharedDaoMethods):
-    def add(self, tenant_name: str, city: str, email: str) -> Tenant:
-        new_tenant = Tenant(name=tenant_name, city=city, email=email)
+    def add(self, data: dict) -> dict:
+        new_tenant = Tenant(**data)
         session.add(new_tenant)
         session.commit()
-        return self.to_array(new_tenant)[0]
+        return self.to_dict(new_tenant)
 
 
 
