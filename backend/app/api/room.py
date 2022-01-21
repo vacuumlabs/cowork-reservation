@@ -21,37 +21,34 @@ def get_room_list():
             True if "with-events" in request.args else False,
             True if "with-next-events" in request.args else False
             )
-        resp = make_response(jsonify(results['data']), 200)
-        resp.headers['Access-Control-Expose-Headers'] = 'X-Total-Count'
-        resp.headers['X-Total-Count'] = results['count']
-        return resp
-    return make_response(jsonify({}), 403)
+        return room_service.response(results['data'],results['count'])
+    return room_service.response(status_code=403)
 
 @room_bp.route("/rooms/<id>", methods=["GET"])
 def get_room_one(id):
     accessible_roles = ["*"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
-    if returned_value["have_access"]: 
-        return jsonify(room_dao.get_one(id))
-    return make_response(jsonify({}), 403)
+    if returned_value["have_access"]:
+        return room_service.response(room_dao.get_one(id))
+    return room_service.response(status_code=403)
 
 @room_bp.route("/rooms/<id>", methods=["PUT"])
 def update_room(id):
     accessible_roles = ["SUPER_ADMIN"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
     if not returned_value["have_access"]:
-        return make_response(jsonify({}), 403)
+        return room_service.response(status_code=403)
     data = request.json
-    return jsonify(room_dao.update(id, data))
+    return room_service.response(room_dao.update(id, data))
 
 @room_bp.route("/rooms/<id>", methods=["DELETE"])
 def delete_room(id):
     accessible_roles = ["SUPER_ADMIN"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
     if not returned_value["have_access"]:
-        return make_response(jsonify({}), 403)
+        return room_service.response(status_code=403)
     room_dao.delete(id)
-    return jsonify({})
+    return room_service.response()
 
 
 @room_bp.route("/rooms", methods=["POST"])
@@ -59,7 +56,7 @@ def create_room():
     accessible_roles = ["SUPER_ADMIN"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
     if not returned_value["have_access"]:
-        return make_response(jsonify({}), 403)
+        return room_service.response(status_code=403)
     data = request.json
     new_room = room_dao.add(
         data["city"],
@@ -68,6 +65,6 @@ def create_room():
         data["building"],
         int(data["room_number"] if "room_number" in data else data["roomNumber"])
     )
-    return jsonify(new_room)
+    return room_service.response(new_room)
 
     

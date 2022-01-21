@@ -28,7 +28,7 @@ export type Room = {
   floor: string
   capacity: string
   equipment: string
-  events: Event[]
+  events: RoomEvent[]
 }
 
 export type Building = {
@@ -44,7 +44,7 @@ export type City = {
   name: string
 }
 
-export type Event = {
+export type RoomEvent = {
   calendarId: string
   name: string
   author: string

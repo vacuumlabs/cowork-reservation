@@ -1,6 +1,6 @@
 import datetime
 from typing import Iterable
-from app.models import Tenant
+from app.models import Building, City, Tenant
 from app.models import Calendar
 from app.models import Room
 from app.models import Event
@@ -12,6 +12,12 @@ session = db.session
 class SharedDaoMethods:
     def __init__(self, model):
         self.model = model
+
+    def add(self, data: dict) -> dict:
+        new_record = self.model(**data)
+        session.add(new_record)
+        session.commit()
+        return self.to_dict(new_record)
 
     def get_all(self, filters: dict, sort: list, results_range: list) -> dict:
         results = session.query(self.model)
@@ -117,12 +123,49 @@ class SharedDaoMethods:
             entry[column.name] = getattr(row, column.name)
         return entry
 
+    def to_array_tables(self, results) -> list:
+
+        converted = []
+
+        try:
+            for i in range(len(results)):
+                for row in results[i]:
+                    entry = self.to_dict(row)
+                    if 'resource_id' in entry:
+                        converted[-1]['joined'] = entry
+                    else:
+                        converted.append(entry)
+
+        except:
+            converted.append(self.to_dict(results))
+        return converted
+
 class CalendarDAO(SharedDaoMethods):
-    def add(self, tenant_id: int, name: str, google_id: str) -> Calendar:
-        new_calendar = Calendar(tenant_id=tenant_id, name=name, google_id=google_id)
+    def add(self, tenant_id: int, name: str, google_id: str, resource_id=None, webhook_id=None, expiration=None) -> Calendar:
+        new_calendar = Calendar(tenant_id=tenant_id, name=name, google_id=google_id, resource_id = resource_id,webhook_id= webhook_id, expiration = expiration )
         session.add(new_calendar)
         session.commit()
         return self.to_array(new_calendar)[0]
+
+    def check_if_exist(self, resource_id: str, webhook_id: str):
+        data = session.query(self.model)
+        data = data.filter((Calendar.resource_id == resource_id) & (Calendar.webhook_id == webhook_id))
+        if data.count() == 0:
+            return False
+        else:
+            return  True
+
+
+    def get_all_id_by_name_exept_id(self, name: str, id: str):
+        data = session.query(self.model)
+        data = data.filter(Calendar.name == name, Calendar.id != id)
+
+        return self.to_array(data.all())
+
+    def get_all_calendar_by_resource_and_webhook_id(self, resource_id: str, webhook_id: str):
+        data = session.query(self.model)
+        data = data.filter((Calendar.resource_id == resource_id) & (Calendar.webhook_id == webhook_id))
+        return data.first().id,data.first().name,data.first().google_id
 
 class RoomDAO(SharedDaoMethods):
     def add(
@@ -167,6 +210,12 @@ class RoomDAO(SharedDaoMethods):
                 room["room_events"] = room_events
         return {"data": results, "count": x_total_count}
 
+
+    def get_all_id_by_name(self, name: str):
+        data = session.query(self.model)
+        data = data.filter(Room.building == name)
+        return self.to_array(data.first())
+
 class EventDAO(SharedDaoMethods):
     def add(
             self, 
@@ -176,8 +225,8 @@ class EventDAO(SharedDaoMethods):
             start: datetime, 
             end: datetime,
             google_id: str,
-            tenant_id: int,
-            status: bool,
+            tenant_id: int
+
         ) -> Event:
             new_event = Event(
                 calendar_id=calendar_id, 
@@ -186,8 +235,7 @@ class EventDAO(SharedDaoMethods):
                 start=start, 
                 end=end,
                 google_id=google_id,
-                tenant_id=tenant_id,
-                status=status,
+                tenant_id=tenant_id
             )
             session.add(new_event)
             session.commit()
@@ -255,6 +303,33 @@ class EventDAO(SharedDaoMethods):
         return event_dao.update(event_id, {
             "end": time
         })
+
+    def get_all_events_from_calendar_id(self, google_id: str):
+        data = Event.query.join(Calendar)
+        data = data.filter(Calendar.google_id==google_id)
+        return self.to_array(data.all())
+
+    def get_all_events_from_calendar_resource_id(self, resource_id: str, webhook_id: str):
+        data = session.query(Event,Calendar).join(Calendar,Event.calendar_id == Calendar.id)
+        data = data.filter((Calendar.resource_id == resource_id) & (Calendar.webhook_id == webhook_id) )
+        if data.first() == None:
+            return {}
+        return self.to_array_tables(data.all())
+
+    def get_all_events_by_name_and_google_id(self,google_id:str, name:str):
+        data = session.query(self.model)
+        data = data.filter((Event.google_id == google_id) & (Event.name == name) )
+        return self.to_array(data.first())
+
+    def get_count_events_from_calendar_id(self, google_id: str):
+        data = Event.query.join(Calendar)
+        data = data.filter(Calendar.google_id == google_id)
+        return data.count()
+
+    def get_all_events_by_name_and_date_are_not_google_id(self, start: str,  end: str ,name: str ,id :str):
+        data = session.query(self.model)
+        data = data.filter((Event.google_id != id) & (Event.name == name)& (Event.start == start) & (Event.end == end))
+        return self.to_array(data.all())
         
 
 class TenantDAO(SharedDaoMethods):
@@ -270,3 +345,5 @@ room_dao = RoomDAO(Room)
 calendar_dao = CalendarDAO(Calendar)
 event_dao = EventDAO(Event)
 tenant_dao = TenantDAO(Tenant)            
+building_dao = SharedDaoMethods(Building)            
+city_dao = SharedDaoMethods(City)            

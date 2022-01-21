@@ -7,7 +7,8 @@ import { NavigatorStackParamList } from '..'
 import { Typography, Screen, Grid } from '../../components'
 import Clock from './Clock'
 import Header from './Header'
-import Footer from './Footer'
+import Footer from './Footer/Footer'
+import { isRoomAvailable } from '../../utils'
 
 type RoomDetailProps = StackScreenProps<
   NavigatorStackParamList,
@@ -28,11 +29,13 @@ const RoomDetailScreen: React.FC<RoomDetailProps> = ({
 
         <Grid justify="center" alignItems="center" spacing={2}>
           <Typography variant="h1">{room.name}</Typography>
-          <Typography variant="h3">FREE</Typography>
+          <Typography variant="h3">
+            {isRoomAvailable(room) ? 'FREE' : 'BOOKED'}
+          </Typography>
           <Clock color="turquoise" max={10} />
         </Grid>
 
-        <Footer />
+        <Footer currentRoomId={room.id} />
       </Grid>
     </Screen>
   )

@@ -1,5 +1,5 @@
 """Migration created at 2021-11-21 20:11:08.197630
-Revision ID: 0385dc117c59
+Revision ID: c57413f027bb
 Revises: 
 Create Date: 2021-11-21 20:11:08.217648
 """
@@ -8,7 +8,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '0385dc117c59'
+revision = 'c57413f027bb'
 down_revision = None
 branch_labels = None
 depends_on = None

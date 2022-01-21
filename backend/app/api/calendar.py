@@ -14,44 +14,36 @@ def get_calendar_list():
     if returned_value["have_access"]:
         url_args = request.args
         params = calendar_service.url_args_to_query_params_dict(url_args)
-        results = calendar_dao.get_all(
-            params['filters'],
-            params['sort'], 
-            params['range']
-            )
-        resp = make_response(jsonify(results["data"]), 200)
-        resp.headers["Access-Control-Expose-Headers"] = "X-Total-Count"
-        resp.headers["X-Total-Count"] = results["count"]
-        return resp
-    return make_response(jsonify({}), 403)
+        results = calendar_dao.get_all(params["filters"], params["sort"], params["range"])
+        return calendar_service.response(results['data'],results['count'])
+    return calendar_service.response(status_code=403)
 
 @calendar_bp.route("/calendars/<id>", methods=["GET"])
 def get_calendar(id):
     accessible_roles = ["*"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
     if returned_value["have_access"]:
-        return jsonify(calendar_dao.get_one(id))
-    return make_response(jsonify({}), 403)
-
+        return calendar_service.response(calendar_dao.get_one(id))
+    return calendar_service.response(status_code=403)
 
 @calendar_bp.route("/calendars/<id>", methods=["PUT"])
 def update_calendar(id):
     accessible_roles = ["SUPER_ADMIN","TENANT_ADMIN"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
-    if returned_value["have_access"]:
-        data = request.json
-        return jsonify(calendar_dao.update(id, data))
-    return make_response(jsonify({}), 403)
+    if not returned_value["have_access"]:
+        return calendar_service.response(status_code=403)
+    data = request.json
+    return calendar_service.response(calendar_dao.update(id, data))
 
 
 @calendar_bp.route("/calendars/<id>", methods=["DELETE"])
 def delete_calendar(id):
     accessible_roles = ["SUPER_ADMIN","TENANT_ADMIN"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
-    if returned_value["have_access"]:
-        calendar_dao.delete(id)
-        return jsonify({})
-    return make_response(jsonify({}), 403)
+    if not returned_value["have_access"]:
+        return calendar_service.response(status_code=403)
+    calendar_dao.delete(id)
+    return calendar_service.response()
 
 
 @calendar_bp.route("/calendars/", methods=["POST"])
@@ -61,8 +53,12 @@ def create_calendar():
     if returned_value["have_access"]:
         data = request.json
         new_calendar = calendar_dao.add(
-            int(data["tenant_id"]), data["name"], int(data["google_id"])
+            int(data["tenant_id"]),
+            data["name"],
+            data["google_id"],
+            data["resource_id"],
+            data["webhook_id"],
         )
-        return jsonify(new_calendar)
-    return make_response(jsonify({}), 403)
+        return calendar_service.response(new_calendar)
+    return calendar_service.response(status_code=403)
     
