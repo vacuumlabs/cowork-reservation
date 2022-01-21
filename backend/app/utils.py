@@ -7,6 +7,26 @@ from flask import Flask
 
 from flask_sqlalchemy import SQLAlchemy
 
+import re  
+  
+def to_snake(word):  
+  return re.sub('([A-Z]\w+$)', '_\\1', word).lower()  
+  
+def to_camel(word):  
+    components = word.split('_')  
+    return components[0] + ''.join(x.title() for x in components[1:])  
+  
+def camel_to_snake_dict(d: dict) -> dict:  
+   if isinstance(d, list):  
+      return [camel_to_snake_dict(i) if isinstance(i, (dict, list)) else i for i in d]  
+   return {to_snake(a):camel_to_snake_dict(b) if isinstance(b, (dict, list)) else b for a, b in d.items()}  
+  
+def snake_to_camel_dict(d: dict) -> dict:
+    if isinstance(d, int):
+        return str(d)
+    if isinstance(d, list):  
+        return [snake_to_camel_dict(i) if isinstance(i, (dict, list)) else i for i in d]  
+    return {to_camel(a):snake_to_camel_dict(b) if isinstance(b, (dict, list, int)) else b for a, b in d.items()}  
 
 def config_logging():
     client = google.cloud.logging.Client()

@@ -17,16 +17,13 @@ def get_multiple():
         params['sort'], 
         params['range']
         )
-    resp = make_response(jsonify(results['data']), 200)
-    resp.headers['Access-Control-Expose-Headers'] = 'Content-Range'
-    resp.headers['Content-Range'] = results['count']
-    return resp
+    return event_service.response(results['data'],results['count'])
 
 
 @event_bp.route("/events/<id>", methods=["GET"])
 def get_one(id):
     # TODO: check if tenant has permissions to view desired event
-    return jsonify(event_dao.get_one(id))
+    return event_service.response(event_dao.get_one(id))
 
 
 @event_bp.route("/events/<id>", methods=["PUT"])
@@ -35,20 +32,20 @@ def update(id):
     data = request.json
     if "minutes" in data:
         event_dao.update(id, data)
-        return jsonify(event_dao.change_duration(id, data["minutes"]))
+        return event_service.response(event_dao.change_duration(id, data["minutes"]))
     else:
-        return jsonify(event_dao.update(id, data))
+        return event_service.response(event_dao.update(id, data))
 
 
 @event_bp.route("/events/<id>", methods=["DELETE"])
 def delete(id):
     event_dao.delete(id)
-    return jsonify({})
+    return event_service.response()
 
 
 @event_bp.route("/events/<id>/cancel", methods=["GET"])
 def end_event(id):
-    return jsonify(event_dao.cancel_event(id))
+    return event_service.response(event_dao.cancel_event(id))
 
 
 @event_bp.route("/events", methods=["POST"])
@@ -63,4 +60,4 @@ def create():
         str(data["google_id"]),
         int(data["tenant_id"]),
     )
-    return jsonify(new_event)
+    return event_service.response(new_event)
