@@ -10,13 +10,12 @@ import {
 import { CustomUserClaims, User, UserRole } from './models'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAJ_GxyUXUkja9DCHXVTbH9Jhje5bsfv9s',
-  authDomain: 'coworkreservation.firebaseapp.com',
-  projectId: 'coworkreservation',
-  storageBucket: 'coworkreservation.appspot.com',
-  messagingSenderId: '182196777623',
-  appId: '1:182196777623:web:c9d18ac242055ba54f2fd2',
-  measurementId: 'G-LRR9NTQ779',
+  apiKey: 'AIzaSyDWEi46ncDnVLlZBfQtJUQaExTTS0vfFV4',
+  authDomain: 'zeta-store-338710.firebaseapp.com',
+  projectId: 'zeta-store-338710',
+  storageBucket: 'zeta-store-338710.appspot.com',
+  messagingSenderId: '150065018955',
+  appId: '1:150065018955:web:181764ae5d5d134502f5ce',
 }
 
 initializeApp(firebaseConfig)

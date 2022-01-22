@@ -1,5 +1,10 @@
 import React, { useState } from 'react'
-import { LoadingIndicator, useMutation } from 'react-admin'
+import {
+  LoadingIndicator,
+  useMutation,
+  useNotify,
+  useRedirect,
+} from 'react-admin'
 import {
   makeStyles,
   TextField,
@@ -16,21 +21,37 @@ type RegisterPageProps = {
 
 function RegisterPage({ setShowRegister }: RegisterPageProps): JSX.Element {
   const classes = useStyles()
+  const notify = useNotify()
+  const redirect = useRedirect()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const [register, { loading }] = useMutation({
-    type: 'create',
-    resource: 'users',
-    payload: {
-      data: {
-        name: name,
-        email: email,
-        password: password,
+  const [register, { loading }] = useMutation(
+    {
+      type: 'create',
+      resource: 'register',
+      payload: {
+        data: {
+          name: name,
+          email: email,
+          password: password,
+        },
       },
     },
-  })
+    {
+      onSuccess: ({ data }) => {
+        setShowRegister(false)
+        notify('Registration successfull')
+      },
+      onFailure: (error) => {
+        notify(error.message, {
+          type: 'warning',
+        })
+        setShowRegister(false)
+      },
+    }
+  )
   return (
     <Card className={classes.registrationCard}>
       <Grid container direction="column" alignItems="center" spacing={1}>
