@@ -83,6 +83,8 @@ class RoomService(SharedServices):
 class CalendarService(SharedServices):
     pass
 
+class ServiceAccountService(SharedServices):
+    pass
 city_service = SharedServices()
 building_service = SharedServices()
 event_service = EventService()
@@ -91,3 +93,4 @@ room_service = RoomService()
 calendar_service = CalendarService()
 tenant_service = TenantService()
 user_service = SharedServices()
+serviceaccount_service = ServiceAccountService()

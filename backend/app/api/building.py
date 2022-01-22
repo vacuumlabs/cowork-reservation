@@ -1,9 +1,11 @@
 import json
 from flask import jsonify, request, make_response, render_template
 from flask.blueprints import Blueprint
-from app.daos import building_dao
+from app.daos import building_dao,service_accounts_dao
 from app.firebase_utils import have_claims
 from app.services import building_service
+
+from app.api.service_account import service_account
 
 building_bp = Blueprint("building_bp", __name__)
 
@@ -30,6 +32,11 @@ def update_building(id):
 def delete_building(id):
     if not have_claims(request.headers.get("Authorization"),"SUPER_ADMIN"):
         return building_service.response(status_code=403)
+    returned_value = have_claims(request.headers.get("Authorization"),"SUPER_ADMIN")
+
+    holder = building_dao.get_one(id)
+    tenant_service = service_accounts_dao.get_by_tennant_id(returned_value['tenant_id'])
+    delete_Building(tenant_service['google_id'],holder['name'])
     building_dao.delete(id)
     return building_service.response()
 
@@ -38,7 +45,11 @@ def delete_building(id):
 def create_building():
     if not have_claims(request.headers.get("Authorization"),"SUPER_ADMIN"):
         return building_service.response(status_code=403)
+    returned_value = have_claims(request.headers.get("Authorization"),"SUPER_ADMIN")
+
     data = request.json
+    tenant_service = service_accounts_dao.get_by_tennant_id(returned_value['tenant_id'])
+    create_buildings(tenant_service['google_id'], data['name'], data['floors'])
     new_building = building_dao.add(data)
     return building_service.response(new_building)
 

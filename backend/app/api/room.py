@@ -1,9 +1,10 @@
 import json
 from flask import jsonify, request, make_response, render_template
 from flask.blueprints import Blueprint
-from app.daos import room_dao
+from app.daos import room_dao,service_accounts_dao
 from app.firebase_utils import have_claims
 from app.services import room_service
+from app.api.service_account import service_account
 
 room_bp = Blueprint("room_bp", __name__)
 
@@ -47,6 +48,9 @@ def delete_room(id):
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
     if not returned_value["have_access"]:
         return room_service.response(status_code=403)
+    holder = room_dao.get_one(id)
+    tenant_service = service_accounts_dao.get_by_tennant_id(returned_value['tenant_id'])
+    delete_Room(tenant_service['google_id'],holder['name'])
     room_dao.delete(id)
     return room_service.response()
 
@@ -58,6 +62,8 @@ def create_room():
     if not returned_value["have_access"]:
         return room_service.response(status_code=403)
     data = request.json
+    tenant_service = service_accounts_dao.get_by_tennant_id(returned_value['tenant_id'])
+    create_Room(tenant_service['google_id'], data['name'], data["capacity"],  data["floor"],  data["building"])
     new_room = room_dao.add(
         data["city"],
         int(data["capacity"]),
