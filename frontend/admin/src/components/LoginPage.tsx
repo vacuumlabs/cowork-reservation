@@ -3,7 +3,8 @@ import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
 import { Login } from 'ra-ui-materialui'
-import { Button, Card, TextField } from '@mui/material'
+import { Card, TextField } from '@mui/material'
+import { useMutation, Button } from 'react-admin'
 
 // TODO extract to env
 const firebaseConfig = {
@@ -29,15 +30,29 @@ const uiConfig = {
 
 function LoginPage(): JSX.Element {
   const [loginPage, setLoginPage] = useState(true)
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   const handleSwitch = () => {
     setLoginPage(!loginPage)
   }
 
   // TODO
-  const handleRegistration = () => {
-    console.log('NYI (not yet implemented)')
-  }
+  const [mutate, { loading }] = useMutation()
+  const handleRegistration = (event: { target: { dataset: { id: any } } }) =>
+    mutate({
+      type: 'create',
+      resource: 'users',
+      payload: {
+        data: {
+          name: name,
+          email: email,
+          password: password,
+        },
+      },
+    })
+
   return (
     <div>
       {loginPage ? (
@@ -46,21 +61,7 @@ function LoginPage(): JSX.Element {
             uiConfig={uiConfig}
             firebaseAuth={firebase.auth()}
           />
-          <Button
-            variant="contained"
-            onClick={handleSwitch}
-            style={{
-              display: 'flex',
-              alignSelf: 'center',
-              marginLeft: '7.5em',
-              marginBottom: '1em',
-              backgroundColor: '#3f51b5',
-              fontFamily: 'Roboto,Helvetica,Arial,sans-serif',
-              borderRadius: '2px',
-            }}
-          >
-            Register
-          </Button>
+          <Button variant="contained" onClick={handleSwitch} label="Register" />
         </Login>
       ) : (
         <Login>
@@ -77,6 +78,9 @@ function LoginPage(): JSX.Element {
               label="Name"
               variant="standard"
               inputProps={{ maxLength: 50 }}
+              onChange={(e) => {
+                setName(e.target.value)
+              }}
             />
             <TextField
               required
@@ -84,6 +88,9 @@ function LoginPage(): JSX.Element {
               label="E-mail"
               variant="standard"
               inputProps={{ maxLength: 50 }}
+              onChange={(e) => {
+                setEmail(e.target.value)
+              }}
             />
             <TextField
               required
@@ -91,6 +98,9 @@ function LoginPage(): JSX.Element {
               label="Password"
               type="password"
               variant="standard"
+              onChange={(e) => {
+                setPassword(e.target.value)
+              }}
             />
             <div
               style={{
@@ -99,7 +109,7 @@ function LoginPage(): JSX.Element {
                 alignItems: 'flex-end',
               }}
             >
-              <Button
+              {/* <Button
                 variant="contained"
                 style={{
                   boxShadow: 'none',
@@ -132,7 +142,7 @@ function LoginPage(): JSX.Element {
                 size="small"
               >
                 Register
-              </Button>
+              </Button> */}
             </div>
           </Card>
         </Login>
