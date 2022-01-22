@@ -13,6 +13,7 @@ import {
   MeetingRoom as RoomIcon,
   HomeWork as BuildingIcon,
   LocationCity as CityIcon,
+  PersonAdd as InvitationIcon,
 } from '@material-ui/icons'
 import { User, UserRole } from 'shared/models'
 
@@ -69,6 +70,12 @@ const useMenuItems = (user?: User) => {
         to="/users"
         primaryText="My People"
         leftIcon={<UsersIcon />}
+      />,
+      <MenuItemLink
+        key="invites"
+        to="/invites"
+        primaryText="Invitations"
+        leftIcon={<InvitationIcon />}
       />,
     ],
     [UserRole.USER]: [<ProfileMenuItemLink key="profile" />],

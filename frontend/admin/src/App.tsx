@@ -11,10 +11,11 @@ import Room from './components/Room'
 import Layout from './components/Layout'
 import City from './components/City'
 import Building from './components/Building'
+import Invitation from './components/Invitation'
 import LoginPage from './components/LoginPage'
 
 // TODO extract to env file
-const USE_BACKEND_API = true
+const USE_BACKEND_API = false
 const BACKEND_URL = 'https://cowork-reservation-jjr73225zq-lm.a.run.app/'
 
 const jsonProvider = jsonServerProvider(
@@ -66,6 +67,7 @@ const TENANT_ADMIN_RESOURCES = [
     options={{ label: 'Profile' }}
   />,
   <Resource key="users" name="users" {...User} options={{ label: 'Admins' }} />,
+  <Resource key="invites" name="invites" {...Invitation} />,
 ]
 
 const USER_RESOURCES = [

@@ -54,3 +54,12 @@ export type RoomEvent = {
   tenantId: string
   tenant: Tenant
 }
+
+export type Invitation = {
+  domain: string,
+  id: string,
+  role: string,
+  status: string,
+  tenantId: string,
+  value: string
+}
