@@ -8,8 +8,9 @@ import {
   TextField,
   useGetIdentity,
 } from 'react-admin'
-import { Typography } from '@mui/material'
-import { User } from 'shared/models'
+import { Typography } from '@material-ui/core'
+
+import { User } from '../../models'
 
 const UserTitle = ({ record }: { record?: User }) => (
   <span>{record ? record.name : 'User'}</span>

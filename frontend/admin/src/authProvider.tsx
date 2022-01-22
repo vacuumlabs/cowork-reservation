@@ -6,7 +6,8 @@ import {
   UserCredential,
   User as FirebaseUser,
 } from 'firebase/auth'
-import { CustomUserClaims, User, UserRole } from 'shared/models'
+
+import { CustomUserClaims, User, UserRole } from './models'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAJ_GxyUXUkja9DCHXVTbH9Jhje5bsfv9s',

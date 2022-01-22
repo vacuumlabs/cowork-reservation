@@ -9,7 +9,8 @@ import {
   required,
   useGetIdentity,
 } from 'react-admin'
-import { UserRole } from 'shared/models'
+
+import { UserRole } from '../../models'
 
 const UserCreate: (props: CreateProps) => JSX.Element = (props) => {
   const { identity } = useGetIdentity()

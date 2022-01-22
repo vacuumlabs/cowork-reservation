@@ -1,4 +1,4 @@
-import { Tabs, Tab, Divider } from '@mui/material'
+import { Tabs, Tab, Divider } from '@material-ui/core'
 import React, { useCallback, useEffect, useState } from 'react'
 import {
   ListProps,
@@ -14,7 +14,8 @@ import {
   ListContextProvider,
   useGetIdentity,
 } from 'react-admin'
-import { UserRole } from 'shared/models'
+
+import { UserRole } from '../../models'
 
 const tabs = [
   { id: UserRole.TENANT_ADMIN, name: 'Admins' },

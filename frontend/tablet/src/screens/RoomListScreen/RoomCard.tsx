@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
-import { Room } from 'shared/models'
 
+import { Room } from '../../models'
 import { Grid, Icon, theme, Typography } from '../../components'
 
 type RoomCardProps = Room & {

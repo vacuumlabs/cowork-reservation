@@ -8,7 +8,8 @@ import {
   Datagrid,
   EditButton,
 } from 'react-admin'
-import { City } from 'shared/models'
+
+import { City } from '../../models'
 
 const CityTitle = ({ record }: { record?: City }) => (
   <span>{record ? record.name : 'City'}</span>
