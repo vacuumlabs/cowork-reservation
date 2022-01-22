@@ -6,88 +6,42 @@ import { Typography, Grid, theme, Button } from '../../../components'
 import { findRoomNextEvent, isRoomAvailable } from '../../../utils'
 import { dummyRoomList } from '../../RoomListScreen'
 
+const extendMeetingMinutes = [15, 30, 45, 60]
+
 type QuickActionsProps = {
   currentRoomId: string
 }
 
 const QuickActions: React.FC<QuickActionsProps> = ({ currentRoomId }) => {
   const room = dummyRoomList.find((r) => r.id === currentRoomId)
-  const nextEvent = room ? findRoomNextEvent(room) : undefined
 
-  if (!room || !nextEvent) {
-    return (
-      <Grid justify="flex-end">
-        <Typography variant="button">QUICK RESERVATION</Typography>
-        <Grid direction="row" spacing={1} style={styles.buttons}>
-          <Button
-            title="15 min"
-            // eslint-disable-next-line no-console
-            onPress={() => console.log('TODO reserve 15 min')}
-          />
-          <Button
-            title="30 min"
-            // eslint-disable-next-line no-console
-            onPress={() => console.log('TODO reserve 30 min')}
-          />
-          <Button
-            title="45 min"
-            // eslint-disable-next-line no-console
-            onPress={() => console.log('TODO reserve 45 min')}
-          />
-          <Button
-            title="60 min"
-            // eslint-disable-next-line no-console
-            onPress={() => console.log('TODO reserve 60 min')}
-          />
-        </Grid>
-      </Grid>
-    )
-  }
-
-  const { startDate } = nextEvent
+  if (!room) return null
+  const nextEvent = findRoomNextEvent(room)
 
   return (
-    <Grid justify="flex-end">
-      <Typography variant="button">
+    <Grid justify="flex-end" alignItems="center">
+      <Typography variant="button" style={styles.title}>
         {isRoomAvailable(room) ? 'QUICK RESERVATION' : 'EXTEND MEETING'}
       </Typography>
-      <Grid direction="row" spacing={1} style={styles.buttons}>
-        {isBefore(addMinutes(new Date(), 15), startDate) ? (
-          <Button
-            title="15 min"
-            // eslint-disable-next-line no-console
-            onPress={() => console.log('TODO reserve 15 min')}
-          />
-        ) : (
-          <Button title="15 min" onPress={() => ''} variant="secondary" />
-        )}
-        {isBefore(addMinutes(new Date(), 30), startDate) ? (
-          <Button
-            title="30 min"
-            // eslint-disable-next-line no-console
-            onPress={() => console.log('TODO reserve 30 min')}
-          />
-        ) : (
-          <Button title="30 min" onPress={() => ''} variant="secondary" />
-        )}
-        {isBefore(addMinutes(new Date(), 45), startDate) ? (
-          <Button
-            title="45 min"
-            // eslint-disable-next-line no-console
-            onPress={() => console.log('TODO reserve 45 min')}
-          />
-        ) : (
-          <Button title="45 min" onPress={() => ''} variant="secondary" />
-        )}
-        {isBefore(addMinutes(new Date(), 60), startDate) ? (
-          <Button
-            title="60 min"
-            // eslint-disable-next-line no-console
-            onPress={() => console.log('TODO reserve 60 min')}
-          />
-        ) : (
-          <Button title="60 min" onPress={() => ''} variant="secondary" />
-        )}
+      <Grid direction="row" spacing={1}>
+        {extendMeetingMinutes.map((minutes) => {
+          const isEnoughTime =
+            !nextEvent ||
+            isBefore(addMinutes(new Date(), minutes), nextEvent.startDate)
+          return (
+            <Button
+              key={minutes}
+              title={`${minutes} min`}
+              variant={isEnoughTime ? 'primary' : 'secondary'}
+              onPress={() => {
+                isEnoughTime
+                  ? // eslint-disable-next-line no-console
+                    console.log(`TODO extend by ${minutes} minutes`)
+                  : null
+              }}
+            />
+          )
+        })}
       </Grid>
     </Grid>
   )
@@ -96,7 +50,7 @@ const QuickActions: React.FC<QuickActionsProps> = ({ currentRoomId }) => {
 export default QuickActions
 
 const styles = StyleSheet.create({
-  buttons: {
-    marginTop: theme.spacing.lg,
+  title: {
+    margin: theme.spacing.lg,
   },
 })

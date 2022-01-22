@@ -1,7 +1,7 @@
 import React from 'react'
 import { subHours, addHours, subMinutes, addMinutes } from 'date-fns'
 import { StyleSheet } from 'react-native'
-import { Room, Building, City } from 'shared/models'
+import { Room, Building, City, Tenant } from 'shared/models'
 
 import { NavigationProps } from '..'
 import authProvider from '../../authProvider'
@@ -22,6 +22,11 @@ const dummyBuilding: Building = {
   address: 'Jurkovičova Tepláreň',
 }
 
+const dummyTenant: Tenant = {
+  id: '1',
+  name: 'Vacuumlabs',
+}
+
 export const dummyRoomList: Room[] = [
   {
     id: '1',
@@ -40,7 +45,7 @@ export const dummyRoomList: Room[] = [
         endDate: subHours(new Date(), 1),
         googleId: '1',
         tenantId: '1',
-        tenantName: 'Vacuumlabs',
+        tenant: dummyTenant,
       },
       {
         calendarId: '2',
@@ -50,7 +55,7 @@ export const dummyRoomList: Room[] = [
         endDate: addMinutes(new Date(), 30),
         googleId: '2',
         tenantId: '2',
-        tenantName: 'Amazon',
+        tenant: dummyTenant,
       },
       {
         calendarId: '3',
@@ -60,7 +65,7 @@ export const dummyRoomList: Room[] = [
         endDate: addHours(new Date(), 2),
         googleId: '3',
         tenantId: '3',
-        tenantName: 'Google',
+        tenant: dummyTenant,
       },
     ],
   },
@@ -81,7 +86,7 @@ export const dummyRoomList: Room[] = [
         endDate: subHours(new Date(), 1),
         googleId: '1',
         tenantId: '1',
-        tenantName: 'Microsoft',
+        tenant: dummyTenant,
       },
     ],
   },
@@ -102,7 +107,7 @@ export const dummyRoomList: Room[] = [
         endDate: addHours(new Date(), 2),
         googleId: '3',
         tenantId: '3',
-        tenantName: 'Telekom',
+        tenant: dummyTenant,
       },
     ],
   },

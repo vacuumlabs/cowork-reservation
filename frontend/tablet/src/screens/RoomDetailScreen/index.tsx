@@ -5,7 +5,7 @@ import SystemNavigationBar from 'react-native-system-navigation-bar'
 import { hoursToSeconds, minutesToSeconds } from 'date-fns'
 
 import { NavigatorStackParamList } from '..'
-import { Typography, Screen, Grid, Button, theme } from '../../components'
+import { Typography, Screen, Grid, Button } from '../../components'
 import Clock from './Clock'
 import Header from './Header'
 import Footer from './Footer/Footer'
@@ -25,8 +25,15 @@ const RoomDetailScreen: React.FC<RoomDetailProps> = ({
   route,
 }: RoomDetailProps) => {
   const { room } = route.params
-  const changeDate = room ? findRoomNextChangeDate(room) : undefined
-  const currentEvent = room ? findRoomCurrentEvent(room) : undefined
+  if (!room)
+    return (
+      <Screen>
+        <Typography variant="h1">Room not found</Typography>
+      </Screen>
+    )
+
+  const changeDate = findRoomNextChangeDate(room)
+  const currentEvent = findRoomCurrentEvent(room)
 
   const currentEventStartEndDate = currentEvent
     ? hoursToSeconds(currentEvent.endDate.getHours()) +
@@ -81,9 +88,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   earlyButton: {
-    top: -theme.spacing.xl,
+    bottom: 90,
     position: 'absolute',
     alignSelf: 'center',
-    opacity: 0.85,
   },
 })
