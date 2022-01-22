@@ -52,7 +52,7 @@ def register_user():
                 invite_to_use = inv
         if invite_to_use != "":
             custom_claims = { 
-                "tenantId": invite_to_use["tenant_id"],
+                "tenantId": str(invite_to_use["tenant_id"]),
                 "role": invite_to_use["role"]}
 
     registration_data = map_registration_data(data, custom_claims)
