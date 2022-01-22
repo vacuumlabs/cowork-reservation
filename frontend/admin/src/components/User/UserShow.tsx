@@ -8,8 +8,9 @@ import {
   TextField,
   useGetIdentity,
 } from 'react-admin'
-import { Typography } from '@mui/material'
-import { User } from 'shared/models'
+import { Typography } from '@material-ui/core'
+
+import { User } from '../../models'
 
 import { getIdToken } from '../../authProvider'
 

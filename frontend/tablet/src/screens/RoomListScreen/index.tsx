@@ -1,7 +1,7 @@
 import React from 'react'
 import { subHours, addHours, subMinutes, addMinutes } from 'date-fns'
 import { StyleSheet } from 'react-native'
-import { Room, Building, City, Tenant } from 'shared/models'
+import { Room, Building, Event, City } from '../../models'
 
 import { NavigationProps } from '..'
 import authProvider from '../../authProvider'
