@@ -7,6 +7,7 @@ from app.models import Event
 from app.models import ServiceAccounts
 from app import db
 from app.user_dao import user_dao
+from app.utils import gcp_print
 
 session = db.session
 
@@ -120,7 +121,8 @@ class SharedDaoMethods:
             calendar = session.query(self.model).filter_by(id=id).first()
             session.delete(calendar)
             session.commit()
-        except:
+        except Exception as err:
+            gcp_print(err)
             return False
         return True
 
