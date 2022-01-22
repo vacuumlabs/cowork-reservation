@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { Admin, fetchUtils, Resource } from 'react-admin'
+import React from 'react'
+import { Admin, Resource, fetchUtils } from 'react-admin'
 import jsonServerProvider from 'ra-data-json-server'
 import simpleRestProvider from 'ra-data-simple-rest'
 
@@ -78,18 +78,6 @@ const USER_RESOURCES = [
 ]
 
 const App: React.FC = () => {
-  // TEMP console.log firebase idToken for dev purposes
-  useEffect(() => {
-    const logIdToken = async () => {
-      // eslint-disable-next-line no-console
-      console.log(await getIdToken())
-    }
-
-    if (process.env.NODE_ENV === 'development') {
-      logIdToken()
-    }
-  }, [])
-
   return (
     <Admin
       dataProvider={dataProvider}

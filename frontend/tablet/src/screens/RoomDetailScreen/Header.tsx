@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { format } from 'date-fns'
 
-import { Typography, Button, Grid } from '../../components'
+import { Typography, Grid } from '../../components'
+import FindRoomModal from './FindRoom/FindRoomModal'
 
 const Header: React.FC = () => {
   const [dateTime, setDateTime] = useState(new Date())
@@ -21,12 +22,7 @@ const Header: React.FC = () => {
         <Typography variant="h4">{format(dateTime, 'EEEE, MMM dd')}</Typography>
       </View>
 
-      <Button
-        title="Find Room"
-        // TODO Add find room drawer
-        // eslint-disable-next-line no-console
-        onPress={() => console.log('TODO Open find room drawer')}
-      />
+      <FindRoomModal />
     </Grid>
   )
 }

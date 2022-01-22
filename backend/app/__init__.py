@@ -1,8 +1,10 @@
 import os
+import logging
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, render_template
 from flask_migrate import Migrate
 from flask_cors import CORS
+from app.utils import config_logging, gcp_print
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -10,14 +12,19 @@ migrate = Migrate()
 
 def create_app(config_filename):
     app = Flask(__name__)
-    CORS(app)
-    app.config.from_pyfile(config_filename)
-    if new_value := os.environ.get("SQLALCHEMY_DATABASE_URI"):
-        app.config["SQLALCHEMY_DATABASE_URI"] = new_value
-    db.init_app(app)
-    migrate.init_app(app, db)
-    register_blueprints(app)
-    register_error_handlers(app)
+    try:
+        config_logging
+        CORS(app)
+        app.config.from_pyfile(config_filename)
+        if new_value := os.environ.get("SQLALCHEMY_DATABASE_URI"):
+            app.config["SQLALCHEMY_DATABASE_URI"] = new_value
+        db.init_app(app)
+        migrate.init_app(app, db)
+        register_blueprints(app)
+        register_error_handlers(app)
+    except Exception as error:
+        gcp_print(str(error))
+        logging.exception(error)
     return app
 
 
@@ -28,6 +35,10 @@ def register_blueprints(app: Flask):
     from .api.calendar import calendar_bp
     from .api.room import room_bp
     from .api.event import event_bp
+    from .api.users import users_bp
+    from .api.building import building_bp
+    from .api.city import city_bp
+    from .api.invitations import invites_bp
 
     # Blueprints registrations
     app.register_blueprint(default_bp)
@@ -36,6 +47,10 @@ def register_blueprints(app: Flask):
     app.register_blueprint(calendar_bp)
     app.register_blueprint(room_bp)
     app.register_blueprint(event_bp)
+    app.register_blueprint(users_bp)
+    app.register_blueprint(building_bp)
+    app.register_blueprint(city_bp)
+    app.register_blueprint(invites_bp)
 
 
 def register_error_handlers(app: Flask):
