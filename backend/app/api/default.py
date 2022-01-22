@@ -60,12 +60,12 @@ def register_user():
 
     registration_data = map_registration_data(data, custom_claims)
     if not all(k in registration_data for k in ('display_name', 'email', 'password')):
-        return default_service.response({"status": 400,"error": "Registration data not provided"}, status_code=400)
+        return default_service.response({"status": 400, "message": "Registration data not provided"}, status_code=400)
     map_registration_data(data, custom_claims)
     try:
         new_user = auth.create_user(**registration_data)
     except Exception as e:
-        return default_service.response({"error": str(e)}, status_code=400)
+        return default_service.response({"status": 400, "message": str(e)}, status_code=400)
     if custom_claims:
         auth.set_custom_user_claims(new_user.uid, custom_claims)
     if invite_to_use and not invite_to_use["domain"]:
