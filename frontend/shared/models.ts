@@ -52,4 +52,5 @@ export type RoomEvent = {
   endDate: Date
   googleId: string
   tenantId: string
+  tenant: Tenant
 }

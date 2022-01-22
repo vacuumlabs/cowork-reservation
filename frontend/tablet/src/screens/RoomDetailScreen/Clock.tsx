@@ -12,18 +12,19 @@ const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
 type ClockProps = {
   color: Extract<ColorVariant, 'turquoise' | 'red'>
   max: number
+  bookedTime?: number
 }
 
 const Clock: (props: ClockProps) => JSX.Element = ({
   color,
   max,
+  bookedTime,
 }: ClockProps) => {
   const animated = React.useRef(new Animated.Value(0)).current
   const circleRef = React.useRef<View>(null)
   const inputRef = React.useRef<TextInput>(null)
   const circumference = 2 * Math.PI * RADIUS
   const halfCircle = RADIUS + STROKE_WIDTH
-  const timeLeft = 10
 
   const animation = (toValue: number) => {
     return Animated.timing(animated, {
@@ -32,27 +33,55 @@ const Clock: (props: ClockProps) => JSX.Element = ({
       useNativeDriver: true,
       easing: Easing.out(Easing.ease),
     }).start(() => {
-      animation(toValue === 0 ? 10 : toValue - 1)
+      animation(toValue === 0 ? max : toValue - 1)
     })
   }
 
   React.useEffect(() => {
-    animation(timeLeft)
-    animated.addListener((v) => {
-      const maxPerc = (100 * v.value) / max
-      const strokeDashoffset = circumference - (circumference * maxPerc) / 100
-      if (inputRef?.current) {
-        const sec = Math.round(v.value)
-        inputRef.current.setNativeProps({
-          text: `00:00:${sec < 10 ? '0' : ''}${sec}`,
-        })
-      }
-      if (circleRef?.current) {
-        circleRef.current.setNativeProps({
-          strokeDashoffset: -strokeDashoffset,
-        })
-      }
-    })
+    animation(max)
+    if (max !== 1) {
+      animated.addListener((v) => {
+        const maxPerc = bookedTime
+          ? (100 * v.value) / bookedTime
+          : (100 * v.value) / max
+        const strokeDashoffset = circumference - (circumference * maxPerc) / 100
+        if (inputRef?.current) {
+          const hours = Math.floor(v.value / 3600)
+          const minutes = Math.floor((v.value - hours * 3600) / 60)
+          const seconds = Math.floor(v.value) - hours * 3600 - minutes * 60
+          inputRef.current.setNativeProps({
+            text: `${hours < 10 ? '0' : ''}${hours}:${
+              minutes < 10 ? '0' : ''
+            }${minutes}:${seconds < 10 ? '0' : ''}${seconds}`,
+          })
+        }
+        if (circleRef?.current) {
+          circleRef.current.setNativeProps({
+            strokeDashoffset: -strokeDashoffset,
+          })
+        }
+      })
+    } else {
+      animated.addListener((v) => {
+        const maxPerc = (100 * v.value) / max
+        const strokeDashoffset = circumference - (circumference * maxPerc) / 100
+        if (inputRef?.current) {
+          const hours = new Date().getHours()
+          const minutes = new Date().getMinutes()
+          const seconds = new Date().getSeconds()
+          inputRef.current.setNativeProps({
+            text: `${hours < 10 ? '0' : ''}${hours}:${
+              minutes < 10 ? '0' : ''
+            }${minutes}:${seconds < 10 ? '0' : ''}${seconds}`,
+          })
+        }
+        if (circleRef?.current) {
+          circleRef.current.setNativeProps({
+            strokeDashoffset: strokeDashoffset + 1,
+          })
+        }
+      })
+    }
 
     return () => {
       animated.removeAllListeners()
@@ -74,11 +103,13 @@ const Clock: (props: ClockProps) => JSX.Element = ({
             r={RADIUS}
             fill={theme.colors[color]}
             fillOpacity={color === 'turquoise' ? 0.1 : 0.3}
-            stroke={theme.colors[color]}
+            stroke={
+              max === 1 ? theme.colors.backgroundLight : theme.colors[color]
+            }
             strokeWidth={STROKE_WIDTH}
             strokeLinecap="round"
             strokeDashoffset={circumference}
-            strokeDasharray={circumference}
+            strokeDasharray={color === 'turquoise' ? 0 : circumference}
           />
         </G>
       </Svg>

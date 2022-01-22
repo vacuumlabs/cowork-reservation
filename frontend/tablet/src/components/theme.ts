@@ -6,7 +6,7 @@ export type ColorVariant =
   | 'backgroundDarker'
 export type TypographyColorVariant = 'turquoise' | 'white' | 'black' | 'gray'
 export type TypographyVariant = 'h1' | 'h2' | 'h3' | 'h4' | 'body' | 'button'
-type SizeVariant = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+export type SizeVariant = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
 const SPACING_UNIT = 8
 
@@ -20,6 +20,13 @@ const theme = {
     md: spacing(2),
     lg: spacing(2.5),
     xl: spacing(4),
+  } as { [key in SizeVariant]: number },
+  iconSizeVariant: {
+    xs: 20,
+    sm: 24,
+    md: 28,
+    lg: 32,
+    xl: 48,
   } as { [key in SizeVariant]: number },
   colors: {
     turquoise: '#36DABC',

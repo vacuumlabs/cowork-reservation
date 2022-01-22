@@ -40,3 +40,21 @@ export const formatDuration: (duration: Duration) => string = (duration) => {
     duration.minutes
   )}:${formatLessThanTen(duration.seconds)}`
 }
+
+export const diffChangeDateAndNow: (changeDate: Date | undefined) => number = (
+  changeDate
+) => {
+  const now = new Date()
+  if (changeDate) {
+    return (changeDate.getTime() - now.getTime()) / 1000
+  } else return 1
+}
+
+export const findRoomCurrentEvent: (room: Room) => RoomEvent | undefined = (
+  room
+) => {
+  const now = new Date()
+  return room.events.find(
+    (event) => event.startDate < now && now < event.endDate
+  )
+}
