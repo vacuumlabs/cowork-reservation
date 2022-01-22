@@ -2,6 +2,7 @@ import configparser
 import logging
 import logging.config
 import google.cloud.logging
+import json
 
 from flask import Flask
 
@@ -36,6 +37,12 @@ def config_logging():
     )
     logger = logging.getLogger("root")
     logger.debug("logging.conf got")
+
+def gcp_print(message: str):
+    print(json.dumps(str(message)))
+    import sys
+
+    sys.stdout.flush()
 
 
 def migrate_database(app: Flask):
