@@ -10,6 +10,7 @@ import {
 } from 'react-admin'
 import { Typography } from '@mui/material'
 import { User, UserRole } from 'shared/models'
+import { Link } from 'react-router-dom'
 
 import { getIdToken } from '../../authProvider'
 
@@ -55,6 +56,13 @@ const UserShow: (props: ShowProps) => JSX.Element = (props) => {
             </ReferenceField>
           )}
           <TextField source="role" />
+          {identity.role === UserRole.TENANT_ADMIN ? (
+            <Link to="/calendar" className="btn btn-primary">
+              Link service account
+            </Link>
+          ) : (
+            <></>
+          )}
         </SimpleShowLayout>
       )}
     </Show>

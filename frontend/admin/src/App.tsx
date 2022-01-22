@@ -12,10 +12,11 @@ import Layout from './components/Layout'
 import City from './components/City'
 import Building from './components/Building'
 import LoginPage from './components/LoginPage'
+import CustomRoutes from './CustomRoutes'
 
 // TODO extract to env file
 const USE_BACKEND_API = true
-const BACKEND_URL = 'https://cowork-reservation-jjr73225zq-lm.a.run.app/'
+const BACKEND_URL = 'https://cowork-reservation-f43a6j7azq-ez.a.run.app/'
 
 const jsonProvider = jsonServerProvider(
   'https://my-json-server.typicode.com/Bandius/myJsonServer'
@@ -84,6 +85,7 @@ const App: React.FC = () => {
       authProvider={authProvider}
       loginPage={LoginPage}
       layout={Layout}
+      customRoutes={CustomRoutes}
     >
       {(permissions) =>
         permissions === UserRole.SUPER_ADMIN
