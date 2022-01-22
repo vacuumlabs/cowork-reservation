@@ -30,10 +30,10 @@ const uiConfig = {
 }
 
 function LoginPage(): JSX.Element {
-  const [showRegister, setShowRegister] = useState(true)
+  const [showRegister, setShowRegister] = useState(false)
   return (
     <Login>
-      {showRegister ? (
+      {!showRegister ? (
         <>
           <StyledFirebaseAuth
             uiConfig={uiConfig}
@@ -46,19 +46,23 @@ function LoginPage(): JSX.Element {
             justifyContent="center"
             flexDirection="column"
           >
-            <Typography align="center">Don&apos;t have an account?</Typography>
+            <Box pb={1}>
+              <Typography align="center">
+                Don&apos;t have an account?
+              </Typography>
+            </Box>
 
             <Button
               variant="contained"
               color="primary"
-              onClick={() => setShowRegister(!showRegister)}
+              onClick={() => setShowRegister(true)}
             >
               Sign up
             </Button>
           </Box>
         </>
       ) : (
-        <RegisterPage />
+        <RegisterPage setShowRegister={setShowRegister} />
       )}
     </Login>
   )

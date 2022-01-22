@@ -1,8 +1,20 @@
 import React, { useState } from 'react'
 import { LoadingIndicator, useMutation } from 'react-admin'
-import { makeStyles, TextField, Button, Card, Grid } from '@material-ui/core'
+import {
+  makeStyles,
+  TextField,
+  Button,
+  Card,
+  Grid,
+  Typography,
+  Box,
+} from '@material-ui/core'
 
-function RegisterPage(): JSX.Element {
+type RegisterPageProps = {
+  setShowRegister: (value: boolean) => void
+}
+
+function RegisterPage({ setShowRegister }: RegisterPageProps): JSX.Element {
   const classes = useStyles()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -30,6 +42,7 @@ function RegisterPage(): JSX.Element {
             onChange={(e) => {
               setName(e.target.value)
             }}
+            className={classes.input}
           />
         </Grid>
         <Grid item>
@@ -40,31 +53,50 @@ function RegisterPage(): JSX.Element {
             onChange={(e) => {
               setEmail(e.target.value)
             }}
+            className={classes.input}
           />
         </Grid>
         <Grid item>
           <TextField
             required
             label="Password"
-            type="new-password"
+            type="password"
+            autoComplete="new-password"
             onChange={(e) => {
               setPassword(e.target.value)
             }}
+            className={classes.input}
           />
         </Grid>
         <Grid item>
-          {loading ? (
-            <LoadingIndicator />
-          ) : (
-            <Button
-              variant="contained"
+          <Box
+            p={2}
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Typography
+              align="center"
               color="primary"
-              onClick={register}
-              className={classes.button}
+              onClick={() => setShowRegister(false)}
+              className={classes.signIn}
             >
-              Register
-            </Button>
-          )}
+              Already have an account? Sign in.
+            </Typography>
+            {loading ? (
+              <LoadingIndicator />
+            ) : (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={register}
+                className={classes.button}
+              >
+                Register
+              </Button>
+            )}
+          </Box>
         </Grid>
       </Grid>
     </Card>
@@ -75,9 +107,17 @@ export default RegisterPage
 
 const useStyles = makeStyles({
   registrationCard: {
-    minHeight: 250,
+    minHeight: 300,
+  },
+  input: {
+    width: 220,
+  },
+  signIn: {
+    marginTop: 8,
+    marginBottom: 8,
+    cursor: 'pointer',
   },
   button: {
-    marginTop: 16,
+    width: '100%',
   },
 })
