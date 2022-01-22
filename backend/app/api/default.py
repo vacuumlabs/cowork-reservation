@@ -33,7 +33,7 @@ def register_user():
     custom_claims = {}
     invite_to_use = {}
     if not data:
-        return default_service.response({"error": "Registration data not provided"}, status_code=400)
+        return default_service.response({"status": 400, "message": "Registration data not provided"}, status_code=400)
     if not "email" in data:
         return default_service.response(status_code=400)
     email = data["email"]
@@ -60,7 +60,7 @@ def register_user():
 
     registration_data = map_registration_data(data, custom_claims)
     if not all(k in registration_data for k in ('display_name', 'email', 'password')):
-        return default_service.response({"error": "Registration data not provided"}, status_code=400)
+        return default_service.response({"status": 400,"error": "Registration data not provided"}, status_code=400)
     map_registration_data(data, custom_claims)
     try:
         new_user = auth.create_user(**registration_data)
