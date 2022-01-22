@@ -23,16 +23,20 @@ def get_building_one(id):
 
 @building_bp.route("/buildings/<id>", methods=["PUT"])
 def update_building(id):
-    if not have_claims(request.headers.get("Authorization"),"SUPER_ADMIN"):
+    accessible_roles = ["SUPER_ADMIN"]
+    returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
+    if not returned_value["have_access"]:
         return building_service.response(status_code=403)
+        
     data = request.json
     return building_service.response(building_dao.update(id, data))
 
 @building_bp.route("/buildings/<id>", methods=["DELETE"])
 def delete_building(id):
-    if not have_claims(request.headers.get("Authorization"),"SUPER_ADMIN"):
+    accessible_roles = ["SUPER_ADMIN"]
+    returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
+    if not returned_value["have_access"]:
         return building_service.response(status_code=403)
-    returned_value = have_claims(request.headers.get("Authorization"),"SUPER_ADMIN")
 
     holder = building_dao.get_one(id)
     tenant_service = service_accounts_dao.get_by_tennant_id(returned_value['tenant_id'])
@@ -43,9 +47,10 @@ def delete_building(id):
 
 @building_bp.route("/buildings", methods=["POST"])
 def create_building():
-    if not have_claims(request.headers.get("Authorization"),"SUPER_ADMIN"):
+    accessible_roles = ["SUPER_ADMIN"]
+    returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
+    if not returned_value["have_access"]:
         return building_service.response(status_code=403)
-    returned_value = have_claims(request.headers.get("Authorization"),"SUPER_ADMIN")
 
     data = request.json
     tenant_service = service_accounts_dao.get_by_tennant_id(returned_value['tenant_id'])

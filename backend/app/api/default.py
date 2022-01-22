@@ -108,9 +108,8 @@ def get_serviceaccount(id):
 
 @default_bp.route("/serviceaccount", methods=["POST"])
 def create_serviceaccount():
-    if not have_claims(request.headers.get("Authorization"),"SUPER_ADMIN"):
-        return serviceaccount_service.response(status_code=403)
-    returned_value = have_claims(request.headers.get("Authorization"),"SUPER_ADMIN")
+    accessible_roles = ["SUPER_ADMIN"]
+    returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
 
     if returned_value["have_access"]:
         data = request.json
@@ -127,7 +126,9 @@ def create_serviceaccount():
 
 @default_bp.route("/serviceaccount/<id>", methods=["DELETE"])
 def delete_serviceaccount(id):
-    if not have_claims(request.headers.get("Authorization"),"SUPER_ADMIN"):
+    accessible_roles = ["SUPER_ADMIN"]
+    returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
+    if not returned_value["have_access"]:
         return serviceaccount_service.response(status_code=403)
 
     service_accounts_dao.delete(id)
