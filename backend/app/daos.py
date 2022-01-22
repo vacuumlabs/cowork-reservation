@@ -9,6 +9,21 @@ from app import db
 
 session = db.session
 
+def change_to_db(data):
+    sub = '.'
+    if sub in data:
+        data = data.split('.')
+        return data[0]
+    else:
+        substring = "+"
+        if substring in data:
+            data = data.split("+")
+            return data[0]
+        else:
+            datas = data.split('T')
+            data = datas[0]+'T'+(datas[1].split('-')[0])
+            return data
+
 
 class SharedDaoMethods:
     def __init__(self, model):
@@ -207,7 +222,7 @@ class RoomDAO(SharedDaoMethods):
             for room in results:
                 room_events_filters = {"room_id": room["id"]}
                 if with_next_events:
-                    room_events_filters["_after"] = datetime.datetime.now()
+                    room_events_filters["after"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
                 room_events = event_dao.get_all(filters=room_events_filters)
                 if room_events: room_events = room_events["data"]
                 room["room_events"] = room_events
@@ -249,15 +264,15 @@ class EventDAO(SharedDaoMethods):
         x_total_count = 0
         if filters:
             results = self.apply_filters(filters, results)
-            if "_before" in filters:
-                if type(filters["_before"]) is str:
-                    before = datetime.datetime.strptime(filters["_before"], '%Y-%m-%dT%H:%M:%S')
-                else: before = filters["_before"]
+            if "before" in filters:
+                if type(filters["before"]) is str:
+                    before = datetime.datetime.strptime(filters["before"], '%Y-%m-%dT%H:%M:%S')
+                else: before = filters["before"]
                 results = results.filter(Event.start < before)
-            if "_after" in filters:
-                if type(filters["_after"]) is str:
-                    after = datetime.datetime.strptime(filters["_after"], '%Y-%m-%dT%H:%M:%S')
-                else: after = filters["_after"]
+            if "after" in filters:
+                if type(filters["after"]) is str:
+                    after = datetime.datetime.strptime(filters["after"], '%Y-%m-%dT%H:%M:%S')
+                else: after = filters["after"]
                 results = results.filter(Event.end > after)
             x_total_count = results.count()
 
@@ -298,8 +313,8 @@ class EventDAO(SharedDaoMethods):
         event_to_cancel = event_dao.get_one(event_id)
         if not event_to_cancel:
             return {"error": "bad request"}
-        time = datetime.datetime.now()
-        if event_to_cancel["start"] > time:
+        time =  datetime.datetime.now(datetime.timezone.utc).isoformat()
+        if event_to_cancel["start"] > time: #todo change
             return self.delete(event_id)
         if event_to_cancel["end"] < time:
             return event_to_cancel
