@@ -37,6 +37,7 @@ def register_blueprints(app: Flask):
     from .api.users import users_bp
     from .api.building import building_bp
     from .api.city import city_bp
+    from .api.invitations import invites_bp
 
     # Blueprints registrations
     app.register_blueprint(default_bp)
@@ -48,6 +49,7 @@ def register_blueprints(app: Flask):
     app.register_blueprint(users_bp)
     app.register_blueprint(building_bp)
     app.register_blueprint(city_bp)
+    app.register_blueprint(invites_bp)
 
 
 def register_error_handlers(app: Flask):

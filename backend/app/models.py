@@ -1,3 +1,4 @@
+from email.policy import default
 from flask_sqlalchemy.model import DefaultMeta
 from app import db
 
@@ -24,6 +25,7 @@ class Tenant(BaseModel):
 
     calendars = db.relationship("Calendar", backref="tenant")
     events = db.relationship("Event", backref="tenant")
+    invitations = db.relationship("Invitation", backref="tenant")
 
 
 class Event(BaseModel):
@@ -69,3 +71,11 @@ class ServiceAccounts(BaseModel):
     name = db.Column(db.String(255), nullable=False)
     tenant_id = db.Column(db.Integer, db.ForeignKey("tenant.id"))
 
+class Invitation(BaseModel):
+    id = db.Column(db.Integer, primary_key=True)
+    value = db.Column(db.String(255), nullable=False)
+    role = db.Column(db.String(255), nullable=False)
+    tenant_id = db.Column(db.Integer, db.ForeignKey("tenant.id"))
+    expiration = db.Column(db.DateTime)
+    domain = db.Column(db.Boolean, nullable=False, default=False)
+    status = db.Column(db.String(255))
