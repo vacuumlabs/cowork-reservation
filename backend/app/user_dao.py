@@ -8,13 +8,19 @@ class UserDAO:
         # implement filters 
         list_of_users = [] 
         users_count = 0
+        if filters:
+            filters = {}
+
+        if client_data["user_role"] != "SUPER_ADMIN":
+            filters["tenantId"] = client_data["tenant_id"] 
          
         if filters: 
-            if client_data["user_role"] != "SUPER_ADMIN":
-                filters["tenantId"] = client_data["tenant_id"] 
             list_of_users = self.apply_filters(filters, list_of_users) 
-            users_count = len(list_of_users) 
-             
+            users_count = len(list_of_users)
+        else:
+            list_of_users = self.get_user_list_from_firebase()
+            users_count = len(list_of_users)
+        
         if results_range: 
             if users_count == 0: 
                 users_count = len(list_of_users)
@@ -128,9 +134,15 @@ class UserDAO:
     def user_record_to_dict(self, user) -> dict: 
         user_dict = {} 
         user_dict = {"id": user.uid, "name":user.display_name, "email":user.email} 
-        if user.custom_claims: 
-            user_dict = {**user_dict, **user.custom_claims}  
-        return user_dict 
+        custom_claims = user.custom_claims if user.custom_claims else {"role":"", "tenantId":""}
+        user_dict = {**user_dict, **custom_claims} 
+        return user_dict
+
+    def get_user_list_from_firebase(self) -> list:
+        u_list = []
+        for user in auth.list_users().iterate_all():  
+            u_list.append(self.user_record_to_dict(user))
+        return u_list
          
  
 user_dao = UserDAO()
