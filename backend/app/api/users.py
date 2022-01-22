@@ -40,14 +40,13 @@ def create_tenant_admin():
  
 @users_bp.route("/users/<id>", methods=["DELETE"]) 
 def del_tenant(id): 
-    accessible_roles = ["SUPER_ADMIN"] 
+    accessible_roles = ["SUPER_ADMIN","TENANT_ADMIN"] 
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles) 
     if returned_value["have_access"]: 
-        success = user_dao.delete_user(id) 
+        '''success = user_dao.delete_user(id)
         if success: 
-            return user_service.response() 
-        else: 
-            return user_service.response(status_code=500) 
+            return user_service.response() '''
+        return  user_service.response(user_dao.update_user(have_claims, id, {"role":"", "tenantId": ""}))
     return user_service.response(status_code=403) 
  
 @users_bp.route("/users/<id>", methods=["PUT"]) 
