@@ -1,6 +1,5 @@
 from firebase_admin import auth 
 from typing import Iterable 
-from app.daos import tenant_dao 
 import operator 
  
 class UserDAO: 
@@ -12,7 +11,7 @@ class UserDAO:
          
         if filters: 
             if client_data["user_role"] != "SUPER_ADMIN":
-                filters["tenant_id"] = client_data["tenant_id"] 
+                filters["tenantId"] = client_data["tenant_id"] 
             list_of_users = self.apply_filters(filters, list_of_users) 
             users_count = len(list_of_users) 
              
@@ -57,7 +56,6 @@ class UserDAO:
             if not user.custom_claims: 
                 continue 
             entry = self.user_record_to_dict(user) 
-            print("it" in "shit",type(entry["tenantId"]), ap_filters, entry)
             valid_in_all_filters = True 
             for key, value in ap_filters.items(): 
                 under_this_filter = False 
@@ -127,15 +125,11 @@ class UserDAO:
         else:
             return desired_user if desired_user["tenant_id"] == client_data["tenant_id"] else {}
                 
-    def user_record_to_dict(self, user, add_tenant_name: bool = False) -> dict: 
+    def user_record_to_dict(self, user) -> dict: 
         user_dict = {} 
         user_dict = {"id": user.uid, "name":user.display_name, "email":user.email} 
         if user.custom_claims: 
-            user_dict = {**user_dict, **user.custom_claims} 
-            if add_tenant_name: 
-                tenant = tenant_dao.get_one(int(user_dict["tenant_id"])) 
-                if "name" in tenant: 
-                    user_dict["tenant"] = tenant["name"]   
+            user_dict = {**user_dict, **user.custom_claims}  
         return user_dict 
          
  
