@@ -8,7 +8,7 @@ class UserDAO:
         # implement filters 
         list_of_users = [] 
         users_count = 0
-        if filters:
+        if not filters:
             filters = {}
 
         if client_data["user_role"] != "SUPER_ADMIN":
