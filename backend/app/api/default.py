@@ -23,6 +23,66 @@ def get_site():
     # TODO: Replace with correct html file
     return render_template("base.html")
 
+@default_bp.route("/register", methods=["POST"])
+def register_user():
+    from app.daos import invites_dao
+    from app.user_dao import user_dao
+    from app.services import default_service
+    from app.firebase_utils import auth
+    data = request.json
+    custom_claims = {}
+    invite_to_use = {}
+    if not data:
+        return default_service.response({"error": "Registration data not provided"}, status_code=400)
+    if not "email" in data:
+        return default_service.response(status_code=400)
+    email = data["email"]
+    try:
+        domain = "@" + email.split("@")[1]    
+    except:
+        domain = ""
+    filters = {"value": [email, domain]}
+    check_invites = invites_dao.get_all(filters,[],[])["data"]
+    if len(check_invites) > 0:
+        invite_to_use = ""
+        for inv in check_invites:
+            if inv["status"] != "Active":
+                continue
+            if inv["value"] == email:
+                invite_to_use = inv
+                break
+            elif inv["value"] == domain:
+                invite_to_use = inv
+        if invite_to_use != "":
+            custom_claims = { 
+                "tenantId": str(invite_to_use["tenant_id"]),
+                "role": invite_to_use["role"]}
+
+    registration_data = map_registration_data(data, custom_claims)
+    if not all(k in registration_data for k in ('display_name', 'email', 'password')):
+        return default_service.response({"error": "Registration data not provided"}, status_code=400)
+    map_registration_data(data, custom_claims)
+    try:
+        new_user = auth.create_user(**registration_data)
+    except Exception as e:
+        return default_service.response({"error": str(e)}, status_code=400)
+    if custom_claims:
+        auth.set_custom_user_claims(new_user.uid, custom_claims)
+    if invite_to_use and not invite_to_use["domain"]:
+        invites_dao.update(invite_to_use["id"], {"status": "Used"})
+    return default_service.response(user_dao.user_record_to_dict(new_user), status_code=201)
+
+def map_registration_data(data: dict = None, custom_claims: dict = None):
+    registration_data = {}
+    if "display_name" in data:
+        registration_data["display_name"] = data["display_name"]
+    if "name" in data:
+        registration_data["display_name"] = data["name"]
+    if "email" in data:
+        registration_data["email"] = data["email"]
+    if "password" in data:
+        registration_data["password"] = data["password"]
+    return registration_data
 
 
 

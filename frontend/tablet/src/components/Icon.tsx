@@ -1,5 +1,4 @@
 import React from 'react'
-import { View } from 'react-native'
 import FontAwesome, {
   SolidIcons,
   RegularIcons,
@@ -7,7 +6,7 @@ import FontAwesome, {
   parseIconFromClassName,
 } from 'react-native-fontawesome'
 
-import theme, { TypographyColorVariant } from './theme'
+import theme, { SizeVariant, TypographyColorVariant } from './theme'
 
 // browse icons at https://fontawesome.com/v5.15/icons?d=gallery&p=2
 
@@ -17,22 +16,22 @@ type IconProps = {
     | keyof typeof RegularIcons
     | keyof typeof BrandIcons
   color?: TypographyColorVariant
+  size?: SizeVariant
 }
 
-const Icon: React.FC<IconProps> = ({ name, color }) => {
+const Icon: React.FC<IconProps> = ({ name, color, size = 'md' }) => {
   return (
-    <View>
-      <FontAwesome
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        icon={parseIconFromClassName(name)}
-        style={{
-          color: color
-            ? theme.typographyColors[color]
-            : theme.colors.backgroundDark,
-        }}
-      />
-    </View>
+    <FontAwesome
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      icon={parseIconFromClassName(name)}
+      style={{
+        color: color
+          ? theme.typographyColors[color]
+          : theme.colors.backgroundDark,
+        fontSize: theme.iconSizeVariant[size],
+      }}
+    />
   )
 }
 

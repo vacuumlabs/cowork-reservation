@@ -1,3 +1,4 @@
+from time import sleep
 from firebase_admin import auth
 import firebase_admin
 from firebase_admin import credentials
@@ -5,6 +6,7 @@ import firebase_admin.auth as faa
 from flask import jsonify, request, render_template
 import os
 import json
+from app.utils import gcp_print
 
 
 
@@ -25,19 +27,25 @@ def is_logged(id_token):
     try:
         auth.verify_id_token(id_token)
         return True
-    except (faa.TokenSignError, faa.ExpiredIdTokenError, faa.InvalidIdTokenError, faa.RevokedIdTokenError):
+    except (faa.TokenSignError, faa.ExpiredIdTokenError, faa.InvalidIdTokenError, faa.RevokedIdTokenError) as err:
+        gcp_print(err)
         return False
     
 #Check if is valid user and return user uid
 def get_logged_uid(id_token):
-    if not id_token:
-        return render_template("error.html"), 403
     try:
-        decoded_token = auth.verify_id_token(id_token)
+        decoded_token = {}
+        try:
+            decoded_token = auth.verify_id_token(id_token)
+        except: 
+            #sleep needed cause of desynchronization of time between client and server
+            sleep(1)
+            decoded_token = auth.verify_id_token(id_token)
         uid = decoded_token['uid']
-        return uid
-    except (faa.TokenSignError, faa.ExpiredIdTokenError, faa.InvalidIdTokenError, faa.RevokedIdTokenError):
-        return render_template("error.html"), 403
+        return {"uid": uid}
+    except (faa.TokenSignError, faa.ExpiredIdTokenError, faa.InvalidIdTokenError, faa.RevokedIdTokenError) as err:
+        gcp_print(err)
+        return None
 
 #Check if is valid user and return user uid---NEW-VERSION
 def get_logged_uid_new(id_token):
@@ -47,7 +55,8 @@ def get_logged_uid_new(id_token):
         decoded_token = auth.verify_id_token(id_token)
         uid = decoded_token['uid']
         return uid
-    except (faa.TokenSignError, faa.ExpiredIdTokenError, faa.InvalidIdTokenError, faa.RevokedIdTokenError):
+    except (faa.TokenSignError, faa.ExpiredIdTokenError, faa.InvalidIdTokenError, faa.RevokedIdTokenError) as err:
+        gcp_print(err)
         return 0
 
 #Check if user have needed claims       
@@ -57,17 +66,22 @@ def have_claims(id_token, claims = "*") -> list:
     if not id_token:
         values_for_return = {"have_access":False}
         return values_for_return  
-    user_auth_token = get_token_from_cookies(id_token)
-    custom_claim = get_required_info(user_auth_token)
+    custom_claim = get_required_info(id_token)
+    if not custom_claim:
+        values_for_return = {"have_access":False}
+        return values_for_return
     for claim in claims:
-        if custom_claim[0] == claim or claim == "*":
+        if custom_claim["user_role"] == claim or claim == "*":
             have_access = True
-    values_for_return = {"have_access":have_access, "tenant_id":custom_claim[1], "user_role":custom_claim[0]}
-    return values_for_return
+    values_for_return = {"have_access":have_access, "tenant_id":custom_claim["tenant_id"], "user_role":custom_claim["user_role"]}
+    return values_for_return 
 
 def get_required_info(id_token) -> list:
-    user = auth.get_user(get_logged_uid(id_token))
-    values_for_return = [user.custom_claims.get("role"), user.custom_claims.get("tenantId")]
+    returned = get_logged_uid(id_token)
+    if not "uid" in returned:
+        return None
+    user = auth.get_user(returned["uid"])
+    values_for_return = {"user_role":user.custom_claims.get("role"),"tenant_id": user.custom_claims.get("tenantId")}
     return values_for_return
 
 #Return custom claims of user
