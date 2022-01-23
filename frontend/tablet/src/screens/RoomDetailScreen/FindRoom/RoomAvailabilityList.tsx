@@ -15,12 +15,16 @@ const getSplitRoomList = (rooms: Room[], currentRoom?: Room) => {
   return currentRoom
     ? [
         {
-          title: 'Floor',
+          title: `Floor ${currentRoom.floor}`,
           data: rooms.filter((r) => r.floor === currentRoom.floor),
         },
         {
-          title: 'Building',
-          data: rooms.filter((r) => r.building.id === currentRoom.building.id),
+          title: `Rest of ${currentRoom.building.name}`,
+          data: rooms.filter(
+            (r) =>
+              r.building.id === currentRoom.building.id &&
+              r.floor !== currentRoom.floor
+          ),
         },
       ]
     : [{ title: 'Rooms', data: rooms }]
