@@ -51,7 +51,7 @@ def del_tenant(id):
  
 @users_bp.route("/users/<id>", methods=["PUT"]) 
 def update_tenant_admin(id): 
-    accessible_roles = ["SUPER_ADMIN"] 
+    accessible_roles = ["SUPER_ADMIN", "TENANT_ADMIN", "USER"] 
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles) 
     if returned_value["have_access"]: 
         data = request.json 
