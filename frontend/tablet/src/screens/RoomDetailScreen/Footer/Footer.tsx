@@ -5,21 +5,21 @@ import { Grid } from '../../../components'
 import Event from './Event'
 import QuickActions from './QuickActions'
 
-type FooterProps = {
-  currentRoomId: string
-}
-
-const Footer: React.FC<FooterProps> = ({ currentRoomId }) => {
+const Footer: React.FC = () => {
   return (
     <Grid direction="row" justify="space-between" stretch>
-      <Grid justify="flex-end" style={styles.sideWrapper}>
-        <Event eventVariant="current" currentRoomId={currentRoomId} />
+      <Grid
+        justify="flex-end"
+        alignItems="flex-start"
+        style={styles.sideWrapper}
+      >
+        <Event eventVariant="current" />
       </Grid>
       <Grid justify="flex-end" style={styles.centerWrapper}>
-        <QuickActions currentRoomId={currentRoomId} />
+        <QuickActions />
       </Grid>
-      <Grid justify="flex-end" style={styles.sideWrapper}>
-        <Event eventVariant="next" currentRoomId={currentRoomId} />
+      <Grid justify="flex-end" alignItems="flex-end" style={styles.sideWrapper}>
+        <Event eventVariant="next" />
       </Grid>
     </Grid>
   )
@@ -30,6 +30,7 @@ export default Footer
 const styles = StyleSheet.create({
   sideWrapper: {
     flexGrow: 1,
+    width: 250,
   },
   centerWrapper: {
     flexGrow: 3,

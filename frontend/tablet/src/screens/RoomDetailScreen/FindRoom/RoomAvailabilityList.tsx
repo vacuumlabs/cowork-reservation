@@ -1,34 +1,42 @@
 import React from 'react'
 import { SectionList, StyleSheet, View } from 'react-native'
-import { Room } from 'shared/models'
 
 import { theme, Typography } from '../../../components'
+import { Room } from '../../../models'
 import { findRoomNextChangeDate, isRoomAvailable } from '../../../utils'
 import RoomListItem from './RoomListItem'
 
 type RoomAvailabilityListProps = {
   rooms: Room[]
+  currentRoomId: string
 }
 
-const getSplitRoomList = (rooms: Room[]) => {
-  return [
-    { title: 'Floor', data: rooms },
-    { title: 'Building', data: rooms },
-    { title: 'Building', data: rooms },
-    { title: 'Building', data: rooms },
-    { title: 'Building', data: rooms },
-    { title: 'Building', data: rooms },
-  ]
+const getSplitRoomList = (rooms: Room[], currentRoom?: Room) => {
+  return currentRoom
+    ? [
+        {
+          title: 'Floor',
+          data: rooms.filter((r) => r.floor === currentRoom.floor),
+        },
+        {
+          title: 'Building',
+          data: rooms.filter((r) => r.building.id === currentRoom.building.id),
+        },
+      ]
+    : [{ title: 'Rooms', data: rooms }]
 }
 
 const RoomAvailabilityList: React.FC<RoomAvailabilityListProps> = ({
   rooms,
+  currentRoomId,
 }) => {
+  const currentRoom = rooms.find((r) => r.id === currentRoomId)
+
   return (
     <SectionList
       scrollEnabled
       stickySectionHeadersEnabled
-      sections={getSplitRoomList(rooms)}
+      sections={getSplitRoomList(rooms, currentRoom)}
       keyExtractor={(item, index) => item.id + index}
       renderItem={({ item }) => (
         <RoomListItem

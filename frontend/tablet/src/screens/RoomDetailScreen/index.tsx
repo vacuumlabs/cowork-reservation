@@ -1,10 +1,8 @@
-import { StackScreenProps } from '@react-navigation/stack'
-import React from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet } from 'react-native'
 import SystemNavigationBar from 'react-native-system-navigation-bar'
 import { hoursToSeconds, minutesToSeconds } from 'date-fns'
 
-import { NavigatorStackParamList } from '..'
 import { Typography, Screen, Grid, Button } from '../../components'
 import Clock from './Clock'
 import Header from './Header'
@@ -15,23 +13,29 @@ import {
   findRoomNextChangeDate,
   isRoomAvailable,
 } from '../../utils'
+import { DataContext } from '../../contexts/DataContext'
 
-type RoomDetailProps = StackScreenProps<
-  NavigatorStackParamList,
-  'RoomDetailScreen'
->
+const RoomDetailScreen: React.FC = () => {
+  const { rooms, isLoading, currentRoomId, endCurrentEvent } =
+    useContext(DataContext)
 
-const RoomDetailScreen: React.FC<RoomDetailProps> = ({
-  route,
-}: RoomDetailProps) => {
-  const { room } = route.params
-  if (!room)
+  if (!rooms || isLoading)
     return (
       <Screen>
-        <Typography variant="h1">Room not found</Typography>
+        <Typography variant="h2">Loading room...</Typography>
       </Screen>
     )
 
+  const room = rooms.find((r) => r.id === currentRoomId)
+
+  if (!room)
+    return (
+      <Screen>
+        <Typography variant="h2">Room not found</Typography>
+      </Screen>
+    )
+
+  const isAvailable = isRoomAvailable(room)
   const changeDate = findRoomNextChangeDate(room)
   const currentEvent = findRoomCurrentEvent(room)
 
@@ -54,7 +58,7 @@ const RoomDetailScreen: React.FC<RoomDetailProps> = ({
         <Grid justify="center" alignItems="center" spacing={2}>
           <Typography variant="h1">{room.name}</Typography>
           <Typography variant="h3">
-            {isRoomAvailable(room) ? 'FREE' : 'BOOKED'}
+            {isAvailable ? 'FREE' : 'BOOKED'}
           </Typography>
           {isRoomAvailable(room) ? (
             <Clock color="turquoise" max={diffChangeDateAndNow(changeDate)} />
@@ -68,14 +72,14 @@ const RoomDetailScreen: React.FC<RoomDetailProps> = ({
           {!isRoomAvailable(room) && (
             <Button
               title="End early"
-              onPress={() => 'TODO end earlier meet'}
+              onPress={() => endCurrentEvent(room.id)}
               variant="error"
               style={styles.earlyButton}
             />
           )}
         </Grid>
 
-        <Footer currentRoomId={room.id} />
+        <Footer />
       </Grid>
     </Screen>
   )

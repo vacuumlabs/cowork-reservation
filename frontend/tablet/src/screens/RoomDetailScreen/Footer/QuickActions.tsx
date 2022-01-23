@@ -1,43 +1,54 @@
 import { addMinutes, isBefore } from 'date-fns'
-import React from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet } from 'react-native'
 
 import { Typography, Grid, theme, Button } from '../../../components'
-import { findRoomNextEvent, isRoomAvailable } from '../../../utils'
-import { dummyRoomList } from '../../RoomListScreen'
+import { DataContext } from '../../../contexts/DataContext'
+import { findRoomCurrentEvent, findRoomNextEvent } from '../../../utils'
 
-const extendMeetingMinutes = [15, 30, 45, 60]
+const buttonMinutes = [15, 30, 45, 60]
 
-type QuickActionsProps = {
-  currentRoomId: string
-}
+const QuickActions: React.FC = () => {
+  const { rooms, isLoading, currentRoomId, bookEvent, extendCurrentEvent } =
+    useContext(DataContext)
 
-const QuickActions: React.FC<QuickActionsProps> = ({ currentRoomId }) => {
-  const room = dummyRoomList.find((r) => r.id === currentRoomId)
+  if (!rooms || isLoading)
+    return <Typography variant="h2">Loading rooms...</Typography>
+
+  const room = rooms.find((r) => r.id === currentRoomId)
 
   if (!room) return null
+  const currentEvent = findRoomCurrentEvent(room)
   const nextEvent = findRoomNextEvent(room)
+  const isAvailable = !currentEvent
 
   return (
     <Grid justify="flex-end" alignItems="center">
       <Typography variant="button" style={styles.title}>
-        {isRoomAvailable(room) ? 'QUICK RESERVATION' : 'EXTEND MEETING'}
+        {isAvailable ? 'QUICK RESERVATION' : 'EXTEND MEETING'}
       </Typography>
       <Grid direction="row" spacing={1}>
-        {extendMeetingMinutes.map((minutes) => {
+        {buttonMinutes.map((minutes) => {
           const isEnoughTime =
             !nextEvent ||
-            isBefore(addMinutes(new Date(), minutes), nextEvent.startDate)
+            isBefore(
+              addMinutes(
+                isAvailable ? new Date() : currentEvent.endDate,
+                minutes
+              ),
+              nextEvent.startDate
+            )
+          const action = () =>
+            isAvailable
+              ? bookEvent(currentRoomId, minutes)
+              : extendCurrentEvent(currentRoomId, minutes)
           return (
             <Button
               key={minutes}
               title={`${minutes} min`}
               variant={isEnoughTime ? 'primary' : 'secondary'}
               onPress={() => {
-                isEnoughTime
-                  ? // eslint-disable-next-line no-console
-                    console.log(`TODO extend by ${minutes} minutes`)
-                  : null
+                isEnoughTime ? action() : null
               }}
             />
           )

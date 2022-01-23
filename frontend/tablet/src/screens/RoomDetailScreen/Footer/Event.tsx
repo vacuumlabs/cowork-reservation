@@ -1,17 +1,21 @@
 import { format } from 'date-fns'
-import React from 'react'
+import React, { useContext } from 'react'
 
 import { Typography, Grid } from '../../../components'
+import { DataContext } from '../../../contexts/DataContext'
 import { findRoomCurrentEvent, findRoomNextEvent } from '../../../utils'
-import { dummyRoomList } from '../../RoomListScreen'
 
 type EventProps = {
   eventVariant: 'current' | 'next'
-  currentRoomId: string
 }
 
-const Event: React.FC<EventProps> = ({ eventVariant, currentRoomId }) => {
-  const room = dummyRoomList.find((r) => r.id === currentRoomId)
+const Event: React.FC<EventProps> = ({ eventVariant }) => {
+  const { rooms, isLoading, currentRoomId } = useContext(DataContext)
+
+  if (!rooms || isLoading)
+    return <Typography variant="h2">Loading rooms...</Typography>
+
+  const room = rooms.find((r) => r.id === currentRoomId)
   if (!room) return null
 
   const event =

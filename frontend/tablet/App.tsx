@@ -3,13 +3,16 @@ import { NavigationContainer } from '@react-navigation/native'
 
 import ScreenNavigator from './src/screens'
 import { UserContextProvider } from './src/contexts/UserContext'
+import { DataContextProvider } from './src/contexts/DataContext'
 
 const App: React.FC = () => {
   return (
     <UserContextProvider>
-      <NavigationContainer>
-        <ScreenNavigator />
-      </NavigationContainer>
+      <DataContextProvider>
+        <NavigationContainer>
+          <ScreenNavigator />
+        </NavigationContainer>
+      </DataContextProvider>
     </UserContextProvider>
   )
 }

@@ -1,16 +1,15 @@
 import Modal from 'react-native-modal'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Dimensions, StyleSheet, View } from 'react-native'
 
 import { Button, Grid, theme, Typography } from '../../../components'
-import { dummyRoomList } from '../../RoomListScreen'
 import RoomAvailabilityList from './RoomAvailabilityList'
+import { DataContext } from '../../../contexts/DataContext'
 
 const { height } = Dimensions.get('window')
 
 const FindRoomModal: React.FC = () => {
-  // TODO replace with fetched data
-  const rooms = dummyRoomList
+  const { rooms, isLoading, currentRoomId } = useContext(DataContext)
   const [isVisible, setIsVisible] = useState(false)
 
   const onOpen = () => {
@@ -28,6 +27,8 @@ const FindRoomModal: React.FC = () => {
       <Modal
         onBackdropPress={onDismiss}
         isVisible={isVisible}
+        animationIn="slideInRight"
+        animationOut="slideOutRight"
         style={styles.modal}
       >
         <Grid style={styles.content} stretch>
@@ -41,7 +42,11 @@ const FindRoomModal: React.FC = () => {
             <Button title="Close" variant="secondary" onPress={onDismiss} />
           </Grid>
 
-          <RoomAvailabilityList rooms={rooms} />
+          {!rooms || isLoading ? (
+            <Typography variant="h2">Loading rooms...</Typography>
+          ) : (
+            <RoomAvailabilityList rooms={rooms} currentRoomId={currentRoomId} />
+          )}
         </Grid>
       </Modal>
     </View>
