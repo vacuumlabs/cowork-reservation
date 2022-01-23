@@ -22,11 +22,17 @@ def get_one_tenant(id):
 
 @tenant_bp.route("/tenants", methods=["GET"])
 def get_tenant_list():
-    accessible_roles = {"SUPER_ADMIN","TENANT_ADMIN"}
+    accessible_roles = ["SUPER_ADMIN","TENANT_ADMIN", "USER"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
     if returned_value["have_access"]:
         url_args = request.args
         params = tenant_service.url_args_to_query_params_dict(url_args)
+        if returned_value["user_role"] in ["TENANT_ADMIN", "USER"]:
+            if "id" in params:
+                if params["id"] != returned_value["tenant_id"]:
+                    return tenant_service.response(status_code=400)
+            else:
+                params["id"] = returned_value["tenant_id"]
         results = tenant_dao.get_all(
             params['filters'],
             params['sort'], 
