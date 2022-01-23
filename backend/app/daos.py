@@ -239,7 +239,7 @@ class RoomDAO(SharedDaoMethods):
 
     def get_all_id_by_name(self, name: str):
         data = session.query(self.model)
-        data = data.filter(Room.building == name)
+        data = data.filter(Room.name == name)
         return self.to_array(data.first())
 
 class EventDAO(SharedDaoMethods):
