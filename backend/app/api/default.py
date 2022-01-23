@@ -138,6 +138,7 @@ def delete_serviceaccount(id):
 
 @default_bp.route("/notification", methods=["POST", "GET"])
 def get_notifications():
+
     notifications = request.headers['X-Goog-Resource-ID']
     id_webhook = request.headers['X-Goog-Channel-ID']
     resourceid = request.headers['X-Goog-Resource-ID']
@@ -166,6 +167,10 @@ def get_notifications():
     gcp_print('./////////////////////////////////////////////////////////.')
 
     get_all_events_that_are_not_in_db = [i for i in web_data if i not in db_data]  # pomocou tohto viem najst nove
+
+
+    gcp_print(get_all_events_that_are_not_in_db)
+    return
 
     if len(get_all_events_that_are_not_in_db) != 0:
         get_data_for_db = calendar_dao.get_one(calendar_id_in_db)
