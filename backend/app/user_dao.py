@@ -132,7 +132,12 @@ class UserDAO:
         if client_data["user_role"] == "SUPER_ADMIN":
             return desired_user
         else:
-            return desired_user if desired_user["tenantId"] == client_data["tenant_id"] else {}
+            if client_data["user_role"] == "TENANT_ADMIN" and desired_user["tenantId"] == client_data["tenant_id"]:
+                return desired_user
+            elif client_data["user_role"] == "USER" and desired_user["id"] == client_data["user_uid"]:
+                return desired_user
+            else:
+                return {}
                 
     def user_record_to_dict(self, user) -> dict: 
         user_dict = {} 
