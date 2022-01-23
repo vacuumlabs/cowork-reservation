@@ -23,8 +23,8 @@ const AddAdminButton = (): JSX.Element => (
   <Button
     startIcon={<AddIcon />}
     component={Link}
-    label="Add Tenant Admin"
-    to={'../../users/create'}
+    label="Invite Tenant Admin"
+    to={'../../invites/create'}
   />
 )
 
@@ -32,17 +32,8 @@ const AddUserButton = (): JSX.Element => (
   <Button
     startIcon={<AddIcon />}
     component={Link}
-    label="Add user via e-mail"
-    to={'../../users/create'}
-  />
-)
-
-const AddDomainButton = (): JSX.Element => (
-  <Button
-    startIcon={<AddIcon />}
-    component={Link}
-    label="Add domain"
-    to={'../../users/create'}
+    label="Invite user or domain"
+    to={'../../invites/create'}
   />
 )
 
@@ -54,10 +45,7 @@ const TenantShow: (props: ShowProps) => JSX.Element = (props) => {
         <TextField source="name" label="" />
         {permissions === UserRole.SUPER_ADMIN
           ? [<AddAdminButton key="adminButton" />]
-          : [
-              <AddUserButton key="userButton" />,
-              <AddDomainButton key="domainButton" />,
-            ]}
+          : [<AddUserButton key="userButton" />]}
         <ReferenceManyField
           fullWidth
           label="Admins"
@@ -66,9 +54,9 @@ const TenantShow: (props: ShowProps) => JSX.Element = (props) => {
           sort={{ field: 'id', order: 'ASC' }}
         >
           <Datagrid rowClick="show">
-            <TextField source="id" />
             <TextField source="name" />
-            <EditButton />
+            <TextField source="id" />
+            {permissions === UserRole.SUPER_ADMIN && <EditButton />}
           </Datagrid>
         </ReferenceManyField>
       </SimpleShowLayout>

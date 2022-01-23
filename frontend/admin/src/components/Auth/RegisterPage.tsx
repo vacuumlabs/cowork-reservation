@@ -34,7 +34,7 @@ function RegisterPage({ setShowRegister }: RegisterPageProps): JSX.Element {
       },
     },
     {
-      onSuccess: ({ data }) => {
+      onSuccess: () => {
         setShowRegister(false)
         notify('Registration successfull')
       },

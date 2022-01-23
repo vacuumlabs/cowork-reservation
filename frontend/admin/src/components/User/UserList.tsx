@@ -84,7 +84,7 @@ const TabbedDatagrid = (props: DatagridProps) => {
           >
             <TextField source="name" />
           </ReferenceField>
-          <EditButton />
+          {identity?.role === UserRole.SUPER_ADMIN && <EditButton />}
         </Datagrid>
       </ListContextProvider>
     </>
