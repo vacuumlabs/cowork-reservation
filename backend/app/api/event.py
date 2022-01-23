@@ -43,7 +43,7 @@ def update(id):
         if "minutes" in data:
             event_dao.update(id, data)
             updateted_event = event_dao.change_duration(id, data["minutes"])
-            event_dao.delete(id)
+            delete(id)
             holder = service_accounts_dao.get_by_tennant_id(updateted_event['tenant_id'])
             cretated_event = create_event(updateted_event['name'], holder['google_id'], updateted_event["start"], updateted_event["end"], holder['google_id'],
                          holder['google_id'])
@@ -52,7 +52,7 @@ def update(id):
         else:
 
             updateted_event = event_dao.update(id, data)
-            event_dao.delete(id)
+            delete(id)
             holder = service_accounts_dao.get_by_tennant_id(updateted_event['tenant_id'])
             cretated_event = create_event(updateted_event['name'], holder['google_id'], updateted_event["start"],
                                           updateted_event["end"], holder['google_id'],
