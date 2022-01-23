@@ -8,7 +8,6 @@ from app.models import ServiceAccounts
 from app import db
 from app.user_dao import user_dao
 from app.utils import gcp_print
-from api.event import delete
 
 session = db.session
 
@@ -240,7 +239,7 @@ class RoomDAO(SharedDaoMethods):
 
     def get_all_id_by_name(self, name: str):
         data = session.query(self.model)
-        data = data.filter(Room.building == name)
+        data = data.filter(Room.name == name)
         return self.to_array(data.first())
 
 class EventDAO(SharedDaoMethods):
@@ -319,6 +318,7 @@ class EventDAO(SharedDaoMethods):
             return self.update(event_id, {"end": new_end}) 
     
     def cancel_event(self, event_id:int):
+        from app.api.event import delete
         event_to_cancel = event_dao.get_one(event_id)
         if not event_to_cancel:
             return {"error": "bad request"}

@@ -6,6 +6,7 @@ import os
 from pprint import pprint
 from app.api.service_account.services_for_service_account import *
 import json
+from app.utils import gcp_print
 
 API_NAME='calendar'
 API_VERSION = 'v3'
@@ -166,7 +167,9 @@ def change_to_web(data):
     return data
 
 
-def createhook(calendar_id):
+def createhook(calendar_id,mask):
+    service = get_service(API_NAME, API_VERSION, SCOPES, location, mask)
+
     try:
         time_to_unix =  str((time.time() * 1000)+10)
     except:
@@ -176,9 +179,9 @@ def createhook(calendar_id):
     body= {
         "id": str(uuid.uuid4()),
         "type": "web_hook",
-        "address": "https://coworkapp.me/tests",
+        "address": "https://coworkapp.me/notification",
     }
-    return  service.events().watch(calendarId= calendar_id, body = body).execute()
+    return service.events().watch(calendarId= calendar_id, body = body).execute()
 
 
 def closehook(id,resourceid):
@@ -227,10 +230,14 @@ def change_to_dict_db(datadatabaza,name):
 
 def add_differnet_events_to_db(data,holder):
     calendar_id = holder['id']
+    gcp_print(data)
+    gcp_print('GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG')
+
     try:
+        gcp_print(room_dao.get_all_id_by_name(data['location'])[0]['id'])
         room_id = room_dao.get_all_id_by_name(data['location'])[0]['id']
     except:
-        print('ERROR IN ROOM ID DONT EXIST')
+        gcp_print('ERROR IN ROOM ID DONT EXIST')
         return
     name =  data['name']
     start = data['start']
@@ -256,12 +263,12 @@ def add_differnet_events_to_web(data,holder,calendars):
             else:
              data_from_created = create_event(name,calendar_id,start,end,calendar_id,location)
         except:
-            print('error in calendar_id inserting into other calendars')
+            gcp_print('error in calendar_id inserting into other calendars')
             continue
         try:
             event_dao.add(calendar_id_id, room_id, name, start, end,data_from_created['id'], tenant_id)
         except:
-            print('Error in adding into db in add sync')
+            gcp_print('Error in adding into db in add sync')
             continue
 
 def delete_different_events_from_db(data):
@@ -270,7 +277,7 @@ def delete_different_events_from_db(data):
         try:
             event_dao.delete(holder[i]['id'])
         except:
-            print('ERROR in delete from db')
+            gcp_print('ERROR in delete from db')
 
 def delete_different_events_from_web(data,id):
     holder = calendar_dao.get_all_id_by_name_exept_id(data['location'],id)
@@ -281,12 +288,12 @@ def delete_different_events_from_web(data,id):
         try:
             event_dao.delete(event_data[i]['id'])
         except:
-                print("ERROR in DELETE from db")
+                gcp_print("ERROR in DELETE from db")
         try:
             tenant_data = service_accounts_dao.get_by_tennant_id(str(event_data[i]['tenant_id']))
             delete_event(tenant_data[0]['google_id'],event_data[i]['google_id'],tenant_data[0]['google_id'])
         except:
-            print("ERROR In DELET FROM WEB")
+            gcp_print("ERROR In DELET FROM WEB")
 
 
 def create_building(mask,Name,floors):
@@ -309,7 +316,7 @@ def create_building(mask,Name,floors):
     try:
         return service_for_b.resources().buildings ().insert(body = body,customer = 'my_customer').execute()
     except:
-        print('ERROR IN CREATING BUILDING')
+        gcp_print('ERROR IN CREATING BUILDING')
 
         return  None
 
