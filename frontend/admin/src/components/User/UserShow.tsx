@@ -42,14 +42,19 @@ const UserShow: (props: ShowProps) => JSX.Element = (props) => {
         <SimpleShowLayout>
           <TextField source="name" />
           <EmailField source="email" />
-          <ReferenceField
-            source="tenantId"
-            reference="tenants"
-            link={true}
-            label="Tenant"
-          >
-            <TextField source="name" />
-          </ReferenceField>
+          {identity.role === UserRole.SUPER_ADMIN ? (
+            <></>
+          ) : (
+            <ReferenceField
+              source="tenantId"
+              reference="tenants"
+              link={true}
+              label="Tenant"
+            >
+              <TextField source="name" />
+            </ReferenceField>
+          )}
+          <TextField source="role" />
         </SimpleShowLayout>
       )}
     </Show>

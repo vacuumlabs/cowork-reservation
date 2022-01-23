@@ -21,7 +21,7 @@ import { User, UserRole } from '../models'
 const useMenuItems = (user?: User) => {
   const ProfileMenuItemLink = () => (
     <MenuItemLink
-      to={user ? `/user/${user.id}/show` : ''}
+      to={user ? `/users/${user.id}/show` : ''}
       primaryText="My Profile"
       leftIcon={<ProfileIcon />}
     />
