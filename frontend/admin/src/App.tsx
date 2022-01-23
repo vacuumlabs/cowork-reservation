@@ -54,6 +54,7 @@ const SUPER_ADMIN_RESOURCES = [
     {...User}
     options={{ label: 'Tenant Admins' }}
   />,
+  <Resource key="invites" name="invites" {...Invitation} />,
   <Resource key="rooms" name="rooms" {...Room} />,
   <Resource key="cities" name="cities" {...City} />,
   <Resource key="buildings" name="buildings" {...Building} />,

@@ -40,6 +40,12 @@ const useMenuItems = (user?: User) => {
       />,
       <TenantAdminsMenuItemLink key="users" title="Tenant Admins" />,
       <MenuItemLink
+        key="invites"
+        to="/invites"
+        primaryText="Invitations"
+        leftIcon={<InvitationIcon />}
+      />,
+      <MenuItemLink
         key="rooms"
         to="/rooms"
         primaryText="Rooms"

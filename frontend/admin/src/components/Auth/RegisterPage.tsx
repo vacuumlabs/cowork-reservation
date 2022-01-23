@@ -1,10 +1,5 @@
 import React, { useState } from 'react'
-import {
-  LoadingIndicator,
-  useMutation,
-  useNotify,
-  useRedirect,
-} from 'react-admin'
+import { LoadingIndicator, useMutation, useNotify } from 'react-admin'
 import {
   makeStyles,
   TextField,
@@ -22,7 +17,6 @@ type RegisterPageProps = {
 function RegisterPage({ setShowRegister }: RegisterPageProps): JSX.Element {
   const classes = useStyles()
   const notify = useNotify()
-  const redirect = useRedirect()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
