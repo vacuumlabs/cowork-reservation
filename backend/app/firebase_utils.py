@@ -73,7 +73,7 @@ def have_claims(id_token, claims = "*") -> list:
     for claim in claims:
         if custom_claim["user_role"] == claim or claim == "*":
             have_access = True
-    values_for_return = {"have_access":have_access, "tenant_id":custom_claim["tenant_id"], "user_role":custom_claim["user_role"]}
+    values_for_return = {"have_access":have_access, "tenant_id":custom_claim["tenant_id"], "user_role":custom_claim["user_role"], "user_uid": custom_claim["user_uid"]}
     return values_for_return 
 
 def get_required_info(id_token) -> list:
@@ -81,7 +81,7 @@ def get_required_info(id_token) -> list:
     if not "uid" in returned:
         return None
     user = auth.get_user(returned["uid"])
-    values_for_return = {"user_role":user.custom_claims.get("role"),"tenant_id": user.custom_claims.get("tenantId")}
+    values_for_return = {"user_role":user.custom_claims.get("role"),"tenant_id": user.custom_claims.get("tenantId"), "user_uid": user.uid}
     return values_for_return
 
 #Return custom claims of user
