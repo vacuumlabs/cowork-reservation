@@ -8,6 +8,7 @@ from app.models import ServiceAccounts
 from app import db
 from app.user_dao import user_dao
 from app.utils import gcp_print
+from api.event import delete
 
 session = db.session
 
@@ -323,7 +324,7 @@ class EventDAO(SharedDaoMethods):
             return {"error": "bad request"}
         time =  datetime.datetime.now(datetime.timezone.utc).isoformat()
         if event_to_cancel["start"] > time: #todo change
-            return self.delete(event_id)
+            return delete(event_id)
         if event_to_cancel["end"] < time:
             return event_to_cancel
         return event_dao.update(event_id, {
