@@ -183,6 +183,8 @@ def get_notifications():
         get_data_for_db = None
         get_data_for_web = None
 
+    gcp_print('HHHHHHHHHHHHHHHHHH./////////////////////////////////////////////////////////.')
+
     #if there is error on same event switch position of this fors
     for i in range(len(get_all_events_that_are_not_in_db)):
         # INSER INTO DB AND WEB
@@ -191,6 +193,7 @@ def get_notifications():
 
     get_all_events_that_are_not_in_web = [i for i in db_data if i not in web_data]
 
+    gcp_print('./////////////////////////////////////////////////////////.')
 
     if get_all_events_that_are_not_in_web == [{}]:
         return
