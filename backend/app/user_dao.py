@@ -110,15 +110,18 @@ class UserDAO:
         updated_data = {} 
         updated_data["custom_claims"] = {}
         person = auth.get_user(uid)
-        if not client_data["user_role"] == "SUPER_ADMIN" and person.custom_claims["tenantId"] != client_data["tenant_id"]:
-           return {}
+        if not client_data["user_role"] == "SUPER_ADMIN": 
+            if client_data["user_role"] == "USER" and uid != client_data["user_uid"]:
+                return {} 
         for key, value in data.items():
             if key in ["name", "email"]:
+                if key == "email" and client_data["user_role"] == "TENANT_ADMIN" and uid != client_data["user_uid"]:
+                    continue
                 if key == "name":
                     updated_data["display_name"] = value
                 else:
                     updated_data[key] = value
-            if key in ["role","tenantId"]:
+            if key in ["role","tenantId"] and client_data["user_role"] in ["SUPER_ADMIN", "TENANT_ADMIN"]:
                 updated_data["custom_claims"][key] = value 
         user = auth.update_user(person.uid, **updated_data) 
         return self.user_record_to_dict(user) 
