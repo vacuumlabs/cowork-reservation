@@ -230,7 +230,11 @@ def change_to_dict_db(datadatabaza,name):
 
 def add_differnet_events_to_db(data,holder):
     calendar_id = holder['id']
+    gcp_print(data)
+    gcp_print('GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG')
+
     try:
+        gcp_print(room_dao.get_all_id_by_name(data['location'])[0]['id'])
         room_id = room_dao.get_all_id_by_name(data['location'])[0]['id']
     except:
         gcp_print('ERROR IN ROOM ID DONT EXIST')
