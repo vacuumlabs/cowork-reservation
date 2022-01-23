@@ -155,6 +155,11 @@ class CalendarDAO(SharedDaoMethods):
         else:
             return  True
 
+    def get_all_calendars_by_name(self,name: str):
+        data = session.query(self.model)
+        data = data.filter(Calendar.name == name)
+
+        return self.to_array(data.first())
 
     def get_all_id_by_name_exept_id(self, name: str, id: str):
         data = session.query(self.model)
