@@ -378,6 +378,7 @@ class ServiceAccountsDao(SharedDaoMethods):
 class InvitationDAO(SharedDaoMethods):
     def add(self, data: dict) -> dict:
         data["status"] = "Active"
+        data["domain"] = True if data["domain"].lower() == "true" else False
         new_record = self.model(**data)
         session.add(new_record)
         session.commit()
@@ -401,12 +402,15 @@ class InvitationDAO(SharedDaoMethods):
         return new_record
 
     def update(self, id: int, update: dict) -> list:
+        if "domain" in update:
+            update["domain"] = True if update["domain"].lower() == "true" else False
         results = session.query(self.model).filter_by(id=id).first()
         for key, value in update.items():
             try:
                 setattr(results, key, value)
                 session.commit()
-            except:
+            except Exception as e:
+                gcp_print(e)
                 pass
         results = self.to_array(results)[0] if results else {}
         if results and results["status"] == "Active":
