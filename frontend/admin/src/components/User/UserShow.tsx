@@ -10,7 +10,7 @@ import {
 } from 'react-admin'
 import { Typography } from '@material-ui/core'
 
-import { User } from '../../models'
+import { User, UserRole } from '../../models'
 import { getIdToken } from '../../authProvider'
 
 const UserTitle = ({ record }: { record?: User }) => (
