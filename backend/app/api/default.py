@@ -99,8 +99,6 @@ def send_static(path):
 
 
 
-
-
 @default_bp.route("/serviceaccount/<id>", methods=["GET"])
 def get_serviceaccount(id):
     # TODO: check if tenant has permissions to view all cities
@@ -143,6 +141,7 @@ def get_notifications():
     id_webhook = request.headers['X-Goog-Channel-ID']
     resourceid = request.headers['X-Goog-Resource-ID']
 
+
     check = calendar_dao.check_if_exist(resourceid, id_webhook)
     if check == False:
         gcp_print("NO SUCH VALUES IN DB FIRST TRIGGER ")
@@ -170,7 +169,7 @@ def get_notifications():
 
 
     gcp_print(get_all_events_that_are_not_in_db)
-    return
+
 
     if len(get_all_events_that_are_not_in_db) != 0:
         get_data_for_db = calendar_dao.get_one(calendar_id_in_db)
@@ -195,6 +194,8 @@ def get_notifications():
         # INSER INTO DB AND WEB
         add_differnet_events_to_db(get_all_events_that_are_not_in_db[i], get_data_for_db)
         add_differnet_events_to_web(get_all_events_that_are_not_in_db[i], get_data_for_web_calendar, get_data_for_web)
+
+
 
     get_all_events_that_are_not_in_web = [i for i in db_data if i not in web_data]
 
