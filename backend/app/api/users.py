@@ -64,7 +64,7 @@ def update_tenant_admin(id):
 
 @users_bp.route("/users/<id>", methods=["GET"])
 def get_one_user(id):
-    accessible_roles = ["SUPER_ADMIN","TENANT_ADMIN, USER"]
+    accessible_roles = ["SUPER_ADMIN","TENANT_ADMIN", "USER"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
     if returned_value["have_access"]:
         return user_service.response(user_dao.get_one(returned_value, id))
