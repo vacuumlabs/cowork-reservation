@@ -1,4 +1,4 @@
-import { Room, RoomEvent } from 'shared/models'
+import { Room, RoomEvent } from './models'
 
 export const isRoomAvailable: (room: Room) => boolean = (room) => {
   const now = new Date()

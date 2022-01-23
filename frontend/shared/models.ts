@@ -45,6 +45,7 @@ export type City = {
 }
 
 export type RoomEvent = {
+  id: string
   calendarId: string
   name: string
   author: string
