@@ -42,7 +42,12 @@ def update(id):
         data = request.json
         if "minutes" in data:
             event_dao.update(id, data)
-            return event_service.response(event_dao.change_duration(id, data["minutes"]))
+            updateted_event = event_dao.change_duration(id, data["minutes"])
+            holder = service_accounts_dao.get_by_tennant_id(updateted_event['tenant_id'])
+            cretated_event = create_event(updateted_event['name'], holder['google_id'], updateted_event["start"], updateted_event["end"], holder['google_id'],
+                         holder['google_id'])
+            
+            return event_service.response(cretated_event)
         else:
             return event_service.response(event_dao.update(id, data))
     return event_service.response(status_code=403)
