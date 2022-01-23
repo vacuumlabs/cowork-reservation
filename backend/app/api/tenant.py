@@ -10,12 +10,15 @@ tenant_bp = Blueprint("tenant_bp", __name__)
 
 @tenant_bp.route("/tenants/<id>", methods=["GET"])
 def get_one_tenant(id):
-    accessible_roles = ["SUPER_ADMIN","TENANT_ADMIN"]
+    accessible_roles = ["SUPER_ADMIN","TENANT_ADMIN", "USER"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
     if returned_value["have_access"]:
+            if returned_value["user_role"] in ["TENANT_ADMIN", "USER"]:
+                if id != returned_value["tenant_id"]:
+                    return tenant_service.response(status_code=400)
             return tenant_service.response(tenant_dao.get_one(id))
     else:
-        return tenant_service.response(status_code=403)
+        return tenant_service.response(status_code=400)
 
 @tenant_bp.route("/tenants", methods=["GET"])
 def get_tenant_list():
