@@ -67,6 +67,6 @@ def get_one_user(id):
     accessible_roles = ["SUPER_ADMIN","TENANT_ADMIN"]
     returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
     if returned_value["have_access"]:
-            return user_service.response(user_dao.get_one(returned_value, id))
+        return user_service.response(user_dao.get_one(returned_value, id))
     else:
         return user_service.response(status_code=403)

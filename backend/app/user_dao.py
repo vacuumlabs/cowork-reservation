@@ -127,9 +127,9 @@ class UserDAO:
         desired_user = auth.get_user(uid)
         desired_user = self.user_record_to_dict(desired_user)
         if client_data["user_role"] == "SUPER_ADMIN":
-           return desired_user
+            return desired_user
         else:
-            return desired_user if desired_user["tenant_id"] == client_data["tenant_id"] else {}
+            return desired_user if desired_user["tenantId"] == client_data["tenant_id"] else {}
                 
     def user_record_to_dict(self, user) -> dict: 
         user_dict = {} 
