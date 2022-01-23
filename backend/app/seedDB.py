@@ -1,4 +1,4 @@
-from app.models import Building, City, Event, Calendar, Tenant, Room
+from app.models import Building, City, Event, Calendar, Tenant, Room, ServiceAccounts
 import datetime
 from random import randrange
 from flask import Flask
@@ -13,28 +13,28 @@ def citySeed():
     if City.query.count() == 0:
         db.session.add(City(name="Košice"))  
         db.session.add(City(name="Bratislava"))  
-        db.session.add(City(name="Prešov"))  
-        db.session.add(City(name="Mexico City"))  
+        db.session.add(City(name="Prešov"))
         db.session.commit()
 
 def buildingSeed():
     if Building.query.count() == 0:
-        db.session.add(Building(name="Business Centre 1", city_id=1, address="Štúrová 27.5"))  
-        db.session.add(Building(name="Business Centre 2", city_id=1, address="Werferova 9"))  
-        db.session.add(Building(name="Business Centrum", city_id=2, address="Zochova 580, 811 03"))    
-        db.session.add(Building(name="Business Park", city_id=3, address="Volgogradská 721, 080 03"))    
-        db.session.add(Building(name="Torre Reforma", city_id=4, address="Cuauhtémoc  401"))    
+        db.session.add(Building(name="Aupark", city_id=2, address="Einsteinova 3541"))
+        db.session.add(Building(name="Polus", city_id=2, address="Vajnorská 10645"))
+        db.session.add(Building(name="Skypark", city_id=2, address="Bottova 2622/2"))
         db.session.commit()
 
 def roomSeed():
     if Room.query.count() == 0:
-        db.session.add(Room(city_id=1, building_id=1, name="Mordor 1", floor=1, capacity=20, equipment="[whiteboard, projector]"))  
-        db.session.add(Room(city_id=1, building_id=1, name="Mordor 2", floor=1, capacity=4, equipment="[whiteboard]"))  
-        db.session.add(Room(city_id=1, building_id=2, name="Tardis", floor=2, capacity=3, equipment="[whiteboard]"))  
-        db.session.add(Room(city_id=2, building_id=3, name="Blavdor", floor=1, capacity=5, equipment="[whiteboard, projector]"))  
-        db.session.add(Room(city_id=2, building_id=3, name="Arteos", floor=2, capacity=20, equipment="[whiteboard, projector, computers]"))  
-        db.session.add(Room(city_id=3, building_id=4, name="Harry Potter", floor=1, capacity=40, equipment="[whiteboard, projector, wands]"))  
-        db.session.add(Room(city_id=4, building_id=5, name="El Room", floor=5, capacity=100, equipment="[whiteboard, projector]"))  
+        db.session.add(Room(city_id=2, building_id=1, name="AgRoom", floor=4, capacity=30, equipment="[whiteboard, projector]"))
+        db.session.add(Room(city_id=2, building_id=1, name="AuRoom", floor=1, capacity=30, equipment="[whiteboard]"))
+        db.session.add(Room(city_id=2, building_id=1, name="AuRora", floor=2, capacity=30, equipment="[whiteboard]"))
+        db.session.add(Room(city_id=2, building_id=2, name="Remus", floor=1, capacity=20, equipment="[whiteboard, projector]"))
+        db.session.add(Room(city_id=2, building_id=2, name="Plus", floor=1, capacity=20, equipment="[whiteboard, projector, computers]"))
+        db.session.add(Room(city_id=2, building_id=2, name="Romulus", floor=1, capacity=30, equipment="[whiteboard, projector, wands]"))
+        db.session.add(Room(city_id=2, building_id=3, name="Dalek", floor=1, capacity=15, equipment="[whiteboard, projector]"))
+        db.session.add(Room(city_id=2, building_id=3, name="Paradox", floor=4, capacity=20, equipment="[whiteboard, projector]"))
+        db.session.add(Room(city_id=2, building_id=3, name="Tardis", floor=1, capacity=30, equipment="[whiteboard, projector]"))
+
         db.session.commit()
 
 
@@ -55,19 +55,45 @@ def tenantSeed():
         db.session.commit()
 
 
-def calendarSeed(num: int):
+def calendarSeed():
     if Calendar.query.count() == 0:
-        google_id = ["a1b2c3d4e5f6g7"]
-        name = "Calendar_number_"
-        tenantSeed()
-        tenants = Tenant.query.all()
-        for idx in range(num):
-            calendar = Calendar()
-            calendar.tenant_id = tenants[idx % len(tenants)].id
-            calendar.name = name + str(idx)
-            calendar.google_id = google_id[idx % len(google_id)]
-            db.session.add(calendar)
+        db.session.add(Calendar(tenant_id = 1,name="AgRoom",google_id ='c_1889o2gvf7l5ajnbio3dkca5ta95u@resource.calendar.google.com', resource_id ='eTxaDH3T5xchXUAkFTNHuHKdES8',webhook_id='6ad51f13-c5a6-403b-a955-a4ae5f3fc605'))
+        db.session.add(Calendar(tenant_id = 1,name="AuRoom",google_id ='c_18862dhu3o7l2hd7k684l832mk8lo@resource.calendar.google.com', resource_id ='ucZHNjspkvsYwxMJ-2zCIVCzimw',webhook_id='ef3041e1-347f-4f19-aa5e-8121db9bfa30'))
+        db.session.add(Calendar(tenant_id = 1,name="AuRora",google_id ='c_1880laqcpcn4ci7bihnl8ms3q1tqs@resource.calendar.google.com', resource_id ='0qTAOBdDekyTNRFoYxg2bwIu6QQ',webhook_id='c299b585-9559-44a9-b9e5-60cdcc818fb9'))
+
+        db.session.add(Calendar(tenant_id = 1,name="Dalek",google_id ='c_188bqs8ef664kidcnaamm8h2mss9e@resource.calendar.google.com', resource_id ='UfjavDYChzbx48ym6TSOV0owkLU',webhook_id='f16f0ab0-bd6b-4457-b0aa-618aac781aed'))
+        db.session.add(Calendar(tenant_id = 1,name="Paradox",google_id ='c_18837vdmue9qihpmk7ijak2icvb0c@resource.calendar.google.com', resource_id ='IxJ8UHlZ91VXriAZVD0IdKHDLYE',webhook_id='bdbcc146-b5cf-4250-84ad-98feee84530c'))
+        db.session.add(Calendar(tenant_id = 1,name="Tardis",google_id ='c_188b3t8vau9ruhsdjstsj372h33j0@resource.calendar.google.com', resource_id ='Bbpb81rAxv6k40fM29g7ASdjE30',webhook_id='efcbf775-11ad-43f9-9625-445a9859ca4c'))
+
+        db.session.add(Calendar(tenant_id = 1,name="Plus",google_id ='c_1882juesp3rf0j2gj1fohtdep8hhk@resource.calendar.google.com', resource_id ='gFI-AIlg6Yzv0DWgHoeu1uYaG2I',webhook_id='bb4ffa2d-2c92-4368-ba43-59bac10884b0'))
+        db.session.add(Calendar(tenant_id = 1,name="Remus",google_id ='c_18819ee72ulpcg27ip15fkqkdkeic@resource.calendar.google.com', resource_id ='a3y4W9qULHYqJwZSuSIKuhFRI-E',webhook_id='edc49ddd-9d0c-4a87-b2b0-8895b2d590d3'))
+        db.session.add(Calendar(tenant_id = 1,name="Romulus",google_id ='c_188bf9qje9r7kii6n084n5ba13v0i@resource.calendar.google.com', resource_id ='2yJ2OviTIetxHHD6pLFhHAAfgUU',webhook_id='cacd79ab-93d0-466f-adb6-8b9320f060dd'))
+        ## 2
+        db.session.add(Calendar(tenant_id = 2,name="AgRoom",google_id ='c_18832o1hla4b6h2mlicpbc4trdph2@resource.calendar.google.com', resource_id ='10eySH8CqDB0TfVNr8Af0NSNAvE',webhook_id='3ed880e7-d016-44f1-ab19-c89cf1f78e98'))
+        db.session.add(Calendar(tenant_id = 2,name="AuRoom",google_id ='c_1885lme8l48e6ibki88vvhpq67umu@resource.calendar.google.com', resource_id ='hbWAPNiTWIHPosiXuRBVAM0yAts',webhook_id='22bf4b6b-71d2-4843-954f-00031ecdcff3'))
+        db.session.add(Calendar(tenant_id = 2,name="AuRora",google_id ='c_1887atsvllk1mgcnnv13h78gep58c@resource.calendar.google.com', resource_id ='QcU6uK4eH1JM1MBuZsY58i9lOuY',webhook_id='9bbdd2ff-002d-43eb-809a-0acb60b768df'))
+
+        db.session.add(Calendar(tenant_id = 2,name="Dalek",google_id ='c_18887hhag5pjui2fgbvmlio2pvqjq@resource.calendar.google.com', resource_id ='MHZKChg5NOylwsqNRXEyzk_dMNQ',webhook_id='60ffe819-a9af-44b6-bc0d-812e8da42e44'))
+        db.session.add(Calendar(tenant_id = 2,name="Paradox",google_id ='c_188f60r0tcq96he4gvqfe9jntpqpa@resource.calendar.google.com', resource_id ='XE5Q9pNqq-n6xMDgxzCObvvJgsQ',webhook_id='10bcf1ec-f4fa-4f9a-b15e-9b29df9575fc'))
+        db.session.add(Calendar(tenant_id =2,name="Tardis",google_id ='c_18880i89lru50gu7j58g1g31uvt16@resource.calendar.google.com', resource_id ='Wv2bxej40mOX6Yhd2i2eNOrP_ag',webhook_id='0738b638-050e-4661-8325-9942ba62c885'))
+
+        db.session.add(Calendar(tenant_id = 2,name="Plus",google_id ='c_18831uoh8g3tmgg9gdade5atlealk@resource.calendar.google.com', resource_id ='we6YSwSuSVfGpgbcgVBe7FApVA0',webhook_id='4806032f-6e43-4d19-bd79-b9dd17aa210b'))
+        db.session.add(Calendar(tenant_id = 2,name="Remus",google_id ='c_1880fe8oqesfiibij4aefnav7k5cc@resource.calendar.google.com', resource_id ='OSVkvEfi7UTYGLs77405DtL8ydQ',webhook_id='6ec50afa-d1b1-4677-9511-b68a45319394'))
+        db.session.add(Calendar(tenant_id = 2,name="Romulus",google_id ='c_1885gqqifk3t8ivcn61rtp5vv1pfk@resource.calendar.google.com', resource_id ='EbhSl19t6JpoxygA116HzV0KKEU',webhook_id='d22dd2a9-1b19-4d67-89f4-d263012b95bf'))
+
+
         db.session.commit()
+
+
+
+
+def ServiceAccountsSeeds():
+    if ServiceAccounts.query.count() == 0:
+        db.session.add(ServiceAccounts(tenant_id = 1,name="service",google_id ='service@coworkreservation.me'))
+        db.session.add(ServiceAccounts(tenant_id = 2,name="serviceaccount",google_id ='serviceaccount@coworkapp.space'))
+
+        db.session.commit()
+
 
 
 def eventSeed():
@@ -210,5 +236,6 @@ def seed_database(app: Flask):
         citySeed()
         buildingSeed()
         roomSeed()
-        calendarSeed(num_of_entries)
+        calendarSeed()
         eventSeed()
+        ServiceAccountsSeeds()
