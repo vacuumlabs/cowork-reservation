@@ -97,8 +97,6 @@ def ServiceAccountsSeeds():
 
 
 def eventSeed():
-    if Event.query.count() != 0:
-        db.session.query(Event).delete()
     if Event.query.count() == 0:
         # Room 1 schedule
         db.session.add(
@@ -237,5 +235,4 @@ def seed_database(app: Flask):
         buildingSeed()
         roomSeed()
         calendarSeed()
-        eventSeed()
         ServiceAccountsSeeds()
