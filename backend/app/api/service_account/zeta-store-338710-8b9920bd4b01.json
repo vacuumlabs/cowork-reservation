@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "zeta-store-338710",
+  "private_key_id": "8b9920bd4b016ee9e0f399238ab60d32ac20fff8",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDg7OiAkd81ypNF\nczXHHK9IsP0EUChKWPsSYLsxwmcPuhwmHB5RWhWxHdwTXrqOENJFk2dV9s66p72J\n2Neu1w57/nqF62kgws1t6sEOhO3vU7f7w59eZgzms/LgQnxYeGh60wC0+q0Ug/fB\n1xXFUJEeD6w1VaaEBYe0yv0lRzfIkwF1UHe9B9jezlHhyZ43hYBqVb1+8n5iSAiX\n3/VepBHPiQzszlz0Yxxaop8rpYQXFQwNLHosE6vXfCSvdcswM73DK6vWtIIVR6r3\n4toupYqJsZJq60uhFUKl9m0UTqnvjq33lxF0IsF+eNcLjdKR7eFPH1n4uuc/w41a\nelXPUol3AgMBAAECggEABoWYC7JTrkYu3nBfVfZirZpWdzuM6vQbQ5jecBoRhKuC\nQEwQ/0SXbiQpgb5G2xcgD29B4l/w0XcB9Mq1r3ImoabrDf+ZvQyWrpjx+vheDK2d\nnzwUAzNHdjNUahuxIQnfCRwdu7P1oobv7QTysqf3rTzlYtVfhT4wYN8TDk8WoGub\nvjL6DmoGwmiIBGAHw+wbmCwjI/UQRWzC5ybAeIf6hX0zcVI94+yczXyfOjwVemuY\nvkbetCnbDqU0Y/E+7oF1hGaaPFdOQC2QnIFlV/yG46Swi7PDP6z+yax63C4oFups\nRK+Z9H11QTOdAz5faApkl5jdcBc7FWkSiKyzDEls4QKBgQDwF8OaBM9C2w8GdRBp\nO3LAcVxFb/3cA/P9e66kgPJ4ST6MguDO9+yV3NZL7jf+RtbiVFTUE6gfXmtXH6R4\ngv1fWrcZfQtFuY6dhNf3XfIfvjNiFh+0KCwNWNa7A52Ax2ApYAIGtcxAnv+ptHC1\nMvwbZeVQhoniv+FiKbGXcKTm3wKBgQDv0+NvaTo8qIFEhzyr41dKHZOZr7PmqWZI\nPqZM/4E6t6J7Efs1oNOTBqHZ11QUqRtxGbKubI/VsPT9IqtUonWbAsk0E1LmIduq\nInFKeewccaLOZbCFMCGSoKGbHOkW7Adx0Dgd3GaqULX2kYJzEmn4c0nBasnILPQ6\nbanzPQMoaQKBgGJRCOtILutssvFs/KRrEKmXgjZ5DtaK094oSLLajvAM5k05xv9Z\n7QrNXP/I9CrvLU2PRRF3XzBBROlvbrVexozGpBYO64/I1YrRfHKyiNTQ2U/ASYlH\nrgplJ8F7UIMMoecvhoTi61pHAeCnoEPDNhOuHUJlZY9yDcRZ2HxwR0a3AoGADy/F\nuSpaq7in5uUBbIkK4ACbdiHwLG0RswV0lm+fiU5TlaN/2teCTk8fNKI0CtLij/jm\nnbD2Mrvv54+odcWL2PMGNqv6leQS+uUPc33g+7QecR9zXBu+JIDTevULtY3gss5S\nn2FzhtlxjFmOfybtWvRB+WN/v5NJK+IB3wtABfECgYBoFPGJ1bbfhPZSztincxMW\ndAY3qC1IYkKkxrWa03iJgYSEYBHeyla68Wk0Qi79iUopZ+J1mDNW12xWLw6FbKhX\n9OG1RcfsmAbx7Yz3b38uEDV35yiJeihoVx0rYIU18A3kLQCUKcGVOtvp5szgIg7j\nRfAKzPyH96kUS7OdPIVypQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "serviceaccountforcalendars@zeta-store-338710.iam.gserviceaccount.com",
+  "client_id": "115567082871599091777",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/serviceaccountforcalendars%40zeta-store-338710.iam.gserviceaccount.com"
+}

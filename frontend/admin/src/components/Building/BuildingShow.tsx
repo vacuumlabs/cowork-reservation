@@ -9,7 +9,8 @@ import {
   SimpleShowLayout,
   TextField,
 } from 'react-admin'
-import { Building } from 'shared/models'
+
+import { Building } from '../../models'
 
 const BuildingTitle = ({ record }: { record?: Building }) => (
   <span>{record ? record.name : 'Building'}</span>

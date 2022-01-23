@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
-import { Room } from 'shared/models'
 
+import { Room } from '../../models'
 import { Grid, Icon, theme, Typography } from '../../components'
 
 type RoomCardProps = Room & {
@@ -26,7 +26,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
             <Typography color="black" variant="button">
               {capacity}{' '}
             </Typography>
-            <Icon name="userFriends" />
+            <Icon name="userFriends" size="sm" />
           </Grid>
         </Grid>
         <Grid>

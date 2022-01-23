@@ -1,18 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
-import { Login } from 'ra-ui-materialui'
+import { Login } from 'react-admin'
+import { Typography, Button, Box } from '@material-ui/core'
+
+import RegisterPage from './Auth/RegisterPage'
 
 // TODO extract to env
 const firebaseConfig = {
-  apiKey: 'AIzaSyAJ_GxyUXUkja9DCHXVTbH9Jhje5bsfv9s',
-  authDomain: 'coworkreservation.firebaseapp.com',
-  projectId: 'coworkreservation',
-  storageBucket: 'coworkreservation.appspot.com',
-  messagingSenderId: '182196777623',
-  appId: '1:182196777623:web:c9d18ac242055ba54f2fd2',
-  measurementId: 'G-LRR9NTQ779',
+  apiKey: 'AIzaSyDWEi46ncDnVLlZBfQtJUQaExTTS0vfFV4',
+  authDomain: 'zeta-store-338710.firebaseapp.com',
+  projectId: 'zeta-store-338710',
+  storageBucket: 'zeta-store-338710.appspot.com',
+  messagingSenderId: '150065018955',
+  appId: '1:150065018955:web:181764ae5d5d134502f5ce',
 }
 
 firebase.initializeApp(firebaseConfig)
@@ -23,18 +25,45 @@ const uiConfig = {
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
   ],
+  popupMode: true,
 }
 
 function LoginPage(): JSX.Element {
+  const [showRegister, setShowRegister] = useState(false)
   return (
-    <div>
-      <Login>
-        <StyledFirebaseAuth
-          uiConfig={uiConfig}
-          firebaseAuth={firebase.auth()}
-        />
-      </Login>
-    </div>
+    <Login>
+      {!showRegister ? (
+        <>
+          <StyledFirebaseAuth
+            uiConfig={uiConfig}
+            firebaseAuth={firebase.auth()}
+          />
+
+          <Box
+            p={2}
+            display="flex"
+            justifyContent="center"
+            flexDirection="column"
+          >
+            <Box pb={1}>
+              <Typography align="center">
+                Don&apos;t have an account?
+              </Typography>
+            </Box>
+
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setShowRegister(true)}
+            >
+              Sign up
+            </Button>
+          </Box>
+        </>
+      ) : (
+        <RegisterPage setShowRegister={setShowRegister} />
+      )}
+    </Login>
   )
 }
 

@@ -8,9 +8,9 @@ import {
   TextField,
   useGetIdentity,
 } from 'react-admin'
-import { Typography } from '@mui/material'
-import { User, UserRole } from 'shared/models'
+import { Typography } from '@material-ui/core'
 
+import { User } from '../../models'
 import { getIdToken } from '../../authProvider'
 
 const UserTitle = ({ record }: { record?: User }) => (

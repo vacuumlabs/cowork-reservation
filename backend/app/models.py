@@ -1,3 +1,4 @@
+from email.policy import default
 from flask_sqlalchemy.model import DefaultMeta
 from app import db
 
@@ -19,11 +20,12 @@ class Calendar(BaseModel):
 class Tenant(BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
-    city = db.Column(db.String(255), nullable=False)
-    email = db.Column(db.String(255), nullable=False)
+    #city = db.Column(db.String(255))
+    #email = db.Column(db.String(255))
 
     calendars = db.relationship("Calendar", backref="tenant")
     events = db.relationship("Event", backref="tenant")
+    invitations = db.relationship("Invitation", backref="tenant")
 
 
 class Event(BaseModel):
@@ -36,13 +38,44 @@ class Event(BaseModel):
     google_id = db.Column(db.String(255), nullable=False)
     tenant_id = db.Column(db.Integer, db.ForeignKey("tenant.id"))
 
+class City(BaseModel):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+
+    rooms = db.relationship("Room", backref="city")
+    buildings = db.relationship("Building", backref="city")
+
+class Building(BaseModel):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+    address = db.Column(db.String(255), nullable=False)
+    city_id = db.Column(db.Integer, db.ForeignKey("city.id"))
+
+    rooms = db.relationship("Room", backref="building")
 
 class Room(BaseModel):
     id = db.Column(db.Integer, primary_key=True)
-    city = db.Column(db.String(255), nullable=False)
     capacity = db.Column(db.Integer, nullable=False)
+    floor = db.Column(db.Integer)
+    name = db.Column(db.String(255))
     equipment = db.Column(db.String(255))
-    building = db.Column(db.String(255), nullable=False)
-    room_number = db.Column(db.Integer, nullable=False)
+    building_id = db.Column(db.Integer, db.ForeignKey("building.id"))
+    city_id = db.Column(db.Integer, db.ForeignKey("city.id"))
 
     events = db.relationship("Event", backref="room")
+
+
+class ServiceAccounts(BaseModel):
+    id = db.Column(db.Integer, primary_key=True)
+    google_id = db.Column(db.String(255), nullable=False)
+    name = db.Column(db.String(255), nullable=False)
+    tenant_id = db.Column(db.Integer, db.ForeignKey("tenant.id"))
+
+class Invitation(BaseModel):
+    id = db.Column(db.Integer, primary_key=True)
+    value = db.Column(db.String(255), nullable=False)
+    role = db.Column(db.String(255), nullable=False)
+    tenant_id = db.Column(db.Integer, db.ForeignKey("tenant.id"))
+    expiration = db.Column(db.DateTime)
+    domain = db.Column(db.Boolean, nullable=False, default=False)
+    status = db.Column(db.String(255))

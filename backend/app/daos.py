@@ -1,17 +1,41 @@
 import datetime
 from typing import Iterable
-from app.models import Tenant
+from app.models import Building, City, Invitation, Tenant
 from app.models import Calendar
 from app.models import Room
 from app.models import Event
+from app.models import ServiceAccounts
 from app import db
+from app.user_dao import user_dao
+from app.utils import gcp_print
 
 session = db.session
+
+def change_to_db(data):
+    sub = '.'
+    if sub in data:
+        data = data.split('.')
+        return data[0]
+    else:
+        substring = "+"
+        if substring in data:
+            data = data.split("+")
+            return data[0]
+        else:
+            datas = data.split('T')
+            data = datas[0]+'T'+(datas[1].split('-')[0])
+            return data
 
 
 class SharedDaoMethods:
     def __init__(self, model):
         self.model = model
+
+    def add(self, data: dict) -> dict:
+        new_record = self.model(**data)
+        session.add(new_record)
+        session.commit()
+        return self.to_dict(new_record)
 
     def get_all(self, filters: dict, sort: list, results_range: list) -> dict:
         results = session.query(self.model)
@@ -48,7 +72,7 @@ class SharedDaoMethods:
         count = results_range[1] - start
         if count < 0:
             count = 0
-        results = results.limit(count).offset(start)
+        results = results.limit(count + 1).offset(start)
         return results
 
     def apply_sort(self, sort: list, results=None):
@@ -97,7 +121,8 @@ class SharedDaoMethods:
             calendar = session.query(self.model).filter_by(id=id).first()
             session.delete(calendar)
             session.commit()
-        except:
+        except Exception as err:
+            gcp_print(err)
             return False
         return True
 
@@ -134,6 +159,8 @@ class SharedDaoMethods:
             converted.append(self.to_dict(results))
         return converted
 
+
+
 class CalendarDAO(SharedDaoMethods):
     def add(self, tenant_id: int, name: str, google_id: str, resource_id=None, webhook_id=None, expiration=None) -> Calendar:
         new_calendar = Calendar(tenant_id=tenant_id, name=name, google_id=google_id, resource_id = resource_id,webhook_id= webhook_id, expiration = expiration )
@@ -159,7 +186,7 @@ class CalendarDAO(SharedDaoMethods):
     def get_all_calendar_by_resource_and_webhook_id(self, resource_id: str, webhook_id: str):
         data = session.query(self.model)
         data = data.filter((Calendar.resource_id == resource_id) & (Calendar.webhook_id == webhook_id))
-        return data.first().id,data.first().name,data.first().google_id
+        return data.first().id,data.first().name,data.first().google_id, data.first().tenant_id
 
 class RoomDAO(SharedDaoMethods):
     def add(
@@ -198,7 +225,7 @@ class RoomDAO(SharedDaoMethods):
             for room in results:
                 room_events_filters = {"room_id": room["id"]}
                 if with_next_events:
-                    room_events_filters["_after"] = datetime.datetime.now()
+                    room_events_filters["after"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
                 room_events = event_dao.get_all(filters=room_events_filters)
                 if room_events: room_events = room_events["data"]
                 room["room_events"] = room_events
@@ -240,15 +267,15 @@ class EventDAO(SharedDaoMethods):
         x_total_count = 0
         if filters:
             results = self.apply_filters(filters, results)
-            if "_before" in filters:
-                if type(filters["_before"]) is str:
-                    before = datetime.datetime.strptime(filters["_before"], '%Y-%m-%dT%H:%M:%S')
-                else: before = filters["_before"]
+            if "before" in filters:
+                if type(filters["before"]) is str:
+                    before = datetime.datetime.strptime(filters["before"], '%Y-%m-%dT%H:%M:%S')
+                else: before = filters["before"]
                 results = results.filter(Event.start < before)
-            if "_after" in filters:
-                if type(filters["_after"]) is str:
-                    after = datetime.datetime.strptime(filters["_after"], '%Y-%m-%dT%H:%M:%S')
-                else: after = filters["_after"]
+            if "after" in filters:
+                if type(filters["after"]) is str:
+                    after = datetime.datetime.strptime(filters["after"], '%Y-%m-%dT%H:%M:%S')
+                else: after = filters["after"]
                 results = results.filter(Event.end > after)
             x_total_count = results.count()
 
@@ -289,8 +316,8 @@ class EventDAO(SharedDaoMethods):
         event_to_cancel = event_dao.get_one(event_id)
         if not event_to_cancel:
             return {"error": "bad request"}
-        time = datetime.datetime.now()
-        if event_to_cancel["start"] > time:
+        time =  datetime.datetime.now(datetime.timezone.utc).isoformat()
+        if event_to_cancel["start"] > time: #todo change
             return self.delete(event_id)
         if event_to_cancel["end"] < time:
             return event_to_cancel
@@ -327,15 +354,86 @@ class EventDAO(SharedDaoMethods):
         
 
 class TenantDAO(SharedDaoMethods):
-    def add(self, tenant_name: str, city: str, email: str) -> Tenant:
-        new_tenant = Tenant(name=tenant_name, city=city, email=email)
+    def add(self, data: dict) -> dict:
+        new_tenant = Tenant(**data)
         session.add(new_tenant)
         session.commit()
-        return self.to_array(new_tenant)[0]
+        return self.to_dict(new_tenant)
 
+
+class ServiceAccountsDao(SharedDaoMethods):
+    def add(self,calendar_id: int,name: str,tenant_id: int) -> ServiceAccounts:
+            new_serviceaccount = ServiceAccounts(calendar_id=calendar_id,name=name ,tenant_id=tenant_id)
+            session.add(new_serviceaccount)
+            session.commit()
+            return self.to_array(new_serviceaccount)[0]
+
+    def get_by_tennant_id(self,tennant_id:str):
+        data = session.query(self.model)
+        data = data.filter(ServiceAccounts.tenant_id == tennant_id)
+        if data.first() == None:
+            return None
+        return self.to_array(data.first())
+    
+class InvitationDAO(SharedDaoMethods):
+    def add(self, data: dict) -> dict:
+        data["status"] = "Active"
+        new_record = self.model(**data)
+        session.add(new_record)
+        session.commit()
+        new_record = self.to_dict(new_record)
+        for user in user_dao.get_users({"user_role": "SUPER_ADMIN"})["data"]:
+            if new_record["domain"] and new_record["value"] in user["email"]:
+                user_dao.update_user(
+                    {"user_role": "SUPER_ADMIN"},
+                    user["id"],
+                    {"role": new_record["role"], "tenantId": str(new_record["tenant_id"])},
+                )
+            elif user["email"] == new_record["value"]:
+                user_dao.update_user(
+                    {"user_role": "SUPER_ADMIN"},
+                    user["id"],
+                    {"role": new_record["role"], "tenantId": str(new_record["tenant_id"])},
+                )
+                self.update(new_record["id"], {"status": "Used"})
+                break
+        # pprint(user_dao.get_users({"user_role":"SUPER_ADMIN"})["data"])
+        return new_record
+
+    def update(self, id: int, update: dict) -> list:
+        results = session.query(self.model).filter_by(id=id).first()
+        for key, value in update.items():
+            try:
+                setattr(results, key, value)
+                session.commit()
+            except:
+                pass
+        results = self.to_array(results)[0] if results else {}
+        if results and results["status"] == "Active":
+            for user in user_dao.get_users({"user_role": "SUPER_ADMIN"})["data"]:
+                if results["domain"] and results["value"] in user["email"]:
+                    user_dao.update_user(
+                        {"user_role": "SUPER_ADMIN"},
+                        user["id"],
+                        {"role": results["role"], "tenantId": str(results["tenant_id"])},
+                    )
+                elif user["email"] == results["value"]:
+                    user_dao.update_user(
+                        {"user_role": "SUPER_ADMIN"},
+                        user["id"],
+                        {"role": results["role"], "tenantId": str(results["tenant_id"])},
+                    )
+                    self.update(results["id"], {"status": "Used"})
+                    break
+        # pprint(user_dao.get_users({"user_role":"SUPER_ADMIN"})["data"])
+        return results
 
 
 room_dao = RoomDAO(Room)
 calendar_dao = CalendarDAO(Calendar)
 event_dao = EventDAO(Event)
 tenant_dao = TenantDAO(Tenant)            
+service_accounts_dao = ServiceAccountsDao(ServiceAccounts)
+building_dao = SharedDaoMethods(Building)            
+city_dao = SharedDaoMethods(City)
+invites_dao = InvitationDAO(Invitation)            
