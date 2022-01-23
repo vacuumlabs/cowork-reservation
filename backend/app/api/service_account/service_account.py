@@ -1,7 +1,7 @@
 import time
 import uuid
 import datetime
-from app.daos import event_dao,room_dao,tenant_dao,calendar_dao,service_accounts_dao
+from app.daos import event_dao,room_dao,tenant_dao,calendar_dao,service_accounts_dao,building_dao
 import os
 from pprint import pprint
 from app.api.service_account.services_for_service_account import *
@@ -289,44 +289,114 @@ def delete_different_events_from_web(data,id):
             print("ERROR In DELET FROM WEB")
 
 
-def create_building(mask):
+def create_building(mask,Name,floors):
     service_for_b = get_service_for_directory(SCOPES,location,mask)
-    BuildingCoordinates = {
-                              "latitude": 48.153244,
-                              "longitude": 17.122691
-                          }
-    # BuildingAddress = {
-    #     "regionCode": string,
-    #     "languageCode": string,
-    #     "postalCode": string,
-    #     "administrativeArea": string,
-    #     "locality": string,
-    #     "sublocality": string,
-    #     "addressLines": [
-    #         string
-    #     ]
-    # }
-    body = {  "buildingId" :"new",
-              "buildingName":'new',
-              "resourceId": 'Test1',
-              "resourceName": "test",
-              "RoomName": 'new',
-              "description": 'null',
-              "Floor":'1',
+    body = {
+              "buildingId": str(Name),
+              "buildingName": str(Name),
               "coordinates": {
-                  "latitude": 48.153244,
-                  "longitude": 17.122691
-              },
-              "kind": 'Meeting space',
+                    "latitude": '48.6690',
+                    "longitude": '19.6990'
+                },
+              "etags": str(Name)+'Etags',
               "floorNames": [
-                '2'
+                floors
               ],
 
             }
 
-    #TODO ADD TO DB
 
-    pprint(service_for_b.resources().calendars().insert(body = body,customer = 'my_customer').execute())
+    try:
+        return service_for_b.resources().buildings ().insert(body = body,customer = 'my_customer').execute()
+    except:
+        print('ERROR IN CREATING BUILDING')
+
+        return  None
+
+
+def create_Room(mask,Name,capacity,floor,building):
+    service_for_b = get_service_for_directory(SCOPES,location,mask)
+    body = {
+              "etags": str(Name),
+              "resourceName": str(Name),
+              "resourceCategory": 'CONFERENCE_ROOM',
+              "generatedResourceName": str(Name),
+              "resourceId": str(Name),
+              "capacity": str(capacity),
+              "floorName": str(floor),
+              "buildingId": str(building),
+              "floorSection": str(floor)
+            }
+
+
+    try:
+        return service_for_b.resources().calendars().insert(body=body, customer='my_customer').execute()
+    except:
+        print('ERROR IN CREATING Room')
+    return
+
+def delete_Room(mask,Name):
+    service_for_b = get_service_for_directory(SCOPES,location,mask)
+
+
+    try:
+        return  service_for_b.resources().calendars().delete(calendarResourceId=Name, customer='my_customer').execute()
+    except:
+        print('ERROR IN Deleting Room')
     return
 
 
+def delete_Buildings(mask,Name):
+    service_for_b = get_service_for_directory(SCOPES,location,mask)
+
+    try:
+        return  service_for_b.resources().buildings().delete(buildingId=Name, customer='my_customer').execute()
+    except:
+        print('ERROR IN Deleting Room')
+    return
+
+def update_Room(mask,Name,capacity,floor,building,oldname): #todo fix this no resource google cant find this resource
+
+    service_for_b = get_service_for_directory(SCOPES,location,mask)
+    body = {
+              "resourceName": str(Name),
+              "resourceCategory": 'CONFERENCE_ROOM',
+              "generatedResourceName": str(Name),
+              "resourceId": str(Name),
+              "capacity": str(capacity),
+              "floorName": str(floor),
+              "buildingId": str(building),
+              "floorSection": str(floor)
+            }
+
+
+    try:
+        return service_for_b.resources().calendars().update(calendarResourceId = oldname,body=body, customer='my_customer').execute()
+    except:
+        print('ERROR IN Updating Room')
+    return
+
+
+
+
+def update_Building(mask,Name,floors,oldname):   #todo fix this no resource google cant find this resource
+    service_for_b = get_service_for_directory(SCOPES, location, mask)
+    body = {
+        "buildingId": str(Name),
+        "buildingName": str(Name),
+        "coordinates": {
+            "latitude": '48.6690',
+            "longitude": '19.6990'
+        },
+        "floorNames": [
+            floors
+        ],
+
+    }
+
+
+    try:
+        return service_for_b.resources().buildings().update(buildingId=oldname,body = body,customer = 'my_customer').execute()
+    except:
+        print('ERROR IN Updating Building')
+    return

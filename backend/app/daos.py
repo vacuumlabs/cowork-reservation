@@ -7,6 +7,7 @@ from app.models import Event
 from app.models import ServiceAccounts
 from app import db
 from app.user_dao import user_dao
+from app.utils import gcp_print
 
 session = db.session
 
@@ -120,7 +121,8 @@ class SharedDaoMethods:
             calendar = session.query(self.model).filter_by(id=id).first()
             session.delete(calendar)
             session.commit()
-        except:
+        except Exception as err:
+            gcp_print(err)
             return False
         return True
 
@@ -380,16 +382,24 @@ class InvitationDAO(SharedDaoMethods):
         session.add(new_record)
         session.commit()
         new_record = self.to_dict(new_record)
-        for user in user_dao.get_users({"user_role":"SUPER_ADMIN"})["data"]:
+        for user in user_dao.get_users({"user_role": "SUPER_ADMIN"})["data"]:
             if new_record["domain"] and new_record["value"] in user["email"]:
-                user_dao.update_user({"user_role":"SUPER_ADMIN"}, user["id"], {"role": new_record["role"], "tenantId": new_record["tenant_id"]})
+                user_dao.update_user(
+                    {"user_role": "SUPER_ADMIN"},
+                    user["id"],
+                    {"role": new_record["role"], "tenantId": str(new_record["tenant_id"])},
+                )
             elif user["email"] == new_record["value"]:
-                user_dao.update_user({"user_role":"SUPER_ADMIN"}, user["id"], {"role": new_record["role"], "tenantId": new_record["tenant_id"]})
-                self.update(new_record["id"], {"status":"Used"})
+                user_dao.update_user(
+                    {"user_role": "SUPER_ADMIN"},
+                    user["id"],
+                    {"role": new_record["role"], "tenantId": str(new_record["tenant_id"])},
+                )
+                self.update(new_record["id"], {"status": "Used"})
                 break
-        #pprint(user_dao.get_users({"user_role":"SUPER_ADMIN"})["data"])
+        # pprint(user_dao.get_users({"user_role":"SUPER_ADMIN"})["data"])
         return new_record
-    
+
     def update(self, id: int, update: dict) -> list:
         results = session.query(self.model).filter_by(id=id).first()
         for key, value in update.items():
@@ -400,15 +410,24 @@ class InvitationDAO(SharedDaoMethods):
                 pass
         results = self.to_array(results)[0] if results else {}
         if results and results["status"] == "Active":
-            for user in user_dao.get_users({"user_role":"SUPER_ADMIN"})["data"]:
+            for user in user_dao.get_users({"user_role": "SUPER_ADMIN"})["data"]:
                 if results["domain"] and results["value"] in user["email"]:
-                    user_dao.update_user({"user_role":"SUPER_ADMIN"}, user["id"], {"role": results["role"], "tenantId": results["tenant_id"]})
+                    user_dao.update_user(
+                        {"user_role": "SUPER_ADMIN"},
+                        user["id"],
+                        {"role": results["role"], "tenantId": str(results["tenant_id"])},
+                    )
                 elif user["email"] == results["value"]:
-                    user_dao.update_user({"user_role":"SUPER_ADMIN"}, user["id"], {"role": results["role"], "tenantId": results["tenant_id"]})
-                    self.update(results["id"], {"status":"Used"})
+                    user_dao.update_user(
+                        {"user_role": "SUPER_ADMIN"},
+                        user["id"],
+                        {"role": results["role"], "tenantId": str(results["tenant_id"])},
+                    )
+                    self.update(results["id"], {"status": "Used"})
                     break
-        #pprint(user_dao.get_users({"user_role":"SUPER_ADMIN"})["data"])
+        # pprint(user_dao.get_users({"user_role":"SUPER_ADMIN"})["data"])
         return results
+
 
 room_dao = RoomDAO(Room)
 calendar_dao = CalendarDAO(Calendar)

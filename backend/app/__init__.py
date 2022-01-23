@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, render_template
 from flask_migrate import Migrate
 from flask_cors import CORS
-from app.utils import config_logging
+from app.utils import config_logging, gcp_print
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -23,6 +23,7 @@ def create_app(config_filename):
         register_blueprints(app)
         register_error_handlers(app)
     except Exception as error:
+        gcp_print(str(error))
         logging.exception(error)
     return app
 

@@ -12,7 +12,8 @@ import {
 } from 'react-admin'
 import { Link } from 'react-router-dom'
 import { Add as AddIcon } from '@material-ui/icons'
-import { Tenant, UserRole } from 'shared/models'
+
+import { Tenant, UserRole } from '../../models'
 
 const TenantTitle = ({ record }: { record?: Tenant }) => (
   <span>{record ? record.name : 'Tenant'}</span>

@@ -1,9 +1,12 @@
 from flask.blueprints import Blueprint
-from flask import render_template, request
+from flask import jsonify, request, make_response, render_template
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask.helpers import send_from_directory
 from app.api.service_account.service_account import *
 from app.daos import event_dao, calendar_dao, service_accounts_dao
+from app.firebase_utils import have_claims
+from app.services import serviceaccount_service
+
 
 ### swagger specific ###
 swagger_url = "/swagger"
@@ -30,7 +33,7 @@ def register_user():
     custom_claims = {}
     invite_to_use = {}
     if not data:
-        return default_service.response({"error": "Registration data not provided"}, status_code=400)
+        return default_service.response({"status": 400, "message": "Registration data not provided"}, status_code=400)
     if not "email" in data:
         return default_service.response(status_code=400)
     email = data["email"]
@@ -57,12 +60,12 @@ def register_user():
 
     registration_data = map_registration_data(data, custom_claims)
     if not all(k in registration_data for k in ('display_name', 'email', 'password')):
-        return default_service.response({"error": "Registration data not provided"}, status_code=400)
+        return default_service.response({"status": 400, "message": "Registration data not provided"}, status_code=400)
     map_registration_data(data, custom_claims)
     try:
         new_user = auth.create_user(**registration_data)
     except Exception as e:
-        return default_service.response({"error": str(e)}, status_code=400)
+        return default_service.response({"status": 400, "message": str(e)}, status_code=400)
     if custom_claims:
         auth.set_custom_user_claims(new_user.uid, custom_claims)
     if invite_to_use and not invite_to_use["domain"]:
@@ -81,6 +84,9 @@ def map_registration_data(data: dict = None, custom_claims: dict = None):
         registration_data["password"] = data["password"]
     return registration_data
 
+
+
+
 @default_bp.route("/admin", methods=["GET"])
 def get_admin_site():
     # TODO: Replace with correct html file
@@ -90,6 +96,43 @@ def get_admin_site():
 @default_bp.route("/static/<path:path>")
 def send_static(path):
     return send_from_directory("static", path)
+
+
+
+
+@default_bp.route("/serviceaccount/<id>", methods=["GET"])
+def get_serviceaccount(id):
+    # TODO: check if tenant has permissions to view all cities
+    return serviceaccount_service.response(building_dao.get_one(id))
+
+
+@default_bp.route("/serviceaccount", methods=["POST"])
+def create_serviceaccount():
+    accessible_roles = ["SUPER_ADMIN"]
+    returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
+
+    if returned_value["have_access"]:
+        data = request.json
+        holder = data.split('@')
+        new_servacc = service_accounts_dao.add(
+            data,
+            holder[0],
+            int(returned_value['tenant_id']),
+        )
+        return serviceaccount_service.response(new_servacc)
+
+    return serviceaccount_service.response(status_code=403)
+
+
+@default_bp.route("/serviceaccount/<id>", methods=["DELETE"])
+def delete_serviceaccount(id):
+    accessible_roles = ["SUPER_ADMIN"]
+    returned_value = have_claims(request.headers.get("Authorization"),accessible_roles)
+    if not returned_value["have_access"]:
+        return serviceaccount_service.response(status_code=403)
+
+    service_accounts_dao.delete(id)
+    return serviceaccount_service.response()
 
 
 @default_bp.route("/notification", methods=["POST", "GET"])

@@ -6,6 +6,7 @@ import firebase_admin.auth as faa
 from flask import jsonify, request, render_template
 import os
 import json
+from app.utils import gcp_print
 
 
 
@@ -26,7 +27,8 @@ def is_logged(id_token):
     try:
         auth.verify_id_token(id_token)
         return True
-    except (faa.TokenSignError, faa.ExpiredIdTokenError, faa.InvalidIdTokenError, faa.RevokedIdTokenError):
+    except (faa.TokenSignError, faa.ExpiredIdTokenError, faa.InvalidIdTokenError, faa.RevokedIdTokenError) as err:
+        gcp_print(err)
         return False
     
 #Check if is valid user and return user uid
@@ -41,7 +43,8 @@ def get_logged_uid(id_token):
             decoded_token = auth.verify_id_token(id_token)
         uid = decoded_token['uid']
         return {"uid": uid}
-    except (faa.TokenSignError, faa.ExpiredIdTokenError, faa.InvalidIdTokenError, faa.RevokedIdTokenError):
+    except (faa.TokenSignError, faa.ExpiredIdTokenError, faa.InvalidIdTokenError, faa.RevokedIdTokenError) as err:
+        gcp_print(err)
         return None
 
 #Check if is valid user and return user uid---NEW-VERSION
@@ -52,7 +55,8 @@ def get_logged_uid_new(id_token):
         decoded_token = auth.verify_id_token(id_token)
         uid = decoded_token['uid']
         return uid
-    except (faa.TokenSignError, faa.ExpiredIdTokenError, faa.InvalidIdTokenError, faa.RevokedIdTokenError):
+    except (faa.TokenSignError, faa.ExpiredIdTokenError, faa.InvalidIdTokenError, faa.RevokedIdTokenError) as err:
+        gcp_print(err)
         return 0
 
 #Check if user have needed claims       

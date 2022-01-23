@@ -15,7 +15,8 @@ import {
   LocationCity as CityIcon,
   PersonAdd as InvitationIcon,
 } from '@material-ui/icons'
-import { User, UserRole } from 'shared/models'
+
+import { User, UserRole } from '../models'
 
 const useMenuItems = (user?: User) => {
   const ProfileMenuItemLink = () => (

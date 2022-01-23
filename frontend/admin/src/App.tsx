@@ -2,8 +2,8 @@ import React from 'react'
 import { Admin, Resource, fetchUtils } from 'react-admin'
 import jsonServerProvider from 'ra-data-json-server'
 import simpleRestProvider from 'ra-data-simple-rest'
-import { UserRole } from 'shared/models'
 
+import { UserRole } from './models'
 import authProvider, { getIdToken } from './authProvider'
 import Tenant from './components/Tenant'
 import User from './components/User'
@@ -15,8 +15,8 @@ import Invitation from './components/Invitation'
 import LoginPage from './components/LoginPage'
 
 // TODO extract to env file
-const USE_BACKEND_API = false
-const BACKEND_URL = 'https://cowork-reservation-jjr73225zq-lm.a.run.app/'
+const USE_BACKEND_API = true
+const BACKEND_URL = 'https://cowork-reservation-f43a6j7azq-ez.a.run.app'
 
 const jsonProvider = jsonServerProvider(
   'https://my-json-server.typicode.com/Bandius/myJsonServer'

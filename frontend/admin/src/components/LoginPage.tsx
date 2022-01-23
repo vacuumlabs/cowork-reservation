@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
-import { Login } from 'ra-ui-materialui'
+import { Login } from 'react-admin'
+import { Typography, Button, Box } from '@material-ui/core'
+
+import RegisterPage from './Auth/RegisterPage'
 
 // TODO extract to env
 const firebaseConfig = {
@@ -22,18 +25,45 @@ const uiConfig = {
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
   ],
+  popupMode: true,
 }
 
 function LoginPage(): JSX.Element {
+  const [showRegister, setShowRegister] = useState(false)
   return (
-    <div>
-      <Login>
-        <StyledFirebaseAuth
-          uiConfig={uiConfig}
-          firebaseAuth={firebase.auth()}
-        />
-      </Login>
-    </div>
+    <Login>
+      {!showRegister ? (
+        <>
+          <StyledFirebaseAuth
+            uiConfig={uiConfig}
+            firebaseAuth={firebase.auth()}
+          />
+
+          <Box
+            p={2}
+            display="flex"
+            justifyContent="center"
+            flexDirection="column"
+          >
+            <Box pb={1}>
+              <Typography align="center">
+                Don&apos;t have an account?
+              </Typography>
+            </Box>
+
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setShowRegister(true)}
+            >
+              Sign up
+            </Button>
+          </Box>
+        </>
+      ) : (
+        <RegisterPage setShowRegister={setShowRegister} />
+      )}
+    </Login>
   )
 }
 
