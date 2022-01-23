@@ -60,7 +60,7 @@ def create_invite():
         return invites_service.response(status_code=403)
     data = request.json
     data = camel_to_snake_dict(data)
-    if not access_rights["user_role"] == "SUPER_ADMIN":
+    if access_rights["user_role"] != "SUPER_ADMIN":
         data["tenant_id"] = access_rights["tenant_id"]
     new_invite = invites_dao.add(data)
     return invites_service.response(new_invite)
