@@ -1,34 +1,41 @@
 {
   "project_info": {
-    "project_number": "182196777623",
-    "project_id": "coworkreservation",
-    "storage_bucket": "coworkreservation.appspot.com"
+    "project_number": "344456035051",
+    "project_id": "cowork-reservation",
+    "storage_bucket": "cowork-reservation.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:182196777623:android:425140d8653f0e1c4f2fd2",
+        "mobilesdk_app_id": "1:344456035051:android:f5bef1edcea860d3a01cae",
         "android_client_info": {
           "package_name": "com.tablet"
         }
       },
       "oauth_client": [
         {
-          "client_id": "182196777623-5ids1dgk2ng0vemgspem665t6a2rehv8.apps.googleusercontent.com",
+          "client_id": "344456035051-gdj2rcd0a8fm5s471p89tk35jt6auave.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "%FIREBASE_ANDROID_API_KEY%"
+          "current_key": "AIzaSyAKWuHEXbhiXaJ1vMxk3ZyFglhg8-As_wI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "182196777623-5ids1dgk2ng0vemgspem665t6a2rehv8.apps.googleusercontent.com",
+              "client_id": "344456035051-gdj2rcd0a8fm5s471p89tk35jt6auave.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "344456035051-309e3qgebqbapv6ks3o2d7bnssjgft70.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.vacuumlabs.cowork.tablet"
+              }
             }
           ]
         }

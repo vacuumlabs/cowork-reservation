@@ -3,32 +3,32 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>182196777623-tb1o1e30uegaiu8v0jicqib6o3poobsp.apps.googleusercontent.com</string>
+	<string>344456035051-309e3qgebqbapv6ks3o2d7bnssjgft70.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.182196777623-tb1o1e30uegaiu8v0jicqib6o3poobsp</string>
+	<string>com.googleusercontent.apps.344456035051-309e3qgebqbapv6ks3o2d7bnssjgft70</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDwd168Glyx_NxpdMRxu10VDDo5l9dWrhk</string>
+	<string>AIzaSyCaxQHIgoNverPDZKKNHpsxSgmL4smGEoo</string>
 	<key>GCM_SENDER_ID</key>
-	<string>182196777623</string>
+	<string>344456035051</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.vacuumlabs.cowork.tablet</string>
 	<key>PROJECT_ID</key>
-	<string>coworkreservation</string>
+	<string>cowork-reservation</string>
 	<key>STORAGE_BUCKET</key>
-	<string>coworkreservation.appspot.com</string>
+	<string>cowork-reservation.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:182196777623:ios:8824dd05befc6f2c4f2fd2</string>
+	<string>1:344456035051:ios:0a7f5b2947d7193ba01cae</string>
 </dict>
 </plist>

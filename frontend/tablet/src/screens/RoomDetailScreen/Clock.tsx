@@ -1,11 +1,22 @@
 import * as React from 'react'
-import { Easing, TextInput, Animated, View, StyleSheet } from 'react-native'
+import { useContext } from 'react'
+import {
+  Easing,
+  TextInput,
+  Animated,
+  View,
+  StyleSheet,
+  ViewStyle,
+} from 'react-native'
 import Svg, { G, Circle } from 'react-native-svg'
+import { Button } from '../../components'
 
 import theme, { ColorVariant } from '../../components/theme'
+import Typography from '../../components/Typography'
+import { DataContext } from '../../contexts/DataContext'
 
-const RADIUS = 200
-const STROKE_WIDTH = 10
+const RADIUS = 50
+const STROKE_WIDTH = 2
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
 
@@ -13,18 +24,24 @@ type ClockProps = {
   color: Extract<ColorVariant, 'turquoise' | 'red'>
   max: number
   bookedTime?: number
+  isAvailable: boolean
+  aspectRatio: number
 }
 
 const Clock: (props: ClockProps) => JSX.Element = ({
   color,
   max,
   bookedTime,
+  isAvailable,
+  aspectRatio,
 }: ClockProps) => {
   const animated = React.useRef(new Animated.Value(0)).current
   const circleRef = React.useRef<View>(null)
   const inputRef = React.useRef<TextInput>(null)
   const circumference = 2 * Math.PI * RADIUS
   const halfCircle = RADIUS + STROKE_WIDTH
+
+  const { currentRoomId, endCurrentEvent } = useContext(DataContext)
 
   const animation = (toValue: number) => {
     return Animated.timing(animated, {
@@ -40,15 +57,15 @@ const Clock: (props: ClockProps) => JSX.Element = ({
   React.useEffect(() => {
     animation(max)
     if (max !== 1) {
-      animated.addListener((v) => {
+      animated.addListener(({ value }) => {
         const maxPerc = bookedTime
-          ? (100 * v.value) / bookedTime
-          : (100 * v.value) / max
+          ? (100 * value) / bookedTime
+          : (100 * value) / max
         const strokeDashoffset = circumference - (circumference * maxPerc) / 100
         if (inputRef?.current) {
-          const hours = Math.floor(v.value / 3600)
-          const minutes = Math.floor((v.value - hours * 3600) / 60)
-          const seconds = Math.floor(v.value) - hours * 3600 - minutes * 60
+          const hours = Math.floor(value / 3600)
+          const minutes = Math.floor((value - hours * 3600) / 60)
+          const seconds = Math.floor(value) - hours * 3600 - minutes * 60
           inputRef.current.setNativeProps({
             text: `${hours < 10 ? '0' : ''}${hours}:${
               minutes < 10 ? '0' : ''
@@ -62,9 +79,7 @@ const Clock: (props: ClockProps) => JSX.Element = ({
         }
       })
     } else {
-      animated.addListener((v) => {
-        const maxPerc = (100 * v.value) / max
-        const strokeDashoffset = circumference - (circumference * maxPerc) / 100
+      animated.addListener(() => {
         if (inputRef?.current) {
           const hours = new Date().getHours()
           const minutes = new Date().getMinutes()
@@ -75,11 +90,6 @@ const Clock: (props: ClockProps) => JSX.Element = ({
             }${minutes}:${seconds < 10 ? '0' : ''}${seconds}`,
           })
         }
-        if (circleRef?.current) {
-          circleRef.current.setNativeProps({
-            strokeDashoffset: strokeDashoffset + 1,
-          })
-        }
       })
     }
 
@@ -88,14 +98,19 @@ const Clock: (props: ClockProps) => JSX.Element = ({
     }
   })
 
+  const circleContainer: ViewStyle = {
+    width: aspectRatio > 1 ? 'auto' : '100%',
+    height: aspectRatio > 1 ? '100%' : 'auto',
+  }
+
   return (
-    <View style={{ width: RADIUS * 2, height: RADIUS * 2 }}>
+    <View style={[styles.circleAspectRatio, circleContainer]}>
       <Svg
-        height={RADIUS * 2}
-        width={RADIUS * 2}
+        height="100%"
+        width="100%"
         viewBox={`0 0 ${halfCircle * 2} ${halfCircle * 2}`}
       >
-        <G rotation="-90" origin={`${halfCircle}, ${halfCircle}`}>
+        <G rotation={'-90'} origin={`${halfCircle}, ${halfCircle}`}>
           <Circle
             ref={circleRef}
             cx="50%"
@@ -109,10 +124,14 @@ const Clock: (props: ClockProps) => JSX.Element = ({
             strokeWidth={STROKE_WIDTH}
             strokeLinecap="round"
             strokeDashoffset={circumference}
-            strokeDasharray={color === 'turquoise' ? 0 : circumference}
+            strokeDasharray={max == 1 ? 0 : circumference}
           />
         </G>
       </Svg>
+      <Typography variant="h3" style={styles.statusLabel}>
+        {isAvailable ? 'FREE' : 'BOOKED'}
+      </Typography>
+
       <AnimatedTextInput
         ref={inputRef}
         underlineColorAndroid="transparent"
@@ -120,6 +139,15 @@ const Clock: (props: ClockProps) => JSX.Element = ({
         defaultValue="0"
         style={[StyleSheet.absoluteFillObject, styles.text]}
       />
+
+      {!isAvailable && (
+        <Button
+          title="End early"
+          onPress={() => endCurrentEvent(currentRoomId)}
+          variant="error"
+          style={styles.earlyButton}
+        />
+      )}
     </View>
   )
 }
@@ -127,10 +155,23 @@ const Clock: (props: ClockProps) => JSX.Element = ({
 export default Clock
 
 const styles = StyleSheet.create({
+  circleAspectRatio: {
+    aspectRatio: 1,
+  },
   text: {
     textAlign: 'center',
     fontSize: theme.fontSize.h2,
     fontFamily: theme.fontFamily.h2,
     color: theme.typographyColors.white,
+  },
+  statusLabel: {
+    top: 90,
+    position: 'absolute',
+    alignSelf: 'center',
+  },
+  earlyButton: {
+    bottom: 90,
+    position: 'absolute',
+    alignSelf: 'center',
   },
 })
