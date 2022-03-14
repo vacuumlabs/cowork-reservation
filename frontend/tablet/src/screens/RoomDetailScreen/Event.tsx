@@ -5,13 +5,15 @@ import { StyleProp, TextStyle, View } from 'react-native'
 import { Typography, Grid } from '../../components'
 import { spacing } from '../../components/theme'
 import { DataContext } from '../../contexts/DataContext'
+import { RoomEvent } from '../../models'
 import { findRoomCurrentEvent, findRoomNextEvent } from '../../utils'
 
 type EventProps = {
+  event: RoomEvent | undefined
   eventVariant: 'current' | 'next'
 }
 
-const Event: React.FC<EventProps> = ({ eventVariant }) => {
+const Event: React.FC<EventProps> = ({ event, eventVariant }) => {
   const { rooms, isLoading, currentRoomId } = useContext(DataContext)
   const textAlignStyle: StyleProp<TextStyle> = {
     textAlign: eventVariant === 'current' ? 'left' : 'right',
@@ -22,11 +24,6 @@ const Event: React.FC<EventProps> = ({ eventVariant }) => {
 
   const room = rooms.find((r) => r.id === currentRoomId)
   if (!room) return null
-
-  const event =
-    eventVariant === 'current'
-      ? findRoomCurrentEvent(room)
-      : findRoomNextEvent(room)
 
   if (!room || !event) {
     return (

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { LayoutChangeEvent, StyleSheet, View } from 'react-native'
 import SystemNavigationBar from 'react-native-system-navigation-bar'
 
@@ -6,14 +6,22 @@ import { Typography, Screen } from '../../components'
 import RoomClock from './RoomClock'
 import Header from './Header'
 
-import { findRoomCurrentEvent, findRoomNextChangeDate } from '../../utils'
+import {
+  findRoomCurrentEvent,
+  findRoomNextChangeDate,
+  findRoomNextEvent,
+} from '../../utils'
 import { DataContext } from '../../contexts/DataContext'
 import Event from './Event'
 import QuickActions from './QuickActions'
+import { Room, RoomEvent } from '../../models'
 
 const RoomDetailScreen: React.FC = () => {
   const { rooms, isLoading, currentRoomId } = useContext(DataContext)
   const [clockAspectRatio, setClockAspectRatio] = useState(1)
+  const [room, setRoom] = useState<Room>()
+  const [currentEvent, setCurrentEvent] = useState<RoomEvent>()
+  const [nextEvent, setNextEvent] = useState<RoomEvent>()
 
   if (!rooms || isLoading)
     return (
@@ -22,7 +30,14 @@ const RoomDetailScreen: React.FC = () => {
       </Screen>
     )
 
-  const room = rooms.find((r) => r.id === currentRoomId)
+  useEffect(() => {
+    const selectedRoom = rooms.find((r) => r.id === currentRoomId)
+    if (selectedRoom) {
+      setRoom(selectedRoom)
+      setCurrentEvent(findRoomCurrentEvent(selectedRoom))
+      setNextEvent(findRoomNextEvent(selectedRoom))
+    }
+  }, [currentRoomId])
 
   if (!room)
     return (
@@ -30,8 +45,6 @@ const RoomDetailScreen: React.FC = () => {
         <Typography variant="h2">Room not found</Typography>
       </Screen>
     )
-
-  const changeDate = findRoomNextChangeDate(room)
 
   SystemNavigationBar.stickyImmersive()
 
@@ -41,18 +54,27 @@ const RoomDetailScreen: React.FC = () => {
     setClockAspectRatio(clockParentAspectRatio)
   }
 
+  const onEventStateChange = () => {
+    setCurrentEvent(findRoomCurrentEvent(room))
+    setNextEvent(findRoomNextEvent(room))
+  }
+
   return (
     <Screen>
       <Header roomName={room.name} />
       <View style={styles.centerContentWrapper}>
         <View style={styles.wrapper}>
-          <Event eventVariant="current" />
+          <Event eventVariant="current" event={currentEvent} />
         </View>
         <View onLayout={onClockLayout} style={styles.clockWrapper}>
-          <RoomClock room={room} parentAspectRatio={clockAspectRatio} />
+          <RoomClock
+            room={room}
+            parentAspectRatio={clockAspectRatio}
+            onEventStateChange={onEventStateChange}
+          />
         </View>
         <View style={styles.wrapper}>
-          <Event eventVariant="next" />
+          <Event eventVariant="next" event={nextEvent} />
         </View>
       </View>
       <QuickActions />

@@ -51,13 +51,15 @@ const formatTimeForCountDown = (time: {
 type ClockProps = {
   room: Room
   parentAspectRatio: number
+  onEventStateChange: () => void
 }
 
 const RoomClock: (props: ClockProps) => JSX.Element = ({
   room,
   parentAspectRatio: aspectRatio,
+  onEventStateChange,
 }: ClockProps) => {
-  const isAvailable = isRoomAvailable(room)
+  const [isAvailable, setIsAvailable] = useState(isRoomAvailable(room))
   const changeDate = findRoomNextChangeDate(room)
   const currentEvent = findRoomCurrentEvent(room)
   const color = isAvailable ? 'turquoise' : 'red'
@@ -89,7 +91,7 @@ const RoomClock: (props: ClockProps) => JSX.Element = ({
 
   const updateTimerComponent = (newValue: number) => {
     if (inputRef?.current) {
-      if (remainingSeconds !== -1) {
+      if (remainingSeconds !== undefined) {
         const formattedTime = {
           text: formatTimeForCountDown(parseSeconds(newValue)),
         }
@@ -110,29 +112,45 @@ const RoomClock: (props: ClockProps) => JSX.Element = ({
     let seconds = fromValue
     const timerId = setInterval(() => {
       seconds--
+      console.log(seconds)
+      console.log('remaining seconds', remainingSeconds)
       updateTimerComponent(seconds)
-      if (remainingSeconds !== -1) {
+      if (remainingSeconds !== undefined) {
         animateProgress(currentPercentageProgress(seconds))
+        if (seconds < 0) {
+          setIsAvailable(isRoomAvailable(room))
+          onEventStateChange()
+          clearInterval(timerId)
+        } else {
+          updateTimerComponent(seconds)
+        }
+      } else {
+        updateTimerComponent(seconds)
       }
     }, 1000)
     return timerId
   }
 
-  const currentPercentageProgress = (value: number) => {
-    return bookedTime
-      ? (100 * value) / bookedTime
-      : (100 * value) / remainingSeconds
+  const currentPercentageProgress = (value: number | undefined) => {
+    if (remainingSeconds && value) {
+      return bookedTime
+        ? (100 * value) / bookedTime
+        : (100 * value) / remainingSeconds
+    } else {
+      return 100
+    }
   }
 
   useEffect(() => {
-    if (remainingSeconds === -1) {
+    console.log('use effect remaining seconds', remainingSeconds)
+    if (remainingSeconds === undefined) {
       animateProgress(100)
     } else {
       animateProgress(currentPercentageProgress(remainingSeconds))
-      updateTimerComponent(remainingSeconds)
+      updateTimerComponent(remainingSeconds ?? 0)
     }
-    const timerId = startCountdownTimer(remainingSeconds)
-    if (remainingSeconds !== -1) {
+    const timerId = startCountdownTimer(remainingSeconds ?? 0)
+    if (remainingSeconds !== undefined) {
       animatedProgress.addListener(({ value }) => {
         updateProgressCircle(value)
       })
@@ -155,8 +173,8 @@ const RoomClock: (props: ClockProps) => JSX.Element = ({
   }
 
   const timerDefaultValue = () => {
-    if (remainingSeconds > 0) {
-      formatTimeForCountDown(parseSeconds(remainingSeconds))
+    if (remainingSeconds !== undefined) {
+      formatTimeForCountDown(parseSeconds(remainingSeconds ?? 0))
     } else {
       const hours = new Date().getHours()
       const minutes = new Date().getMinutes()
@@ -186,14 +204,14 @@ const RoomClock: (props: ClockProps) => JSX.Element = ({
             fill={theme.colors[color]}
             fillOpacity={color === 'turquoise' ? 0.1 : 0.3}
             stroke={
-              remainingSeconds === -1
+              remainingSeconds === undefined
                 ? theme.colors.backgroundLight
                 : theme.colors[color]
             }
             strokeWidth={STROKE_WIDTH}
             strokeLinecap="round"
             strokeDashoffset={circumference}
-            strokeDasharray={remainingSeconds === -1 ? 0 : circumference}
+            strokeDasharray={remainingSeconds === undefined ? 0 : circumference}
           />
         </G>
       </Svg>
