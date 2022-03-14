@@ -47,7 +47,7 @@ export const diffChangeDateAndNow: (changeDate: Date | undefined) => number = (
   const now = new Date()
   if (changeDate) {
     return (changeDate.getTime() - now.getTime()) / 1000
-  } else return 1
+  } else return -1
 }
 
 export const findRoomCurrentEvent: (room: Room) => RoomEvent | undefined = (

@@ -1,18 +1,12 @@
 import React, { useContext, useState } from 'react'
 import { LayoutChangeEvent, StyleSheet, View } from 'react-native'
 import SystemNavigationBar from 'react-native-system-navigation-bar'
-import { hoursToSeconds, minutesToSeconds } from 'date-fns'
 
 import { Typography, Screen } from '../../components'
-import Clock from './Clock'
+import RoomClock from './RoomClock'
 import Header from './Header'
 
-import {
-  diffChangeDateAndNow,
-  findRoomCurrentEvent,
-  findRoomNextChangeDate,
-  isRoomAvailable,
-} from '../../utils'
+import { findRoomCurrentEvent, findRoomNextChangeDate } from '../../utils'
 import { DataContext } from '../../contexts/DataContext'
 import Event from './Event'
 import QuickActions from './QuickActions'
@@ -37,27 +31,13 @@ const RoomDetailScreen: React.FC = () => {
       </Screen>
     )
 
-  const isAvailable = isRoomAvailable(room)
   const changeDate = findRoomNextChangeDate(room)
-  const currentEvent = findRoomCurrentEvent(room)
-
-  const currentEventStartEndDate = currentEvent
-    ? hoursToSeconds(currentEvent.endDate.getHours()) +
-      minutesToSeconds(currentEvent.endDate.getMinutes()) +
-      currentEvent.endDate.getSeconds() -
-      (hoursToSeconds(currentEvent.startDate.getHours()) +
-        minutesToSeconds(currentEvent.startDate.getMinutes()) +
-        currentEvent.startDate.getSeconds())
-    : 0
-
-  const bookedTime = !isAvailable ? currentEventStartEndDate : undefined
 
   SystemNavigationBar.stickyImmersive()
 
   const onClockLayout = (e: LayoutChangeEvent) => {
     const { height, width } = e.nativeEvent.layout
     const clockParentAspectRatio = width / height
-    console.log('clock aspect ratio', clockParentAspectRatio)
     setClockAspectRatio(clockParentAspectRatio)
   }
 
@@ -69,13 +49,7 @@ const RoomDetailScreen: React.FC = () => {
           <Event eventVariant="current" />
         </View>
         <View onLayout={onClockLayout} style={styles.clockWrapper}>
-          <Clock
-            color={isAvailable ? 'turquoise' : 'red'}
-            max={diffChangeDateAndNow(changeDate)}
-            bookedTime={bookedTime}
-            isAvailable={isAvailable}
-            aspectRatio={clockAspectRatio}
-          />
+          <RoomClock room={room} parentAspectRatio={clockAspectRatio} />
         </View>
         <View style={styles.wrapper}>
           <Event eventVariant="next" />

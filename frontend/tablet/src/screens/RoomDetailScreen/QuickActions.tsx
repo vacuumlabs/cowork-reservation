@@ -38,10 +38,11 @@ const QuickActions: React.FC = () => {
               ),
               nextEvent.startDate
             )
-          const action = () =>
+          const action = () => {
             isAvailable
               ? bookEvent(currentRoomId, minutes)
               : extendCurrentEvent(currentRoomId, minutes)
+          }
           return (
             <Button
               key={minutes}
