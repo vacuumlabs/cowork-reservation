@@ -27,7 +27,7 @@ const RoomListScreen: React.FC<NavigationProps> = ({
         direction="row"
         justify="center"
         alignItems="center"
-        spacing={2}
+        spacing={3}
         style={styles.list}
       >
         {!rooms || isLoading ? (

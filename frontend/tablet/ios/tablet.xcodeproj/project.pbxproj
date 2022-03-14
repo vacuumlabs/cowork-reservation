@@ -12,6 +12,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		1D0A59F431A24097B6AEB0BF /* Hind Madurai.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2FC88E4103A9435D9E6C1B62 /* Hind Madurai.ttf */; };
+		352D599627D60DDB0015D556 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 352D599527D60DDB0015D556 /* GoogleService-Info.plist */; };
 		36E7AE38938E4BB18574DC65 /* PT Sans Caption Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4923B1D31C146088F7965BE /* PT Sans Caption Bold.ttf */; };
 		51807F8F278ECE020061B749 /* fa-regular-400.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 51807F8C278ECE020061B749 /* fa-regular-400.ttf */; };
 		51807F90278ECE020061B749 /* fa-regular-400.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 51807F8C278ECE020061B749 /* fa-regular-400.ttf */; };
@@ -19,7 +20,6 @@
 		51807F92278ECE020061B749 /* fa-solid-900.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 51807F8D278ECE020061B749 /* fa-solid-900.ttf */; };
 		51807F93278ECE020061B749 /* fa-brands-400.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 51807F8E278ECE020061B749 /* fa-brands-400.ttf */; };
 		51807F94278ECE020061B749 /* fa-brands-400.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 51807F8E278ECE020061B749 /* fa-brands-400.ttf */; };
-		51A1DDF1274E327E00ADF5B2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 51A1DDF0274E327E00ADF5B2 /* GoogleService-Info.plist */; };
 		6172F2D35A4C3AA820D92908 /* libPods-tablet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6423831EA8574132BED9D8CC /* libPods-tablet.a */; };
 		681B88CCB31A45D1B1B04071 /* Crete Round.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4874F38782F84A9EA82C51BF /* Crete Round.ttf */; };
 		7EF68E3733C33B6898317E18 /* libPods-tablet-tabletTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABFE59519B596E51CEFDCCC0 /* libPods-tablet-tabletTests.a */; };
@@ -48,11 +48,11 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = tablet/main.m; sourceTree = "<group>"; };
 		1D0AE47A65C8663E3B452821 /* Pods-tablet-tabletTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tablet-tabletTests.release.xcconfig"; path = "Target Support Files/Pods-tablet-tabletTests/Pods-tablet-tabletTests.release.xcconfig"; sourceTree = "<group>"; };
 		2FC88E4103A9435D9E6C1B62 /* Hind Madurai.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Hind Madurai.ttf"; path = "../assets/fonts/Hind Madurai.ttf"; sourceTree = "<group>"; };
+		352D599527D60DDB0015D556 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4874F38782F84A9EA82C51BF /* Crete Round.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Crete Round.ttf"; path = "../assets/fonts/Crete Round.ttf"; sourceTree = "<group>"; };
 		51807F8C278ECE020061B749 /* fa-regular-400.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "fa-regular-400.ttf"; path = "../assets/fonts/fa-regular-400.ttf"; sourceTree = "<group>"; };
 		51807F8D278ECE020061B749 /* fa-solid-900.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "fa-solid-900.ttf"; path = "../assets/fonts/fa-solid-900.ttf"; sourceTree = "<group>"; };
 		51807F8E278ECE020061B749 /* fa-brands-400.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "fa-brands-400.ttf"; path = "../assets/fonts/fa-brands-400.ttf"; sourceTree = "<group>"; };
-		51A1DDF0274E327E00ADF5B2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6423831EA8574132BED9D8CC /* libPods-tablet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tablet.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C97AB639B58BBB4B15BBE30 /* Pods-tablet-tabletTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tablet-tabletTests.debug.xcconfig"; path = "Target Support Files/Pods-tablet-tabletTests/Pods-tablet-tabletTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = tablet/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -133,7 +133,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				51A1DDF0274E327E00ADF5B2 /* GoogleService-Info.plist */,
+				352D599527D60DDB0015D556 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* tablet */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* tabletTests */,
@@ -280,13 +280,13 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				51807F91278ECE020061B749 /* fa-solid-900.ttf in Resources */,
+				352D599627D60DDB0015D556 /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				681B88CCB31A45D1B1B04071 /* Crete Round.ttf in Resources */,
 				51807F93278ECE020061B749 /* fa-brands-400.ttf in Resources */,
 				51807F8F278ECE020061B749 /* fa-regular-400.ttf in Resources */,
 				1D0A59F431A24097B6AEB0BF /* Hind Madurai.ttf in Resources */,
 				36E7AE38938E4BB18574DC65 /* PT Sans Caption Bold.ttf in Resources */,
-				51A1DDF1274E327E00ADF5B2 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -41,13 +41,13 @@ export const formatDuration: (duration: Duration) => string = (duration) => {
   )}:${formatLessThanTen(duration.seconds)}`
 }
 
-export const diffChangeDateAndNow: (changeDate: Date | undefined) => number = (
-  changeDate
-) => {
+export const diffChangeDateAndNow: (
+  changeDate: Date | undefined
+) => number | undefined = (changeDate) => {
   const now = new Date()
   if (changeDate) {
     return (changeDate.getTime() - now.getTime()) / 1000
-  } else return 1
+  } else return undefined
 }
 
 export const findRoomCurrentEvent: (room: Room) => RoomEvent | undefined = (

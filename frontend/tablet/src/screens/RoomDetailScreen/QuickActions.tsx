@@ -2,9 +2,9 @@ import { addMinutes, isBefore } from 'date-fns'
 import React, { useContext } from 'react'
 import { StyleSheet } from 'react-native'
 
-import { Typography, Grid, theme, Button } from '../../../components'
-import { DataContext } from '../../../contexts/DataContext'
-import { findRoomCurrentEvent, findRoomNextEvent } from '../../../utils'
+import { Typography, Grid, theme, Button } from '../../components'
+import { DataContext } from '../../contexts/DataContext'
+import { findRoomCurrentEvent, findRoomNextEvent } from '../../utils'
 
 const buttonMinutes = [15, 30, 45, 60]
 
@@ -23,11 +23,11 @@ const QuickActions: React.FC = () => {
   const isAvailable = !currentEvent
 
   return (
-    <Grid justify="flex-end" alignItems="center">
+    <Grid alignItems="center">
       <Typography variant="button" style={styles.title}>
         {isAvailable ? 'QUICK RESERVATION' : 'EXTEND MEETING'}
       </Typography>
-      <Grid direction="row" spacing={1}>
+      <Grid direction="row" spacing={3}>
         {buttonMinutes.map((minutes) => {
           const isEnoughTime =
             !nextEvent ||
@@ -38,10 +38,11 @@ const QuickActions: React.FC = () => {
               ),
               nextEvent.startDate
             )
-          const action = () =>
+          const action = () => {
             isAvailable
               ? bookEvent(currentRoomId, minutes)
               : extendCurrentEvent(currentRoomId, minutes)
+          }
           return (
             <Button
               key={minutes}

@@ -8,7 +8,7 @@ export type TypographyColorVariant = 'turquoise' | 'white' | 'black' | 'gray'
 export type TypographyVariant = 'h1' | 'h2' | 'h3' | 'h4' | 'body' | 'button'
 export type SizeVariant = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
-const SPACING_UNIT = 8
+const SPACING_UNIT = 4
 
 export const spacing = (multiplier: number): number =>
   Math.floor(multiplier * SPACING_UNIT)

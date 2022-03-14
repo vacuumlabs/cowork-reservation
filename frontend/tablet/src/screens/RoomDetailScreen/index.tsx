@@ -1,23 +1,27 @@
-import React, { useContext } from 'react'
-import { StyleSheet } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
+import { LayoutChangeEvent, StyleSheet, View } from 'react-native'
 import SystemNavigationBar from 'react-native-system-navigation-bar'
-import { hoursToSeconds, minutesToSeconds } from 'date-fns'
 
-import { Typography, Screen, Grid, Button } from '../../components'
-import Clock from './Clock'
+import { Typography, Screen } from '../../components'
+import RoomClock from './RoomClock'
 import Header from './Header'
-import Footer from './Footer/Footer'
+
 import {
-  diffChangeDateAndNow,
   findRoomCurrentEvent,
   findRoomNextChangeDate,
-  isRoomAvailable,
+  findRoomNextEvent,
 } from '../../utils'
 import { DataContext } from '../../contexts/DataContext'
+import Event from './Event'
+import QuickActions from './QuickActions'
+import { Room, RoomEvent } from '../../models'
 
 const RoomDetailScreen: React.FC = () => {
-  const { rooms, isLoading, currentRoomId, endCurrentEvent } =
-    useContext(DataContext)
+  const { rooms, isLoading, currentRoomId } = useContext(DataContext)
+  const [clockAspectRatio, setClockAspectRatio] = useState(1)
+  const [room, setRoom] = useState<Room>()
+  const [currentEvent, setCurrentEvent] = useState<RoomEvent>()
+  const [nextEvent, setNextEvent] = useState<RoomEvent>()
 
   if (!rooms || isLoading)
     return (
@@ -26,7 +30,14 @@ const RoomDetailScreen: React.FC = () => {
       </Screen>
     )
 
-  const room = rooms.find((r) => r.id === currentRoomId)
+  useEffect(() => {
+    const selectedRoom = rooms.find((r) => r.id === currentRoomId)
+    if (selectedRoom) {
+      setRoom(selectedRoom)
+      setCurrentEvent(findRoomCurrentEvent(selectedRoom))
+      setNextEvent(findRoomNextEvent(selectedRoom))
+    }
+  }, [currentRoomId, rooms])
 
   if (!room)
     return (
@@ -35,52 +46,38 @@ const RoomDetailScreen: React.FC = () => {
       </Screen>
     )
 
-  const isAvailable = isRoomAvailable(room)
-  const changeDate = findRoomNextChangeDate(room)
-  const currentEvent = findRoomCurrentEvent(room)
-
-  const currentEventStartEndDate = currentEvent
-    ? hoursToSeconds(currentEvent.endDate.getHours()) +
-      minutesToSeconds(currentEvent.endDate.getMinutes()) +
-      currentEvent.endDate.getSeconds() -
-      (hoursToSeconds(currentEvent.startDate.getHours()) +
-        minutesToSeconds(currentEvent.startDate.getMinutes()) +
-        currentEvent.startDate.getSeconds())
-    : 0
-
   SystemNavigationBar.stickyImmersive()
+
+  const onClockLayout = (e: LayoutChangeEvent) => {
+    const { height, width } = e.nativeEvent.layout
+    const clockParentAspectRatio = width / height
+    setClockAspectRatio(clockParentAspectRatio)
+  }
+
+  const onEventStateChange = () => {
+    setCurrentEvent(findRoomCurrentEvent(room))
+    setNextEvent(findRoomNextEvent(room))
+  }
 
   return (
     <Screen>
-      <Grid justify="space-between" stretch style={styles.wrapper}>
-        <Header />
-
-        <Grid justify="center" alignItems="center" spacing={2}>
-          <Typography variant="h1">{room.name}</Typography>
-          <Typography variant="h3">
-            {isAvailable ? 'FREE' : 'BOOKED'}
-          </Typography>
-          {isRoomAvailable(room) ? (
-            <Clock color="turquoise" max={diffChangeDateAndNow(changeDate)} />
-          ) : (
-            <Clock
-              color="red"
-              max={diffChangeDateAndNow(changeDate)}
-              bookedTime={currentEventStartEndDate}
-            />
-          )}
-          {!isRoomAvailable(room) && (
-            <Button
-              title="End early"
-              onPress={() => endCurrentEvent(room.id)}
-              variant="error"
-              style={styles.earlyButton}
-            />
-          )}
-        </Grid>
-
-        <Footer />
-      </Grid>
+      <Header roomName={room.name} />
+      <View style={styles.centerContentWrapper}>
+        <View style={styles.wrapper}>
+          <Event eventVariant="current" event={currentEvent} />
+        </View>
+        <View onLayout={onClockLayout} style={styles.clockWrapper}>
+          <RoomClock
+            room={room}
+            parentAspectRatio={clockAspectRatio}
+            onEventStateChange={onEventStateChange}
+          />
+        </View>
+        <View style={styles.wrapper}>
+          <Event eventVariant="next" event={nextEvent} />
+        </View>
+      </View>
+      <QuickActions />
     </Screen>
   )
 }
@@ -88,12 +85,28 @@ const RoomDetailScreen: React.FC = () => {
 export default RoomDetailScreen
 
 const styles = StyleSheet.create({
+  centerContentWrapper: {
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
+  },
+  clockWrapper: {
+    flex: 2,
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
   wrapper: {
     flex: 1,
   },
-  earlyButton: {
-    bottom: 90,
+  statusLabel: {
+    top: 90,
     position: 'absolute',
     alignSelf: 'center',
+  },
+  sideWrapper: {
+    flexGrow: 1,
+    width: 250,
   },
 })
