@@ -112,8 +112,6 @@ const RoomClock: (props: ClockProps) => JSX.Element = ({
     let seconds = fromValue
     const timerId = setInterval(() => {
       seconds--
-      console.log(seconds)
-      console.log('remaining seconds', remainingSeconds)
       updateTimerComponent(seconds)
       if (remainingSeconds !== undefined) {
         animateProgress(currentPercentageProgress(seconds))
@@ -142,7 +140,7 @@ const RoomClock: (props: ClockProps) => JSX.Element = ({
   }
 
   useEffect(() => {
-    console.log('use effect remaining seconds', remainingSeconds)
+    setIsAvailable(isRoomAvailable(room))
     if (remainingSeconds === undefined) {
       animateProgress(100)
     } else {
@@ -160,7 +158,7 @@ const RoomClock: (props: ClockProps) => JSX.Element = ({
       animatedProgress.removeAllListeners()
       clearInterval(timerId)
     }
-  }, [remainingSeconds])
+  }, [room, remainingSeconds])
 
   const updateProgressCircle = (percentageProgress: number) => {
     const strokeDashoffset =

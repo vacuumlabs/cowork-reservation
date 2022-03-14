@@ -37,7 +37,7 @@ const RoomDetailScreen: React.FC = () => {
       setCurrentEvent(findRoomCurrentEvent(selectedRoom))
       setNextEvent(findRoomNextEvent(selectedRoom))
     }
-  }, [currentRoomId])
+  }, [currentRoomId, rooms])
 
   if (!room)
     return (
